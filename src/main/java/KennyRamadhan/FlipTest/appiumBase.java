@@ -1,15 +1,11 @@
 package KennyRamadhan.FlipTest;
-
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.concurrent.TimeUnit;
-
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -39,8 +35,9 @@ public class appiumBase {
 		options.setCapability("appActivity","com.swaglabsmobileapp.MainActivity");
 		options.setPlatformName("Android");
 		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-//		options.setNoReset(false);
-//		options.setFullReset(true);
+		options.setNoReset(true);
+		options.setFullReset(true);
+		options.setCapability("shouldTerminateApp",true);
 //		options.setNewCommandTimeout(Duration.ofMillis(0));
 //		options.autoGrantPermissions();
 //		options.setAvdReadyTimeout(Duration.ofMillis(300000));
