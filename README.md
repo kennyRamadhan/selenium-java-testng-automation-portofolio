@@ -18,5 +18,17 @@ D. After the errors gone you can open e2eMobile.java file and do : Right-click -
 
 E. The reports will be stored in test-output folders and you can choose index.html or emailable-report.html
 
-F. Sometimes you might be face an errors but you can try with another mobile device 
+F. Sometimes you might be face an errors but you can try with another mobile device
 
+G. Library used in this project :
+1. TestNG
+2. TestNG Reports
+3. Hamcrest
+4. Appium Inspector (For Get Elements)
+5. Appium Server
+6. Appium Client
+
+H. Files Explanations :
+1. appiumBase.java = Configuration for Appium server and set capabilities for mobile device and also set the target app
+2. e2eMobile.java = Contains all test cases 
+3. locatorsElements.java = Contains all elements needed for automations
