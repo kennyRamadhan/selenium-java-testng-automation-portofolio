@@ -131,6 +131,7 @@ public class e2eMobile extends appiumBase {
 	@Test // e. Verify user can add products to cart from the product details screen.
 	public void addProductsFromDetails() throws MalformedURLException, URISyntaxException {
 		
+		
 		// Login using given credentials
 		driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"standard_user\"));"));
 		driver.findElement(locatorElements.standardUser()).click();
@@ -167,6 +168,8 @@ public class e2eMobile extends appiumBase {
 						Reporter.log("Displayed Products : "+choosenProducts);
 					}		
 			}
+			
+		
 		}
 		
 		// Add To Cart From Details Products
@@ -198,11 +201,12 @@ public class e2eMobile extends appiumBase {
 		
 		// add multiples products to cart
 		List<WebElement>  listProducts = driver.findElements(locatorElements.addToCart2());
+		@SuppressWarnings("null")
 		WebElement lastElement = (WebElement) Iterables.get(listProducts,0);
+		@SuppressWarnings("null")
 		WebElement last = (WebElement) Iterables.get(listProducts,1);
 		lastElement.click();
 		last.click();
-		
 	}
 	
 	@Test // g. Verify user redirection to product listing screen by tapping on continue shipping option in the cart section.
@@ -224,7 +228,9 @@ public class e2eMobile extends appiumBase {
 		
 		// add multiples products to cart
 		List<WebElement>  listProducts = driver.findElements(locatorElements.addToCart2());
+		@SuppressWarnings("null")
 		WebElement lastElement = (WebElement) Iterables.get(listProducts,0);
+		@SuppressWarnings("null")
 		WebElement last = (WebElement) Iterables.get(listProducts,1);
 		lastElement.click();
 		last.click();
@@ -329,7 +335,9 @@ public class e2eMobile extends appiumBase {
 		
 		// add multiples products to cart
 		List<WebElement>  listProducts = driver.findElements(locatorElements.addToCart2());
+		@SuppressWarnings("null")
 		WebElement lastElement = (WebElement) Iterables.get(listProducts,0);
+		@SuppressWarnings("null")
 		WebElement last = (WebElement) Iterables.get(listProducts,1);
 		lastElement.click();
 		last.click();

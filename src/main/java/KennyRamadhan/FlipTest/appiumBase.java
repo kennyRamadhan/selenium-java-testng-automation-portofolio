@@ -4,8 +4,8 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.TimeUnit;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.android.options.UiAutomator2Options;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -16,9 +16,9 @@ public class appiumBase {
 
 	public AndroidDriver driver;
 	public AppiumDriverLocalService builder;
-
+	public UiAutomator2Options options;
 	@SuppressWarnings("deprecation")
-	@BeforeClass
+	@BeforeMethod
 	public void appiumSettings() throws MalformedURLException, URISyntaxException
 	
   {
@@ -27,32 +27,32 @@ public class appiumBase {
 				.withAppiumJS(new File("C://Users//KenyRamadhan//AppData//Roaming//npm//node_modules//appium//build//lib//main.js"))
 				.withIPAddress("127.0.0.1").usingPort(4723).build();
 		builder.start();
-		UiAutomator2Options options = new UiAutomator2Options();
-		driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options);
-		options.setDeviceName("Xiaomi M210K6G");
-		options.setApp("C://Users//KenyRamadhan//eclipse-workspace//mobileAppAutomationTest//app//appTest.apk//");
+		options = new UiAutomator2Options();
+		options.setDeviceName("emulator-5554(sdk_gphone64_x_86- Android 14");
+		options.setApp("C://Users//KenyRamadhan//Downloads//Android.SauceLabs.Mobile.app.2.7.1.apk");
 		options.setCapability("appPackage", "com.swaglabsmobileapp");
 		options.setCapability("appActivity","com.swaglabsmobileapp.MainActivity");
 		options.setPlatformName("Android");
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-		options.setNoReset(true);
+		options.setCapability("platformVersion", "14");
+		options.setAppWaitForLaunch(true);
 		options.setFullReset(true);
+		options.setNoReset(false);
 		options.setCapability("shouldTerminateApp",true);
+		driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options);
+		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
 //		options.setNewCommandTimeout(Duration.ofMillis(0));
 //		options.autoGrantPermissions();
 //		options.setAvdReadyTimeout(Duration.ofMillis(300000));
 //		options.setAvdLaunchTimeout(Duration.ofMillis(300000));
 //		options.setUiautomator2ServerInstallTimeout(Duration.ofMillis(60000));
 //		options.setAndroidInstallTimeout(Duration.ofMillis(100000));
-//		options.setAppWaitForLaunch(true);
-
-
-
 	}
-	@AfterClass
+	@AfterMethod
 	public void tearDown() {
-		
-		driver.quit();
+	
+		if(driver != null){
+		    driver.quit();
+		   }
 		builder.stop();
 
 	}

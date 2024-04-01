@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+<testng-results ignored="0" total="9" passed="9" failed="0" skipped="0">
   <reporter-output>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Choosen Product : Sauce Labs Backpack]]>
+    </line>
+    <line>
+      <![CDATA[Displayed Products : Sauce Labs Backpack]]>
+    </line>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Choosen Product : Sauce Labs Backpack]]>
+    </line>
+    <line>
+      <![CDATA[Displayed Products : Sauce Labs Backpack]]>
+    </line>
     <line>
       <![CDATA[Success Login]]>
     </line>
@@ -16,17 +37,113 @@
     <line>
       <![CDATA[Order Completed]]>
     </line>
+    <line>
+      <![CDATA[Failed Login]]>
+    </line>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Success Back To List Products]]>
+    </line>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Price Before Sorting : 29.99]]>
+    </line>
+    <line>
+      <![CDATA[Price Before Sorting : 9.99]]>
+    </line>
+    <line>
+      <![CDATA[Price After Sorting From Lowest To Highest : 7.99]]>
+    </line>
+    <line>
+      <![CDATA[Price After Sorting From Lowest To Highest : 9.99]]>
+    </line>
+    <line>
+      <![CDATA[Success Login]]>
+    </line>
+    <line>
+      <![CDATA[Choosen Product : Sauce Labs Backpack]]>
+    </line>
+    <line>
+      <![CDATA[Displayed Products : Sauce Labs Backpack]]>
+    </line>
+    <line>
+      <![CDATA[Details Products Matched]]>
+    </line>
   </reporter-output>
-  <suite started-at="2024-04-01T05:49:25 WIB" name="Default suite" finished-at="2024-04-01T05:50:01 WIB" duration-ms="35256">
+  <suite started-at="2024-04-01T23:56:04 WIB" name="Default suite" finished-at="2024-04-02T00:00:37 WIB" duration-ms="273825">
     <groups>
     </groups>
-    <test started-at="2024-04-01T05:49:25 WIB" name="Default test" finished-at="2024-04-01T05:50:01 WIB" duration-ms="35256">
+    <test started-at="2024-04-01T23:56:04 WIB" name="Default test" finished-at="2024-04-02T00:00:37 WIB" duration-ms="273825">
       <class name="KennyRamadhan.FlipTest.e2eMobile">
-        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@44c03695]" started-at="2024-04-01T05:49:25 WIB" name="appiumSettings" finished-at="2024-04-01T05:49:37 WIB" duration-ms="11465" status="PASS">
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:56:04 WIB" name="appiumSettings" finished-at="2024-04-01T23:56:24 WIB" duration-ms="20106" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- appiumSettings -->
-        <test-method signature="checkoutPositiveFlow()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@44c03695]" started-at="2024-04-01T05:49:37 WIB" name="checkoutPositiveFlow" finished-at="2024-04-01T05:50:00 WIB" duration-ms="23379" status="PASS">
+        <test-method signature="addMultipleProducts()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:56:24 WIB" name="addMultipleProducts" finished-at="2024-04-01T23:56:30 WIB" duration-ms="6654" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- addMultipleProducts -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:56:30 WIB" name="tearDown" finished-at="2024-04-01T23:56:32 WIB" duration-ms="1914" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:56:32 WIB" name="appiumSettings" finished-at="2024-04-01T23:56:49 WIB" duration-ms="17061" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="addProductsFromDetails()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:56:49 WIB" name="addProductsFromDetails" finished-at="2024-04-01T23:57:00 WIB" duration-ms="10924" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+            <line>
+              <![CDATA[Choosen Product : Sauce Labs Backpack]]>
+            </line>
+            <line>
+              <![CDATA[Displayed Products : Sauce Labs Backpack]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- addProductsFromDetails -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:57:00 WIB" name="tearDown" finished-at="2024-04-01T23:57:02 WIB" duration-ms="2086" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:57:02 WIB" name="appiumSettings" finished-at="2024-04-01T23:57:22 WIB" duration-ms="19632" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="addProductsFromListing()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:57:22 WIB" name="addProductsFromListing" finished-at="2024-04-01T23:57:30 WIB" duration-ms="8210" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+            <line>
+              <![CDATA[Choosen Product : Sauce Labs Backpack]]>
+            </line>
+            <line>
+              <![CDATA[Displayed Products : Sauce Labs Backpack]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- addProductsFromListing -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:57:30 WIB" name="tearDown" finished-at="2024-04-01T23:57:33 WIB" duration-ms="3072" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:57:33 WIB" name="appiumSettings" finished-at="2024-04-01T23:57:53 WIB" duration-ms="19566" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="checkoutPositiveFlow()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:57:53 WIB" name="checkoutPositiveFlow" finished-at="2024-04-01T23:58:16 WIB" duration-ms="23153" status="PASS">
           <reporter-output>
             <line>
               <![CDATA[Success Login]]>
@@ -45,7 +162,106 @@
             </line>
           </reporter-output>
         </test-method> <!-- checkoutPositiveFlow -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@44c03695]" started-at="2024-04-01T05:50:00 WIB" name="tearDown" finished-at="2024-04-01T05:50:01 WIB" duration-ms="356" status="PASS">
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:58:16 WIB" name="tearDown" finished-at="2024-04-01T23:58:18 WIB" duration-ms="1494" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:58:18 WIB" name="appiumSettings" finished-at="2024-04-01T23:58:35 WIB" duration-ms="17324" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="failedLogin()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:58:35 WIB" name="failedLogin" finished-at="2024-04-01T23:58:40 WIB" duration-ms="5328" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Failed Login]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- failedLogin -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:58:40 WIB" name="tearDown" finished-at="2024-04-01T23:58:42 WIB" duration-ms="1793" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:58:42 WIB" name="appiumSettings" finished-at="2024-04-01T23:58:59 WIB" duration-ms="17396" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="login()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:58:59 WIB" name="login" finished-at="2024-04-01T23:59:04 WIB" duration-ms="4739" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- login -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:59:04 WIB" name="tearDown" finished-at="2024-04-01T23:59:06 WIB" duration-ms="1666" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:59:06 WIB" name="appiumSettings" finished-at="2024-04-01T23:59:24 WIB" duration-ms="17750" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="redirectionToProductListing()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:59:24 WIB" name="redirectionToProductListing" finished-at="2024-04-01T23:59:35 WIB" duration-ms="11791" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+            <line>
+              <![CDATA[Success Back To List Products]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- redirectionToProductListing -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:59:35 WIB" name="tearDown" finished-at="2024-04-01T23:59:37 WIB" duration-ms="1698" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:59:37 WIB" name="appiumSettings" finished-at="2024-04-01T23:59:55 WIB" duration-ms="17623" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="sortingPrice()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-01T23:59:55 WIB" name="sortingPrice" finished-at="2024-04-02T00:00:04 WIB" duration-ms="8919" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+            <line>
+              <![CDATA[Price Before Sorting : 29.99]]>
+            </line>
+            <line>
+              <![CDATA[Price Before Sorting : 9.99]]>
+            </line>
+            <line>
+              <![CDATA[Price After Sorting From Lowest To Highest : 7.99]]>
+            </line>
+            <line>
+              <![CDATA[Price After Sorting From Lowest To Highest : 9.99]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- sortingPrice -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-02T00:00:04 WIB" name="tearDown" finished-at="2024-04-02T00:00:05 WIB" duration-ms="1673" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- tearDown -->
+        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-02T00:00:05 WIB" name="appiumSettings" finished-at="2024-04-02T00:00:23 WIB" duration-ms="17328" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- appiumSettings -->
+        <test-method signature="verifyDetailsProductIntoCart()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-02T00:00:23 WIB" name="verifyDetailsProductIntoCart" finished-at="2024-04-02T00:00:36 WIB" duration-ms="13024" status="PASS">
+          <reporter-output>
+            <line>
+              <![CDATA[Success Login]]>
+            </line>
+            <line>
+              <![CDATA[Choosen Product : Sauce Labs Backpack]]>
+            </line>
+            <line>
+              <![CDATA[Displayed Products : Sauce Labs Backpack]]>
+            </line>
+            <line>
+              <![CDATA[Details Products Matched]]>
+            </line>
+          </reporter-output>
+        </test-method> <!-- verifyDetailsProductIntoCart -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@411f53a0]" started-at="2024-04-02T00:00:36 WIB" name="tearDown" finished-at="2024-04-02T00:00:37 WIB" duration-ms="1802" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
