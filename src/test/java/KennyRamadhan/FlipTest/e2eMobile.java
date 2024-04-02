@@ -6,13 +6,6 @@ import org.testng.annotations.Test;
 
 public class e2eMobile extends appiumBase {
 	
-//	@BeforeMethod
-//	public void beforeMethod() {
-//	
-//		driver.executeScript("mobile: startActivity", ImmutableMap.of("intent", "com.swaglabsmobileapp/com.swaglabsmobileapp.MainActivity"));
-//	}
-//	
-	
 	@Test //a. Verify user login using given credentials.
 	public void login() throws MalformedURLException, URISyntaxException  {
 		
@@ -25,7 +18,7 @@ public class e2eMobile extends appiumBase {
 		// Verify if user success log in 
 		login.verifySuccessLogin();
 	}
-	
+
 	@Test // b. Verify failure message in case of invalid login credentials are entered by the user.
 	public void failedLogin() throws MalformedURLException, URISyntaxException {
 		
@@ -251,6 +244,6 @@ public class e2eMobile extends appiumBase {
 	    productsList.verifyErrorMessage();
 	}
 	
-	}
+}
 
 

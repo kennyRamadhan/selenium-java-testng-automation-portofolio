@@ -1,14 +1,9 @@
 package KennyRamadhan.FlipTest;
-
 import java.util.List;
-
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
-import org.testng.Assert;
 import org.testng.Reporter;
-
 import com.google.common.collect.Iterables;
-
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
@@ -23,19 +18,9 @@ public class ProductsList {
 		this.driver = driver;
 		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
 	}
-
-	
-
-	
-	
-	
 	
 	@AndroidFindBy(accessibility = "test-ADD TO CART")
 	private WebElement addToCart;
-	
-
-	
-
 	
 	@AndroidFindBy(accessibility="test-PRODUCTS")
 	private WebElement listProducts;
@@ -63,10 +48,6 @@ public class ProductsList {
 	
 	@AndroidFindBy(xpath = "(//android.view.ViewGroup[@content-desc=\"test-Price\"])[1]/android.widget.TextView")
 	private WebElement priceList;
-	
-	
-	
-	
 	
 	public void getProdutsPriceListBeforeSorting() {
 		
@@ -186,7 +167,6 @@ public class ProductsList {
 		last.click();
 		
 	}
-	
 
 	@AndroidFindBy(accessibility  = "test-CONTINUE SHOPPING")
 	private WebElement continueShoppingBtn;
@@ -195,7 +175,6 @@ public class ProductsList {
 		continueShoppingBtn.click();
 	}
 	
-
 	public void verifyBackToListProducts() {
 		
 		if(listProducts.isDisplayed()){	
@@ -227,8 +206,7 @@ public class ProductsList {
 	public void clickCheckout() {
 		checkout.click();
 	}
-	
-	
+		
 	public void setFirstName(String firstName) {
 	firstNameField.sendKeys(firstName);
 	}
@@ -243,7 +221,6 @@ public class ProductsList {
 	postalCodeField.sendKeys(postalCode);
 	}
 	
-
 	public void clickContinue() {
 		continueBtn.click();
 	}
@@ -256,13 +233,10 @@ public class ProductsList {
 		return actualTotalAmount;
 	}
 	
-
-
 	public void clickFinishBtn() {
 		finishBtn.click();
 	}
-	
-	
+		
 	@AndroidFindBy(xpath = "//android.widget.ScrollView[@content-desc=\"test-CHECKOUT: COMPLETE!\"]/android.view.ViewGroup/android.widget.TextView[1]")
 	private WebElement orderComplete;
 	public void verifyOrderComplete() {
@@ -276,7 +250,7 @@ public class ProductsList {
 	    	Reporter.log("Failed Order");
 	    }
 	}
-	
+
 	public void verifyErrorMessage() {
 		
 	    if(errorMessage.isDisplayed()) {
