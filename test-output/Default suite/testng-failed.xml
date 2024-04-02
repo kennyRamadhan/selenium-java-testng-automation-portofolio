@@ -5,16 +5,11 @@
     <classes>
       <class name="KennyRamadhan.FlipTest.e2eMobile">
         <methods>
-          <include name="addProductsFromListing"/>
-          <include name="redirectionToProductListing"/>
           <include name="appiumSettings"/>
-          <include name="failedLogin"/>
           <include name="checkoutPositiveFlow"/>
-          <include name="addProductsFromDetails"/>
-          <include name="login"/>
-          <include name="sortingPrice"/>
           <include name="tearDown"/>
           <include name="verifyDetailsProductIntoCart"/>
+          <include name="checkoutNegativeFlow"/>
         </methods>
       </class> <!-- KennyRamadhan.FlipTest.e2eMobile -->
     </classes>
