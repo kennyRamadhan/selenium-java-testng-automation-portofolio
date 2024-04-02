@@ -32,10 +32,12 @@ G. Library used in this project :
 5. Appium Server
 6. Appium Client
 
-H. Files Explanations :
-1. appiumBase.java = Configuration for Appium server and set capabilities for mobile device and also set the target app
-2. e2eMobile.java = Contains all test cases 
-3. locatorsElements.java = Contains all elements needed for automations
+H. Folder Explanations :
+1. /FlipTest/src/test/java/KennyRamadhan/FlipTest/e2eMobile.java = Contains Test Case
+
+2. /FlipTest/src/main/java : Contains Appium Configurations &  Page Object Design Pattern
+
+3. /FlipTest/test-output : Contains All Reports
 
 
 IMPORTANT!! : I already fixing about Before Test & After Test , I realized there is problem when running test the app doesn quit for each test case but now its already fixed . now you can running and the app will quit and relaunch for each test case. 
