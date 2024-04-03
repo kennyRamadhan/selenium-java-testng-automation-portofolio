@@ -35,9 +35,11 @@ G. Library used in this project :
 H. Folder Explanations :
 1. /FlipTest/src/test/java/KennyRamadhan/FlipTest/e2eMobile.java = Contains Test Case
 
-2. /FlipTest/src/main/java : Contains Appium Configurations &  Page Object Design Pattern
+2. /FlipTest/src/main/java : Contains Appium Configurations,Page Object Design Pattern, & ExtentReports Configurations
 
-3. /FlipTest/test-output : Contains All Reports
+3. /FlipTest/test-output : Contains All Reports Fromm Test NG
 
+4. /FlipTest/reports : Contains All Generate Reports & Screenshot from extentreports Library
+ 
 
 IMPORTANT!! : I already fixing about Before Test & After Test , I realized there is problem when running test the app doesn quit for each test case but now its already fixed . now you can running and the app will quit and relaunch for each test case. 

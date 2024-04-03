@@ -54,8 +54,6 @@ public class appiumBase {
 		builder.stop();
 
 	}
-	
-	
-	
+
 
 }
