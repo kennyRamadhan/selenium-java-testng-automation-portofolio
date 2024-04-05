@@ -8,8 +8,6 @@
           <include name="appiumSettings"/>
           <include name="checkoutPositiveFlow"/>
           <include name="tearDown"/>
-          <include name="verifyDetailsProductIntoCart"/>
-          <include name="checkoutNegativeFlow"/>
         </methods>
       </class> <!-- KennyRamadhan.FlipTest.e2eMobile -->
     </classes>

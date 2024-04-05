@@ -28,12 +28,12 @@ public class appiumBase {
 				.withIPAddress("127.0.0.1").usingPort(4723).build();
 		builder.start();
 		options = new UiAutomator2Options();
-		options.setDeviceName("Redmi Note 10 Pro");
+		options.setDeviceName("Kenny Ramadhan");
 		options.setApp("C://Users//KenyRamadhan//Downloads//Android.SauceLabs.Mobile.app.2.7.1.apk");
 		options.setCapability("appPackage", "com.swaglabsmobileapp");
 		options.setCapability("appActivity","com.swaglabsmobileapp.MainActivity");
 		options.setPlatformName("Android");
-		options.setCapability("platformVersion", "13");
+		//options.setCapability("platformVersion", "13");
 		options.setAppWaitForLaunch(true);
 		options.setNoReset(false);
 		driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options);

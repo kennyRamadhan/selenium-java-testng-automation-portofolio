@@ -1,11 +1,15 @@
 package KennyRamadhan.FlipTest;
 import java.net.MalformedURLException;
+import com.github.javafaker.Faker;
 import java.net.URISyntaxException;
+import java.util.Locale;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class e2eMobile extends appiumBase {
 	
+	@SuppressWarnings("deprecation")
+	Faker faker = new Faker(new Locale("id_ID"));  
 	@Test //a. Verify user login using given credentials.
 	public void login() throws MalformedURLException, URISyntaxException  {
 		
@@ -196,9 +200,9 @@ public class e2eMobile extends appiumBase {
 	    productsList.clickCheckout();
 	    
 	    // user input valid information needed
-	    productsList.setFirstName("Kenny");
-	    productsList.setLastName("Ramadhan");
-	    productsList.setPostalCode("17530");
+	    productsList.setFirstName(faker.name().firstName());
+	    productsList.setLastName(faker.name().lastName());
+	    productsList.setPostalCode(faker.address().zipCode());
 	    productsList.clickContinue();
 	    
 	    // Get actual total amount 
@@ -236,8 +240,8 @@ public class e2eMobile extends appiumBase {
 	    
 	    //User input invalid needed informations
 	    productsList.setFirstName("");
-	    productsList.setLastName("Ramadhan");
-	    productsList.setPostalCode("17530");
+	    productsList.setLastName(faker.name().lastName());
+	    productsList.setPostalCode(faker.address().zipCode());
 	    productsList.clickContinue();
 	    
 	    //Verify if user get alert message after input invalid information needed

@@ -17,6 +17,7 @@ public class ExtentReportsTestNG {
 		reporter.config().setDocumentTitle("SAUCELABS");
 		reporter.config().setReportName("Mobile Automation Testing");
 		reporter.config().setTheme(Theme.DARK);
+	
 		extent.attachReporter(reporter);
 		extent.setSystemInfo("Testers", "Kenny Ramadhan");
 		
