@@ -187,15 +187,15 @@ public class ProductsList {
 	
 	public Double getTotalPriceBeforeCheckout() {
 		
-		List<WebElement> productPrice = driver.findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc=\"test-Price\"]/android.widget.TextView"));
+		List<WebElement> productPrice = driver.findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc='test-Price']/android.widget.TextView"));
 		int countProductPrice = productPrice.size();
 		double totalAmount = 0;
 		
 		// sum total amount chosen products
 	    for(int i = 0; i<countProductPrice; i++ ) {
-			
+
 			String sortPrices = productPrice.get(i).getText();
-			Double expectedTotalAmountWithoutTaxes = Double.parseDouble(sortPrices.substring(1));
+			double expectedTotalAmountWithoutTaxes = Double.parseDouble(sortPrices.substring(1));
 			totalAmount = totalAmount+expectedTotalAmountWithoutTaxes;
 			Reporter.log("Total Amount Price Without Taxes : "+totalAmount);
 		}
@@ -225,11 +225,11 @@ public class ProductsList {
 		continueBtn.click();
 	}
 	
-	public Double getActualTotalPriceAfterCheckout() {
+	public double getActualTotalPriceAfterCheckout() {
 		driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Item total: $39.98\"));"));
 		String actualTotalAmountString = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Item total: $39.98']")).getText();
-		Double actualTotalAmount = Double.parseDouble(actualTotalAmountString.substring(13));
-	    Reporter.log("Actual Total Amount : "+actualTotalAmount);
+		double actualTotalAmount = Double.parseDouble(actualTotalAmountString.substring(13));
+		Reporter.log("Actual Total Amount : "+actualTotalAmount);
 		return actualTotalAmount;
 	}
 	

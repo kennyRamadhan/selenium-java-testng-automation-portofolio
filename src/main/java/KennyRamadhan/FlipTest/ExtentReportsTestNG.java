@@ -10,7 +10,7 @@ public class ExtentReportsTestNG {
 	static ExtentReports extent;
 	@BeforeMethod
 	public static ExtentReports getExtendReport() {
-		String path = System.getProperty("user.dir")+"\\reports\\index.html";
+		String path = System.getProperty("user.dir")+"\\newReports\\reports.html";
 		ExtentSparkReporter reporter = new ExtentSparkReporter(path);
 		extent = new ExtentReports();
 		

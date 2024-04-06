@@ -13,7 +13,7 @@ public class Utils {
 	public String getSuccesScreenshotPath(String testCasesName,AppiumDriver driver) throws IOException {
 		
 		File source = driver.getScreenshotAs(OutputType.FILE);
-		String destinationFile = System.getProperty("user.dir")+"\\reports\\Pass\\"+testCasesName+".png";
+		String destinationFile = System.getProperty("user.dir")+"\\newReports\\Pass\\"+testCasesName+".png";
 		FileUtils.copyFile(source,new File(destinationFile));
 		return destinationFile;
 	}
@@ -21,7 +21,7 @@ public class Utils {
 	public String getFailedScreenshotPath(String testCasesName,AppiumDriver driver) throws IOException {
 		
 		File source = driver.getScreenshotAs(OutputType.FILE);
-		String destinationFile = System.getProperty("user.dir")+"\\reports\\Failed\\"+testCasesName+".png";
+		String destinationFile = System.getProperty("user.dir")+"\\newReports\\Failed\\"+testCasesName+".png";
 		FileUtils.copyFile(source,new File(destinationFile));
 		return destinationFile;
 	}

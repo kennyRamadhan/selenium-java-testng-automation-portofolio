@@ -33,7 +33,7 @@ public class appiumBase {
 		options.setCapability("appPackage", "com.swaglabsmobileapp");
 		options.setCapability("appActivity","com.swaglabsmobileapp.MainActivity");
 		options.setPlatformName("Android");
-		//options.setCapability("platformVersion", "13");
+		options.setCapability("platformVersion", "13");
 		options.setAppWaitForLaunch(true);
 		options.setNoReset(false);
 		driver = new AndroidDriver(new URI("http://127.0.0.1:4723").toURL(), options);

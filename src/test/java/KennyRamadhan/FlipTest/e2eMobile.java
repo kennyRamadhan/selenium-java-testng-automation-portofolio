@@ -209,7 +209,7 @@ public class e2eMobile extends appiumBase {
 	    double actualTotalPrice = productsList.getActualTotalPriceAfterCheckout();
 	    
 	    // Verify if expected total amount is matched with actual total amount is matched (Note : not includes tax)
-	    Assert.assertEquals(expectedTotalPrice,actualTotalPrice);
+		Assert.assertEquals(expectedTotalPrice,actualTotalPrice);
 	    
 	    //Finish Order
 	    productsList.clickFinishBtn();
@@ -247,6 +247,7 @@ public class e2eMobile extends appiumBase {
 	    //Verify if user get alert message after input invalid information needed
 	    productsList.verifyErrorMessage();
 	}
+
 	
 }
 
