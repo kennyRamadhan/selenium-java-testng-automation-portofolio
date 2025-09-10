@@ -28,7 +28,7 @@ public class ConfigLoader {
 
     static {
         try {
-            FileInputStream fis = new FileInputStream("src/main/java/MBI/DST/Resources/config.properties");
+            FileInputStream fis = new FileInputStream("src/main/java/Selenium/Resources/config.properties");
             props.load(fis);
             fis.close();
             System.out.println("✅ Config loaded successfully. Total keys: " + props.size());

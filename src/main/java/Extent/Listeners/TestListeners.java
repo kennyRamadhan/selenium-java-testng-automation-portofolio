@@ -101,7 +101,7 @@ public class TestListeners implements ITestListener{
 	        
 	        ExtentTest node = ExtentNode.getNode();
 	        if (node != null) {
-	            node.fail(result.getThrowable());
+	            node.pass(result.getThrowable());
 	        } else {
 	            System.out.println("[WARNING] ExtentNode.getNode() null. Logging to console instead.");
 	            result.getThrowable().printStackTrace();

@@ -1,55 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
   <reporter-output>
-    <line>
-      <![CDATA[Success Login]]>
-    </line>
-    <line>
-      <![CDATA[Total Amount Price Without Taxes : 29.99]]>
-    </line>
-    <line>
-      <![CDATA[Total Amount Price Without Taxes : 39.98]]>
-    </line>
-    <line>
-      <![CDATA[Actual Total Amount : 39.98]]>
-    </line>
-    <line>
-      <![CDATA[Order Completed]]>
-    </line>
   </reporter-output>
-  <suite started-at="2024-04-05T22:53:56 WIB" name="Default suite" finished-at="2024-04-05T22:54:41 WIB" duration-ms="44376">
+  <suite started-at="2025-09-11T02:12:11 WIB" name="Suite" finished-at="2025-09-11T02:12:23 WIB" duration-ms="12522">
     <groups>
     </groups>
-    <test started-at="2024-04-05T22:53:56 WIB" name="Default test" finished-at="2024-04-05T22:54:41 WIB" duration-ms="44376">
-      <class name="KennyRamadhan.FlipTest.e2eMobile">
-        <test-method is-config="true" signature="appiumSettings()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@51c668e3]" started-at="2024-04-05T22:53:56 WIB" name="appiumSettings" finished-at="2024-04-05T22:54:11 WIB" duration-ms="14578" status="PASS">
+    <test started-at="2025-09-11T02:12:11 WIB" name="E2E Mobile" finished-at="2025-09-11T02:12:23 WIB" duration-ms="12522">
+      <class name="TestNG.Mobile.e2eMobile">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:11 WIB" name="setUp" finished-at="2025-09-11T02:12:19 WIB" duration-ms="8414" status="PASS">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- appiumSettings -->
-        <test-method signature="checkoutPositiveFlow()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@51c668e3]" started-at="2024-04-05T22:54:11 WIB" name="checkoutPositiveFlow" finished-at="2024-04-05T22:54:40 WIB" duration-ms="29013" status="PASS">
+        </test-method> <!-- setUp -->
+        <test-method is-config="true" signature="ensureDriverReady()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:19 WIB" name="ensureDriverReady" finished-at="2025-09-11T02:12:19 WIB" duration-ms="1" status="PASS">
           <reporter-output>
-            <line>
-              <![CDATA[Success Login]]>
-            </line>
-            <line>
-              <![CDATA[Total Amount Price Without Taxes : 29.99]]>
-            </line>
-            <line>
-              <![CDATA[Total Amount Price Without Taxes : 39.98]]>
-            </line>
-            <line>
-              <![CDATA[Actual Total Amount : 39.98]]>
-            </line>
-            <line>
-              <![CDATA[Order Completed]]>
-            </line>
           </reporter-output>
-        </test-method> <!-- checkoutPositiveFlow -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:KennyRamadhan.FlipTest.e2eMobile@51c668e3]" started-at="2024-04-05T22:54:40 WIB" name="tearDown" finished-at="2024-04-05T22:54:41 WIB" duration-ms="723" status="PASS">
+        </test-method> <!-- ensureDriverReady -->
+        <test-method is-config="true" signature="setupPages()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:19 WIB" name="setupPages" finished-at="2025-09-11T02:12:20 WIB" duration-ms="476" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupPages -->
+        <test-method signature="login()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:20 WIB" name="login" finished-at="2025-09-11T02:12:22 WIB" duration-ms="2305" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- login -->
+        <test-method is-config="true" signature="resetAppState()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:22 WIB" name="resetAppState" finished-at="2025-09-11T02:12:23 WIB" duration-ms="1043" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppState -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:24 WIB" name="tearDown" finished-at="2025-09-11T02:12:28 WIB" duration-ms="4027" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->
-      </class> <!-- KennyRamadhan.FlipTest.e2eMobile -->
-    </test> <!-- Default test -->
-  </suite> <!-- Default suite -->
+      </class> <!-- TestNG.Mobile.e2eMobile -->
+    </test> <!-- E2E Mobile -->
+  </suite> <!-- Suite -->
 </testng-results>

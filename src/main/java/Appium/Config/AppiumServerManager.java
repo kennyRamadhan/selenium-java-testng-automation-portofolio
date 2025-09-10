@@ -198,13 +198,4 @@ public class AppiumServerManager {
 
         throw new RuntimeException("Unable to initialize driver - unknown error.");
     }
-
-    /**
-     * Returns the current AppiumDriver instance.
-     *
-     * @return AppiumDriver instance
-     */
-    public static AppiumDriver getDriver() {
-        return driver;
-    }
 }

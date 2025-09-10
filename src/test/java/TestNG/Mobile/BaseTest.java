@@ -10,7 +10,10 @@ import org.testng.annotations.BeforeClass;
 
 import Appium.Config.AppiumServerManager;
 import Appium.Config.DriverManager;
+import Selenium.Pages.Login;
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.IOSDriver;
 
 
 /**
@@ -36,7 +39,9 @@ import io.appium.java_client.AppiumDriver;
  * @version 1.0
  */
 public class BaseTest {
-
+	
+	
+	protected Login login;
 
 
 
@@ -56,6 +61,9 @@ public class BaseTest {
 		AppiumServerManager.startAppiumServer();
 	    // Ambil driver dari AppiumServerManager + simpan di DriverManager
 	    DriverManager.setDriver(AppiumServerManager.initDriver());
+	    
+	  
+	    
 	
 	}
 
@@ -101,14 +109,49 @@ public class BaseTest {
 	 */
 	@AfterMethod(alwaysRun = true)
 	public void resetAppState() {
+		 AppiumDriver driver = DriverManager.getDriver();
 
-		AppiumDriver driver = DriverManager.getDriver();
-        if (driver != null) {
-            Map<String, Object> closeAppArgs = new HashMap<>();
-            closeAppArgs.put("bundleId", "com.maybank2u.salesforce.uatent");
-            driver.executeScript("mobile: terminateApp", closeAppArgs);
-        }
+		    if (driver == null) {
+		        System.out.println("⚠️ Driver is null, skipping resetAppState.");
+		        return;
+		    }
+
+		    String platformName = driver.getCapabilities()
+		            .getCapability("platformName")
+		            .toString()
+		            .toLowerCase();
+
+		    try {
+		        if (platformName.contains("android")) {
+		            // ✅ Android: terminate or reset app
+		            String appPackage = driver.getCapabilities().getCapability("appPackage").toString();
+		            if (driver instanceof AndroidDriver) {
+		                ((AndroidDriver) driver).terminateApp(appPackage); // Close app
+		                System.out.println("✅ Android app terminated: " + appPackage);
+		            }
+		        } else if (platformName.contains("ios")) {
+		            // ✅ iOS: terminate app using bundleId
+		            if (driver instanceof IOSDriver) {
+		                Map<String, Object> closeAppArgs = new HashMap<>();
+		                closeAppArgs.put("bundleId", driver.getCapabilities().getCapability("bundleId"));
+		                driver.executeScript("mobile: terminateApp", closeAppArgs);
+		                System.out.println("✅ iOS app terminated.");
+		            }
+		        }
+		    } catch (Exception e) {
+		        System.err.println("⚠️ Failed to terminate/reset app: " + e.getMessage());
+		    }
 	}
+	
+//	public void performLogin() {
+//		
+//		login.scrollIntoText("standard_user");
+//		login.getStandardUser();
+//		login.clickLoginBtn();
+//		
+//		// Verify if user success log in 
+//		login.verifySuccessLogin();
+//	}
 
 
 

@@ -1,4 +1,5 @@
 package Selenium.Pages;
+import java.time.Duration;
 import java.util.List;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
@@ -9,6 +10,7 @@ import Appium.Config.DriverManager;
 import io.appium.java_client.AppiumBy;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
+import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 public class ProductsList {
 	
@@ -17,73 +19,82 @@ public class ProductsList {
 	public ProductsList() {
 		
 	
-		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver()), this);
+		 PageFactory.initElements(
+			        new AppiumFieldDecorator(DriverManager.getDriver(), Duration.ofSeconds(15)),
+			        this   );
 	}
 	
 	@AndroidFindBy(accessibility = "test-ADD TO CART")
+	@iOSXCUITFindBy(accessibility = "test-ADD TO CART")
 	private WebElement addToCart;
 	
 	@AndroidFindBy(accessibility="test-PRODUCTS")
-	private WebElement listProducts;
+	@iOSXCUITFindBy(accessibility = "test-PRODUCTS")
+	private List<WebElement> listProducts;
 	
 	@AndroidFindBy(accessibility = "test-CHECKOUT")
+	@iOSXCUITFindBy(accessibility = "test-CHECKOUT")
 	private WebElement checkout;
 	
 	@AndroidFindBy(accessibility="test-First Name")
+	@iOSXCUITFindBy(accessibility = "test-First Name")
 	private WebElement firstNameField;
 	
 	@AndroidFindBy(accessibility = "test-FINISH")
+	@iOSXCUITFindBy(accessibility = "test-FINISH")
 	private WebElement finishBtn;
 	
 	@AndroidFindBy(accessibility = "test-CONTINUE")
+	@iOSXCUITFindBy(accessibility = "test-CONTINUE")
 	private WebElement continueBtn;
 	
 	@AndroidFindBy(accessibility="test-Zip/Postal Code")
+	@iOSXCUITFindBy(accessibility = "test-Zip/Postal Code")
 	private WebElement postalCodeField;
 	
 	@AndroidFindBy(accessibility="test-Last Name")
+	@iOSXCUITFindBy(accessibility = "test-Last Name")
 	private WebElement lastNameField;
 	
 	@AndroidFindBy(accessibility = "test-Error message")
+	@iOSXCUITFindBy(accessibility = "test-Error message")
 	private WebElement errorMessage;
 	
 	@AndroidFindBy(xpath = "(//android.view.ViewGroup[@content-desc=\"test-Price\"])[1]/android.widget.TextView")
-	private WebElement priceList;
+	@iOSXCUITFindBy(xpath = "//XCUIElementTypeStaticText[@name=\"test-Price\"]")
+	private List<WebElement> priceList;
+	
+	@AndroidFindBy(accessibility="test-Modal Selector Button")
+	@iOSXCUITFindBy(accessibility = "test-Modal Selector Button")
+	private WebElement filterBtn;
+	
+
+	@AndroidFindBy(xpath="//android.widget.TextView[@text='Price (low to high)']")
+	@iOSXCUITFindBy(iOSNsPredicate =  "name == 'Price (low to high)'")
+	private WebElement lowToHigh;
 	
 	public void getProdutsPriceListBeforeSorting() {
-		
-	
-		List<WebElement> productBeforeSorting = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Price']"));
-		int countProductsBeforeSorting = productBeforeSorting.size();
-	    for(int i = 0; i<countProductsBeforeSorting; i++ ) {
-			String sortPrices = productBeforeSorting.get(i).getText();
-			Double price = Double.parseDouble(sortPrices.substring(1));
-			Reporter.log("Price Before Sorting : "+price);
+		for (WebElement el : priceList) {
+		    double price = Double.parseDouble(el.getText().substring(1));
+		    Reporter.log("Price List Before Sorting : " + price);
 		}
 	
 	}
 	
 	public void getProdutsPriceListAfterSorting() {
-		
-		
-		List<WebElement> productBeforeSorting = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Price']"));
-		int countProductsBeforeSorting = productBeforeSorting.size();
-	    for(int i = 0; i<countProductsBeforeSorting; i++ ) {
-			String sortPrices = productBeforeSorting.get(i).getText();
-			double price = Double.parseDouble(sortPrices.substring(1));
-			Reporter.log("Price After Sorting : "+price);
+		for (WebElement el : priceList) {
+		    double price = Double.parseDouble(el.getText().substring(1));
+		    Reporter.log("Price List After Sorting : " + price);
 		}
+
 	
 	}
 	
-	@AndroidFindBy(accessibility="test-Modal Selector Button")
-	private WebElement filterBtn;
+
 	public void clickFilterBtn() {
 		filterBtn.click();
 	}
 
-	@AndroidFindBy(xpath="//android.widget.TextView[@text='Price (low to high)']")
-	private WebElement lowToHigh;
 	public void clickLowToHigh() {
 		lowToHigh.click();
 	}
@@ -178,7 +189,7 @@ public class ProductsList {
 	
 	public void verifyBackToListProducts() {
 		
-		if(listProducts.isDisplayed()){	
+		if(!listProducts.isEmpty()){	
 				Reporter.log("Success Back To List Products");
 		 	}
 		else{

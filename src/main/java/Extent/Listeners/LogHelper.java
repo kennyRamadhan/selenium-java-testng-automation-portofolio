@@ -75,7 +75,7 @@ public class LogHelper {
         if (currentStepNode != null) {
             currentStepNode.log(Status.INFO, message);
         } else {
-            ExtentNode.getTest().log(Status.FAIL, message);
+            ExtentNode.getTest().log(Status.INFO, message);
         }
     }
 
@@ -91,7 +91,7 @@ public class LogHelper {
     	if (currentStepNode != null) {
             currentStepNode.log(Status.PASS, message);
         } else {
-            ExtentNode.getTest().log(Status.FAIL, message);
+            ExtentNode.getTest().log(Status.PASS, message);
         }
     }
     
