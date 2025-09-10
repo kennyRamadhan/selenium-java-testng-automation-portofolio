@@ -1,0 +1,49 @@
+# ============================================
+# Maven & Build Artifacts
+# ============================================
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+release.properties
+
+# Maven wrapper files (optional)
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+
+# Logs
+*.log
+
+
+# ============================================
+# Appium & Node Related
+# ============================================
+node_modules/
+package-lock.json
+npm-debug.log*
+appium.log
+
+# ============================================
+# IDE Specific Files
+# ============================================
+
+# --- Eclipse ---
+.classpath
+.project
+.settings/
+
+# --- IntelliJ IDEA ---
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# --- VSCode ---
+.vscode/
+
+# ============================================
+# OS Specific Files
+# ============================================
+.DS_Store
+Thumbs.db
