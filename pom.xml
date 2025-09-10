@@ -11,6 +11,13 @@
   <name>Kenny Portofilio</name>
   <!-- FIXME change it to the project's website -->
   <url>http://www.example.com</url>
+  
+  <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <surefire.version>3.2.5</surefire.version>
+    </properties>
 
    <dependencies>
     <!-- https://mvnrepository.com/artifact/io.appium/java-client -->
