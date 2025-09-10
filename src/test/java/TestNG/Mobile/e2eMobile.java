@@ -1,12 +1,17 @@
-package KennyRamadhan.FlipTest;
+package TestNG.Mobile;
 import java.net.MalformedURLException;
 import com.github.javafaker.Faker;
+
+import Selenium.Pages.ProductsList;
+import Selenium.Pages.loginPage;
+import Appium.Config.AppiumServerManager;
+
 import java.net.URISyntaxException;
 import java.util.Locale;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-public class e2eMobile extends appiumBase {
+public class e2eMobile extends AppiumServerManager {
 	
 	@SuppressWarnings("deprecation")
 	Faker faker = new Faker(new Locale("id_ID"));  

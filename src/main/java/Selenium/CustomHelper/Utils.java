@@ -1,4 +1,4 @@
-package KennyRamadhan.FlipTest;
+package Selenium.CustomHelper;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package KennyRamadhan.FlipTest;
+package Selenium.Pages;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Reporter;
