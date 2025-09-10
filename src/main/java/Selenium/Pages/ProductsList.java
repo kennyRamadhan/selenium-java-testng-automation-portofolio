@@ -4,19 +4,20 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Reporter;
 import com.google.common.collect.Iterables;
+
+import Appium.Config.DriverManager;
 import io.appium.java_client.AppiumBy;
-import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 
 public class ProductsList {
 	
-	AndroidDriver driver;
+
 	
-	public ProductsList(AndroidDriver driver) {
+	public ProductsList() {
 		
-		this.driver = driver;
-		PageFactory.initElements(new AppiumFieldDecorator(driver), this);
+	
+		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver()), this);
 	}
 	
 	@AndroidFindBy(accessibility = "test-ADD TO CART")
@@ -52,7 +53,7 @@ public class ProductsList {
 	public void getProdutsPriceListBeforeSorting() {
 		
 	
-		List<WebElement> productBeforeSorting = driver.findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Price']"));
+		List<WebElement> productBeforeSorting = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Price']"));
 		int countProductsBeforeSorting = productBeforeSorting.size();
 	    for(int i = 0; i<countProductsBeforeSorting; i++ ) {
 			String sortPrices = productBeforeSorting.get(i).getText();
@@ -65,7 +66,7 @@ public class ProductsList {
 	public void getProdutsPriceListAfterSorting() {
 		
 		
-		List<WebElement> productBeforeSorting = driver.findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Price']"));
+		List<WebElement> productBeforeSorting = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Price']"));
 		int countProductsBeforeSorting = productBeforeSorting.size();
 	    for(int i = 0; i<countProductsBeforeSorting; i++ ) {
 			String sortPrices = productBeforeSorting.get(i).getText();
@@ -89,7 +90,7 @@ public class ProductsList {
 	
 	public void addProductsToCartDirectlyFromListMenu() {
 		
-		List<WebElement>  listProducts = driver.findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc=\"test-ADD TO CART\"]"));
+		List<WebElement>  listProducts = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc=\"test-ADD TO CART\"]"));
 		@SuppressWarnings("null")
 		WebElement lastElement = (WebElement) Iterables.get(listProducts,0);
 		lastElement.click();
@@ -98,7 +99,7 @@ public class ProductsList {
 	
 	public String getDetailsProducts() {
 		
-		List<WebElement> listProducts = driver.findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc=\"test-Item title\"]"));
+		List<WebElement> listProducts = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc=\"test-Item title\"]"));
 		int sizeProducts = listProducts.size();
 		
 		// choose product
@@ -109,9 +110,9 @@ public class ProductsList {
 			
 			if(productsNames.equalsIgnoreCase("Sauce Labs Backpack")) {
 				
-					driver.findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Item title']")).get(i).click();
+				DriverManager.getDriver().findElements(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Item title']")).get(i).click();
 				
-					String choosenProducts = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Item title']")).getText();
+					String choosenProducts = DriverManager.getDriver().findElement(AppiumBy.xpath("//android.widget.TextView[@content-desc='test-Item title']")).getText();
 					
 					// verify if chosen products equals to displayed products
 					if(productsNames.equalsIgnoreCase(choosenProducts)) {
@@ -124,7 +125,7 @@ public class ProductsList {
 					}
 			}
 		}
-		String descriptionProducts = driver.findElement(AppiumBy.xpath("//android.view.ViewGroup[@content-desc='test-Description']/android.widget.TextView[1]")).getText();
+		String descriptionProducts = DriverManager.getDriver().findElement(AppiumBy.xpath("//android.view.ViewGroup[@content-desc='test-Description']/android.widget.TextView[1]")).getText();
 		return descriptionProducts;
 	}
 	
@@ -137,7 +138,7 @@ public class ProductsList {
 
 	public void scrollIntoText(String text) {
 		
-		driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\""+text+"\"));"));
+		DriverManager.getDriver().findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\""+text+"\"));"));
 	}
 
 	public void addToCartFromDetailsProducts() {
@@ -159,7 +160,7 @@ public class ProductsList {
 	@SuppressWarnings("null")
 	public void addMultipleProducts() {
 		
-		List<WebElement>  listProducts = driver.findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc=\"test-ADD TO CART\"]"));
+		List<WebElement>  listProducts = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc=\"test-ADD TO CART\"]"));
 		@SuppressWarnings("null")
 		WebElement lastElement = (WebElement) Iterables.get(listProducts,0);
 		WebElement last = (WebElement) Iterables.get(listProducts,1);
@@ -187,7 +188,7 @@ public class ProductsList {
 	
 	public Double getTotalPriceBeforeCheckout() {
 		
-		List<WebElement> productPrice = driver.findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc='test-Price']/android.widget.TextView"));
+		List<WebElement> productPrice = DriverManager.getDriver().findElements(AppiumBy.xpath("//android.view.ViewGroup[@content-desc='test-Price']/android.widget.TextView"));
 		int countProductPrice = productPrice.size();
 		double totalAmount = 0;
 		
@@ -226,8 +227,8 @@ public class ProductsList {
 	}
 	
 	public double getActualTotalPriceAfterCheckout() {
-		driver.findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Item total: $39.98\"));"));
-		String actualTotalAmountString = driver.findElement(AppiumBy.xpath("//android.widget.TextView[@text='Item total: $39.98']")).getText();
+		DriverManager.getDriver().findElement(AppiumBy.androidUIAutomator("new UiScrollable(new UiSelector()).scrollIntoView(text(\"Item total: $39.98\"));"));
+		String actualTotalAmountString = DriverManager.getDriver().findElement(AppiumBy.xpath("//android.widget.TextView[@text='Item total: $39.98']")).getText();
 		double actualTotalAmount = Double.parseDouble(actualTotalAmountString.substring(13));
 		Reporter.log("Actual Total Amount : "+actualTotalAmount);
 		return actualTotalAmount;

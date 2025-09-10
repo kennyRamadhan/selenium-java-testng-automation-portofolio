@@ -3,7 +3,7 @@ import java.net.MalformedURLException;
 import com.github.javafaker.Faker;
 
 import Selenium.Pages.ProductsList;
-import Selenium.Pages.loginPage;
+import Selenium.Pages.Login;
 import Appium.Config.AppiumServerManager;
 
 import java.net.URISyntaxException;
@@ -19,7 +19,7 @@ public class e2eMobile extends AppiumServerManager {
 	public void login() throws MalformedURLException, URISyntaxException  {
 		
 		// Login using given credentials
-		loginPage login = new loginPage(driver);
+		Login login = new Login();
 		login.scrollIntoText("standard_user");
 		login.getStandardUser();
 		login.clickLoginBtn();
@@ -32,7 +32,7 @@ public class e2eMobile extends AppiumServerManager {
 	public void failedLogin() throws MalformedURLException, URISyntaxException {
 		
 		// login with input invalid credentials
-		loginPage login = new loginPage(driver);
+		Login login = new Login();
 		login.setUsername("Wrong Username");
 		login.setPassword("Wrong Password");
 		login.clickLoginBtn();
@@ -45,8 +45,8 @@ public class e2eMobile extends AppiumServerManager {
 	public void sortingPrice() throws MalformedURLException, URISyntaxException  {
 		
 		// Login using given credentials
-		ProductsList productsList = new ProductsList(driver);
-		loginPage login = new loginPage(driver);
+		ProductsList productsList = new ProductsList();
+		Login login = new Login();
 		login.scrollIntoText("standard_user");
 		login.getStandardUser();
 		login.clickLoginBtn();
@@ -68,8 +68,8 @@ public class e2eMobile extends AppiumServerManager {
 	@Test // d. Verify user can add products to cart from the product listing screen.
 	public void addProductsFromListing() throws MalformedURLException, URISyntaxException {
 		
-		ProductsList productsList = new ProductsList(driver);
-		loginPage login = new loginPage(driver);
+		ProductsList productsList = new ProductsList();
+		Login login = new Login();
 		// Login using given credentials
 		login.scrollIntoText("standard_user");
 		login.getStandardUser();
@@ -85,8 +85,8 @@ public class e2eMobile extends AppiumServerManager {
 	@Test // e. Verify user can add products to cart from the product details screen.
 	public void addProductsFromDetails() throws MalformedURLException, URISyntaxException {
 		
-		loginPage login = new loginPage(driver);
-		ProductsList productsList = new ProductsList(driver);
+		Login login = new Login();
+		ProductsList productsList = new ProductsList();
 		
 		// Login using given credentials
 		login.scrollIntoText("standard_user");
@@ -111,8 +111,8 @@ public class e2eMobile extends AppiumServerManager {
 	@Test // f. Verify user can add multiple products in the cart at a time.
 	public void addMultipleProducts() throws MalformedURLException, URISyntaxException {
 		// Login using given credentials
-		loginPage login = new loginPage(driver);
-		ProductsList productsList = new ProductsList(driver);
+		Login login = new Login();
+		ProductsList productsList = new ProductsList();
 		login.scrollIntoText("standard_user");
 		login.getStandardUser();
 		login.clickLoginBtn();
@@ -127,8 +127,8 @@ public class e2eMobile extends AppiumServerManager {
 	@Test // g. Verify user redirection to product listing screen by tapping on continue shipping option in the cart section.
 	public void redirectionToProductListing() throws MalformedURLException, URISyntaxException {
 		
-		ProductsList productsList = new ProductsList(driver);
-		loginPage login = new loginPage(driver);
+		ProductsList productsList = new ProductsList();
+		Login login = new Login();
 		
 		// Login using given credentials
 		login.scrollIntoText("standard_user");
@@ -154,8 +154,8 @@ public class e2eMobile extends AppiumServerManager {
 	@Test // h. Verify details of the product added into the cart.
 	public void verifyDetailsProductIntoCart() throws MalformedURLException, URISyntaxException {
 		
-		ProductsList productsList = new ProductsList(driver);
-		loginPage login = new loginPage(driver);
+		ProductsList productsList = new ProductsList();
+		Login login = new Login();
 		
 		// login with given credentials
 		login.scrollIntoText("standard_user");
@@ -184,7 +184,7 @@ public class e2eMobile extends AppiumServerManager {
 	public void checkoutPositiveFlow() throws MalformedURLException, URISyntaxException {
 		
 		// Login using given credentials
-		loginPage login = new loginPage(driver);
+		Login login = new Login();
 		login.scrollIntoText("standard_user");
 		login.getStandardUser();
 		login.clickLoginBtn();
@@ -193,7 +193,7 @@ public class e2eMobile extends AppiumServerManager {
 		login.verifySuccessLogin();
 		
 		// add multiples products to cart
-		ProductsList productsList = new ProductsList(driver);
+		ProductsList productsList = new ProductsList();
 		productsList.addMultipleProducts();
 		productsList.clickCart();
 		
@@ -227,7 +227,7 @@ public class e2eMobile extends AppiumServerManager {
 	public void checkoutNegativeFlow() throws MalformedURLException, URISyntaxException {
 		
 		// Login using given credentials
-		loginPage login = new loginPage(driver);
+		Login login = new Login();
 		login.scrollIntoText("standard_user");
 		login.getStandardUser();
 		login.clickLoginBtn();
@@ -236,7 +236,7 @@ public class e2eMobile extends AppiumServerManager {
 		login.verifySuccessLogin();
 	
 		// add multiples products to cart
-		ProductsList productsList = new ProductsList(driver);
+		ProductsList productsList = new ProductsList();
 		productsList.addMultipleProducts();
 		productsList.clickCart();
 		//Checkout
