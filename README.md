@@ -1,6 +1,6 @@
 ###  Automation Project Description
 
-		This project provides a complete mobile,web & API automation testing framework for iOS  using **Selenium + Appium + TestNG**,   
+		This project provides a complete mobile,web & API automation testing framework using **Selenium + Appium + TestNG**,   
         with built-in reporting extent report. You can run this project with simple configuration just set your capabilities on config.properties for mobile test.
         No need to set path node js and appium main.js you can run this project from Windows and iOS.
 				
