@@ -1,6 +1,6 @@
 ###  Automation Project Description
 
-				This project provides a complete mobile,web & API automation testing framework for iOS  using **Selenium + Appium + TestNG**,   
+		This project provides a complete mobile,web & API automation testing framework for iOS  using **Selenium + Appium + TestNG**,   
         with built-in reporting extent report. You can run this project with simple configuration just set your capabilities on config.properties for mobile test.
         No need to set path node js and appium main.js you can run this project from Windows and iOS.
 				
@@ -44,14 +44,6 @@
 				  npm install -g appium
 				- Xcode (for iOS Simulator support)
 				- Real Device (if running tests on a real device)
----
-
-### Git Workflow
-
-				- Make sure to follow these best practices when working with this repository:
-				- Always run git pull before starting new work after cloning.
-				- Write clear, descriptive commit messages when committing and pushing changes.
-				- Use feature branches if multiple contributors are working simultaneously.
 ---
 
 ### Running Tests
