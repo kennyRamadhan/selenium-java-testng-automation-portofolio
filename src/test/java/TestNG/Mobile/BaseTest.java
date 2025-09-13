@@ -12,6 +12,7 @@ import Appium.Config.AppiumServerManager;
 import Appium.Config.DriverManager;
 import Selenium.Pages.Login;
 import io.appium.java_client.AppiumDriver;
+
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDriver;
 
@@ -90,6 +91,7 @@ public class BaseTest {
 	 *
 	 * @throws Exception jika gagal melakukan re-inisialisasi driver
 	 */
+
 	@BeforeMethod
 	public void ensureDriverReady() throws Exception {
 		  if (DriverManager.getDriver() == null) {
@@ -102,6 +104,22 @@ public class BaseTest {
 	            }
 
 		}
+		  
+		  // Pastikan app kembali terbuka
+			 AppiumDriver driver = DriverManager.getDriver();
+		    String platformName = driver.getCapabilities().getCapability("platformName").toString().toLowerCase();
+
+		    if (platformName.contains("android")) {
+		        // Untuk Android: gunakan launchApp()
+		    	 driver.executeScript("mobile: launchApp", new HashMap<>());
+		    } else if (platformName.contains("ios")) {
+		        // Untuk iOS: gunakan bundleId untuk launch ulang
+		        Map<String, Object> launchAppArgs = new HashMap<>();
+		        launchAppArgs.put("bundleId", "com.saucelabs.SwagLabsMobileApp");
+		        driver.executeScript("mobile: launchApp", launchAppArgs);
+		    }
+
+		    System.out.println("Driver & App siap digunakan.");
 	}
 
 	/**

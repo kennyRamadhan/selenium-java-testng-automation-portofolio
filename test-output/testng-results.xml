@@ -1,33 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results ignored="0" total="1" passed="1" failed="0" skipped="0">
+<testng-results ignored="0" total="4" passed="4" failed="0" skipped="0">
   <reporter-output>
   </reporter-output>
-  <suite started-at="2025-09-11T02:12:11 WIB" name="Suite" finished-at="2025-09-11T02:12:23 WIB" duration-ms="12522">
+  <suite started-at="2025-09-12T12:06:11 WIB" name="Suite" finished-at="2025-09-12T12:07:22 WIB" duration-ms="70269">
     <groups>
     </groups>
-    <test started-at="2025-09-11T02:12:11 WIB" name="E2E Mobile" finished-at="2025-09-11T02:12:23 WIB" duration-ms="12522">
+    <test started-at="2025-09-12T12:06:11 WIB" name="E2E Mobile" finished-at="2025-09-12T12:07:22 WIB" duration-ms="70269">
       <class name="TestNG.Mobile.e2eMobile">
-        <test-method is-config="true" signature="setUp()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:11 WIB" name="setUp" finished-at="2025-09-11T02:12:19 WIB" duration-ms="8414" status="PASS">
+        <test-method is-config="true" signature="setUp()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:11 WIB" name="setUp" finished-at="2025-09-12T12:06:24 WIB" duration-ms="12809" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setUp -->
-        <test-method is-config="true" signature="ensureDriverReady()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:19 WIB" name="ensureDriverReady" finished-at="2025-09-11T02:12:19 WIB" duration-ms="1" status="PASS">
+        <test-method is-config="true" signature="ensureDriverReady()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:24 WIB" name="ensureDriverReady" finished-at="2025-09-12T12:06:24 WIB" duration-ms="72" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- ensureDriverReady -->
-        <test-method is-config="true" signature="setupPages()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:19 WIB" name="setupPages" finished-at="2025-09-11T02:12:20 WIB" duration-ms="476" status="PASS">
+        <test-method is-config="true" signature="setupPages()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:24 WIB" name="setupPages" finished-at="2025-09-12T12:06:25 WIB" duration-ms="452" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- setupPages -->
-        <test-method signature="login()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:20 WIB" name="login" finished-at="2025-09-11T02:12:22 WIB" duration-ms="2305" status="PASS">
+        <test-method signature="login()[pri:1, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:25 WIB" name="login" finished-at="2025-09-12T12:06:27 WIB" duration-ms="2797" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- login -->
-        <test-method is-config="true" signature="resetAppState()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:22 WIB" name="resetAppState" finished-at="2025-09-11T02:12:23 WIB" duration-ms="1043" status="PASS">
+        <test-method is-config="true" signature="resetAppState()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:28 WIB" name="resetAppState" finished-at="2025-09-12T12:06:29 WIB" duration-ms="1139" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- resetAppState -->
-        <test-method is-config="true" signature="tearDown()[pri:0, instance:TestNG.Mobile.e2eMobile@4ea5b703]" started-at="2025-09-11T02:12:24 WIB" name="tearDown" finished-at="2025-09-11T02:12:28 WIB" duration-ms="4027" status="PASS">
+        <test-method is-config="true" signature="ensureDriverReady()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:29 WIB" name="ensureDriverReady" finished-at="2025-09-12T12:06:31 WIB" duration-ms="2525" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ensureDriverReady -->
+        <test-method is-config="true" signature="setupPages()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:31 WIB" name="setupPages" finished-at="2025-09-12T12:06:32 WIB" duration-ms="171" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupPages -->
+        <test-method signature="failedLogin()[pri:2, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:32 WIB" name="failedLogin" finished-at="2025-09-12T12:06:35 WIB" duration-ms="3831" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- failedLogin -->
+        <test-method is-config="true" signature="resetAppState()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:35 WIB" name="resetAppState" finished-at="2025-09-12T12:06:37 WIB" duration-ms="1071" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppState -->
+        <test-method is-config="true" signature="ensureDriverReady()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:37 WIB" name="ensureDriverReady" finished-at="2025-09-12T12:06:38 WIB" duration-ms="1849" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ensureDriverReady -->
+        <test-method is-config="true" signature="setupPages()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:38 WIB" name="setupPages" finished-at="2025-09-12T12:06:39 WIB" duration-ms="212" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupPages -->
+        <test-method signature="sortingPrice()[pri:3, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:39 WIB" name="sortingPrice" finished-at="2025-09-12T12:06:46 WIB" duration-ms="7067" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- sortingPrice -->
+        <test-method is-config="true" signature="resetAppState()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:46 WIB" name="resetAppState" finished-at="2025-09-12T12:06:47 WIB" duration-ms="1086" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppState -->
+        <test-method is-config="true" signature="ensureDriverReady()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:47 WIB" name="ensureDriverReady" finished-at="2025-09-12T12:06:49 WIB" duration-ms="1945" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- ensureDriverReady -->
+        <test-method is-config="true" signature="setupPages()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:49 WIB" name="setupPages" finished-at="2025-09-12T12:06:49 WIB" duration-ms="240" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- setupPages -->
+        <test-method signature="addProductsFromListing()[pri:4, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:06:49 WIB" name="addProductsFromListing" finished-at="2025-09-12T12:07:20 WIB" duration-ms="31108" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- addProductsFromListing -->
+        <test-method is-config="true" signature="resetAppState()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:07:20 WIB" name="resetAppState" finished-at="2025-09-12T12:07:22 WIB" duration-ms="1081" status="PASS">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- resetAppState -->
+        <test-method is-config="true" signature="tearDown()[pri:0, instance:TestNG.Mobile.e2eMobile@64e7619d]" started-at="2025-09-12T12:07:23 WIB" name="tearDown" finished-at="2025-09-12T12:07:27 WIB" duration-ms="4354" status="PASS">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- tearDown -->

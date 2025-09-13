@@ -1,12 +1,19 @@
 package Selenium.CustomHelper;
 
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 
 import Appium.Config.DriverManager;
+import Extent.Listeners.LogHelper;
 import io.appium.java_client.AppiumBy;
 
 public class UtilsHelper {
@@ -53,5 +60,88 @@ public class UtilsHelper {
 	        throw new UnsupportedOperationException("Unsupported platform: " + platformName);
 	    }
 	}
+	
+	
+	  /**
+     * Ambil semua harga dari list WebElement, konversi ke Double, dan log ke report.
+     *
+     * @param elements Daftar WebElement yang berisi harga.
+     * @param label Label log (misal: "Before Sorting" atau "After Sorting").
+     * @return List<Double> berisi harga dalam format numerik.
+     */
+    public static List<Double> extractPrices(List<WebElement> elements, String label) {
+        List<Double> prices = new ArrayList<>();
+        for (WebElement el : elements) {
+            double price = Double.parseDouble(el.getText().replace("$", "").trim());
+            prices.add(price);
+            LogHelper.step("Verifikasi Product List");
+            LogHelper.detail(" Mendapatkan Nilai "+label + " : " + price);
+        }
+        return prices;
+    }
+
+    /**
+     * Periksa apakah urutan harga sudah ascending.
+     */
+    public static boolean isSortedAscending(List<Double> prices) {
+        List<Double> sorted = new ArrayList<>(prices);
+        Collections.sort(sorted);
+        return sorted.equals(prices);
+    }
+
+    /**
+     * Periksa apakah urutan harga sudah descending.
+     */
+    public static boolean isSortedDescending(List<Double> prices) {
+        List<Double> sorted = new ArrayList<>(prices);
+        sorted.sort(Collections.reverseOrder());
+        return sorted.equals(prices);
+    }
+
+    /**
+     * Verifikasi apakah urutan berubah (setelah klik sort).
+     */
+    public static void verifySortingChanged(List<Double> before, List<Double> after) {
+        Assert.assertNotEquals(after, before, "Urutan produk tidak berubah setelah sorting!");
+    }
+
+    /**
+     * Verifikasi apakah list sudah dalam urutan ascending atau descending.
+     */
+    public static void verifySortingOrder(List<Double> prices) {
+        boolean asc = isSortedAscending(prices);
+        boolean desc = isSortedDescending(prices);
+        LogHelper.step("Verifikasi Urutan Product");
+        Assert.assertTrue(asc || desc, "Urutan produk tidak ASC dan tidak DESC!");
+        LogHelper.detail("Urutan produk valid (" + (asc ? "Ascending" : "Descending") + ")");
+    }
+    
+    
+    public void verifyElementExist(WebElement element) {
+		  WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
+	        try {
+	            wait.until(ExpectedConditions.visibilityOf(element));
+	            System.out.println("✅ Element ditemukan: " + element);
+	        } catch (Exception e) {
+	            throw new RuntimeException("❌ Element tidak ditemukan: " + element, e);
+	        }
+
+	}
+    
+    /**
+     * Tap element by its center coordinates (force tap).
+     * This works even if element.click() fails.
+     */
+    public void tapByCoordinates(WebElement element, int offset) {
+        int centerX = element.getRect().x + (element.getRect().width / 2);
+        int centerY = element.getRect().y + (element.getRect().height / 2 + offset);
+        Map<String, Object> tapParams = new HashMap<>();
+        tapParams.put("x", centerX);
+        tapParams.put("y", centerY);
+        System.out.println("🔘 Force tap at: X=" + centerX + " Y=" + centerY);
+        DriverManager.getDriver().executeScript("mobile: tap", tapParams);
+    }
+
+
 
 }

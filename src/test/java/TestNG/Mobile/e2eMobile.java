@@ -6,10 +6,12 @@ import com.github.javafaker.Faker;
 import Selenium.Pages.ProductsList;
 import Selenium.CustomHelper.UtilsHelper;
 import Selenium.Pages.Login;
+import Selenium.Pages.ProductsDetail;
 
 import java.net.URISyntaxException;
+import java.util.List;
 import java.util.Locale;
-import org.testng.Assert;
+
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -17,6 +19,8 @@ public class e2eMobile extends BaseTest {
 	
 	private Login login;
 	private ProductsList productsList;
+	private ProductsDetail detailProducts;
+	@SuppressWarnings("unused")
 	private UtilsHelper helper;
 	/**
 	 * Inisialisasi page object sebelum setiap test dijalankan.
@@ -26,100 +30,78 @@ public class e2eMobile extends BaseTest {
 	 login = new Login();
 	 productsList = new ProductsList();
 	 helper = new UtilsHelper();
-	
+	 detailProducts = new ProductsDetail();
 
 	}
 	
 	@SuppressWarnings("deprecation")
 	Faker faker = new Faker(new Locale("id_ID"));  
-	@Test //a. Verify user login using given credentials.
+	@Test(priority=1) //a. Verify user login using given credentials.
 	public void login() throws MalformedURLException, URISyntaxException  {
 		
 		// Login using given credentials
-		
-		helper.scrollIntoText("standard_user");
-		login.getStandardUser();
-		login.clickLoginBtn();
-		
-		// Verify if user success log in 
-		login.verifySuccessLogin();
+		login.getAutoCredentials("standard_user");
+		productsList.tapCart();
 	}
-//
-//	@Test // b. Verify failure message in case of invalid login credentials are entered by the user.
-//	public void failedLogin() throws MalformedURLException, URISyntaxException {
-//		
-//		// login with input invalid credentials
-//		login.setUsername("Wrong Username");
-//		login.setPassword("Wrong Password");
-//		login.clickLoginBtn();
-//
-//		// Verify if user get alert message after input wrong credentials 
-//		login.verifyErrorMessage();
-//	}
-//	
-//	@Test // c. Verify Price (high to low) and (low to high) filter are working as expected.
-//	public void sortingPrice() throws MalformedURLException, URISyntaxException  {
-//		
-//		// Login using given credentials
-//		
-//		helper.scrollIntoText("standard_user");
-//		login.getStandardUser();
-//		login.clickLoginBtn();
-//		
-//		// Verify if user success log in 
-//		login.verifySuccessLogin();
-//		
-//		// Listing price products store it in list 
-//		productsList.getProdutsPriceListBeforeSorting();
-//		
-//	    // sorting ascending price
-//		productsList.clickFilterBtn();
-//		productsList.clickLowToHigh();
-//		
-//		// listing price products after sorting by ascending price 
-//		productsList.getProdutsPriceListAfterSorting();
-//	}
-//	
-//	@Test // d. Verify user can add products to cart from the product listing screen.
-//	public void addProductsFromListing() throws MalformedURLException, URISyntaxException {
-//		
-//		
-//		// Login using given credentials
-//		helper.scrollIntoText("standard_user");
-//		login.getStandardUser();
-//		login.clickLoginBtn();
-//		
-//		// Verify if user success log in 
-//		login.verifySuccessLogin();
-//		
-//		// Add Products Directly From List products 
-//		productsList.addProductsToCartDirectlyFromListMenu();
-//	}
-//	
-//	@Test // e. Verify user can add products to cart from the product details screen.
-//	public void addProductsFromDetails() throws MalformedURLException, URISyntaxException {
-//		
-//		
-//		
-//		// Login using given credentials
-//		helper.scrollIntoText("standard_user");
-//		login.getStandardUser();
-//		login.clickLoginBtn();
-//		
-//		// Verify if user success log in 
-//		login.verifySuccessLogin();
-//		
-//		// choose product
-//		productsList.getDetailsProducts();
-//		
-//		// Add To Cart From Details Products
-//		productsList.scrollIntoText("ADD TO CART");
-//		productsList.addToCartFromDetailsProducts();
-//		
-//		// Verify cart added after user click add to cart
-//		productsList.verifyProductsSuccesfullyAddedIntoCart();
-//		
-//	}
+
+	@Test(priority=2) // b. Verify failure message in case of invalid login credentials are entered by the user.
+	public void failedLogin() throws MalformedURLException, URISyntaxException {
+		
+		// login with input invalid credentials
+		login.setManualCredentials("Wrong Username", "Wrong Password");
+	}
+	
+	@Test(priority=3) // c. Verify Price (high to low) and (low to high) filter are working as expected.
+	public void sortingPrice() throws MalformedURLException, URISyntaxException  {
+		
+		// Login using given credentials
+		login.getAutoCredentials("standard_user");
+		
+		
+		 // Ambil harga sebelum sorting
+	    List<Double> before = UtilsHelper.extractPrices(productsList.getPriceElements(), "Before Sorting");
+	    
+	    productsList.clickFilterBtn();
+	    productsList.clickLowToHigh();
+	    
+	    // Ambil harga setelah sorting
+	    List<Double> after = UtilsHelper.extractPrices(productsList.getPriceElements(), "After Sorting");
+	    
+	    // Verifikasi urutan berubah
+	    UtilsHelper.verifySortingChanged(before, after);
+	    
+	    // Verifikasi urutan valid (ascending atau descending)
+	    UtilsHelper.verifySortingOrder(after);
+		 
+		 
+			
+	}
+	
+	@Test(priority=4) // d. Verify user can add products to cart from the product listing screen.
+	public void addProductsFromListing() throws MalformedURLException, URISyntaxException {
+		
+		// Login using given credentials
+		login.getAutoCredentials("standard_user");
+	
+		// Add Products Directly From List products 
+		productsList.addAllProducts();;
+	}
+	
+	@Test // e. Verify user can add products to cart from the product details screen.
+	public void addProductsFromDetails() throws MalformedURLException, URISyntaxException {
+		
+		
+		
+		login.getAutoCredentials("standard_user");
+		
+		// choose product
+		productsList.selectAndGetDetailsProducts("Sauce");
+		
+		// Add To Cart From Details Products
+		detailProducts.addToCartFromDetailsProducts();
+		
+	
+	}
 //	
 //	@Test // f. Verify user can add multiple products in the cart at a time.
 //	public void addMultipleProducts() throws MalformedURLException, URISyntaxException {

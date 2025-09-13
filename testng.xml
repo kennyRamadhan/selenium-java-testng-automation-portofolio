@@ -5,10 +5,17 @@
 		<listener class-name="Extent.Listeners.TestListeners"></listener>
 	</listeners>
 	
-  <test name="E2E Mobile">
-    <classes>
-      <class name="TestNG.Mobile.e2eMobile"/>
-    </classes>
-  </test> <!-- Test -->
+   <test name="E2E Mobile">
+        <classes>
+            <class name="TestNG.Mobile.e2eMobile">
+                <methods>
+                    <include name="login"/>
+                    <include name="failedLogin"/>
+                    <include name="sortingPrice"/>
+                    <include name="addProductsFromListing"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
   
 </suite> <!-- Suite -->

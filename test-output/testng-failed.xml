@@ -9,11 +9,11 @@
       <class name="TestNG.Mobile.e2eMobile">
         <methods>
           <include name="setUp"/>
+          <include name="addProductsFromListing"/>
           <include name="resetAppState"/>
           <include name="tearDown"/>
           <include name="setupPages"/>
           <include name="ensureDriverReady"/>
-          <include name="login"/>
         </methods>
       </class> <!-- TestNG.Mobile.e2eMobile -->
     </classes>
