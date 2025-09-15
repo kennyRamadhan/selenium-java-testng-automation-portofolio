@@ -4,18 +4,27 @@
 	<listeners>
 		<listener class-name="Extent.Listeners.TestListeners"></listener>
 	</listeners>
-	
-   <test name="E2E Mobile">
-        <classes>
-            <class name="TestNG.Mobile.e2eMobile">
-                <methods>
-                    <include name="login"/>
-                    <include name="failedLogin"/>
-                    <include name="sortingPrice"/>
-                    <include name="addProductsFromListing"/>
-                </methods>
-            </class>
-        </classes>
-    </test>
-  
-</suite> <!-- Suite -->
+
+	<test name="E2E Mobile">
+		<classes>
+			<class name="TestNG.Mobile.e2eMobile">
+				<methods>
+					<include name="login" />
+					<include name="failedLogin" />
+					<include name="sortingPrice" />
+					<include name="addAllProductsFromListing" />
+					<include name="addProductsFromDetails" />
+					<include name="addMultipleProducts" />
+					<include name="redirectionToProductListing" />
+					<include name="verifyDetailsProductIntoCart" />
+					<include name="checkoutPositiveFlow" />
+					<include name="checkoutNegativeFlow" />
+				</methods>
+			</class>
+			<class name="TestNG.Mobile.Test"></class>
+		</classes>
+
+	</test>
+
+</suite> <!--
+Suite -->

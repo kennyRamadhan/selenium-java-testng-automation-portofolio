@@ -55,11 +55,11 @@ function toggleAllBoxes() {
 <body>
 <h2 align='center'>E2E Mobile</h2><table border='1' align="center">
 <tr>
-<td>Tests passed/Failed/Skipped:</td><td>4/0/0</td>
+<td>Tests passed/Failed/Skipped:</td><td>10/0/1</td>
 </tr><tr>
-<td>Started on:</td><td>Fri Sep 12 12:06:11 WIB 2025</td>
+<td>Started on:</td><td>Mon Sep 15 09:08:46 WIB 2025</td>
 </tr>
-<tr><td>Total time:</td><td>70 seconds (70269 ms)</td>
+<tr><td>Total time:</td><td>161 seconds (161676 ms)</td>
 </tr><tr>
 <td>Included groups:</td><td></td>
 </tr><tr>
@@ -67,6 +67,71 @@ function toggleAllBoxes() {
 </tr>
 </table><p/>
 <small><i>(Hover the method name to see the test class name)</i></small><p/>
+<table width='100%' border='1' class='invocation-failed'>
+<tr><td colspan='4' align='center'><b>FAILED CONFIGURATIONS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='TestNG.Mobile.Test.setUp()'><b>setUp</b><br>Test class: TestNG.Mobile.Test</td>
+<td><div><pre>java.lang.RuntimeException: Unable to initialize driver - unknown error.
+	at Appium.Config.AppiumServerManager.initDriver(AppiumServerManager.java:199)
+	at TestNG.Mobile.BaseTest.setUp(BaseTest.java:64)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 23 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace214350510", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace214350510'><pre>java.lang.RuntimeException: Unable to initialize driver - unknown error.
+	at Appium.Config.AppiumServerManager.initDriver(AppiumServerManager.java:199)
+	at TestNG.Mobile.BaseTest.setUp(BaseTest.java:64)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethodConsideringTimeout(MethodInvocationHelper.java:69)
+	at org.testng.internal.invokers.ConfigInvoker.invokeConfigurationMethod(ConfigInvoker.java:390)
+	at org.testng.internal.invokers.ConfigInvoker.invokeConfigurations(ConfigInvoker.java:325)
+	at org.testng.internal.invokers.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:180)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:122)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.testng.TestRunner.privateRun(TestRunner.java:848)
+	at org.testng.TestRunner.run(TestRunner.java:621)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1280)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1200)
+	at org.testng.TestNG.runSuites(TestNG.java:1114)
+	at org.testng.TestNG.run(TestNG.java:1082)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+</pre></div></td>
+<td>2</td>
+<td>TestNG.Mobile.Test@62833051</td></tr>
+</table><p>
+<table width='100%' border='1' class='invocation-skipped'>
+<tr><td colspan='4' align='center'><b>SKIPPED CONFIGURATIONS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='TestNG.Mobile.Test.ensureDriverReady()'><b>ensureDriverReady</b><br>Test class: TestNG.Mobile.Test</td>
+<td></td>
+<td>0</td>
+<td>TestNG.Mobile.Test@62833051</td></tr>
+<tr>
+<td title='TestNG.Mobile.Test.setupPages()'><b>setupPages</b><br>Test class: TestNG.Mobile.Test</td>
+<td></td>
+<td>0</td>
+<td>TestNG.Mobile.Test@62833051</td></tr>
+</table><p>
 <table width='100%' border='1' class='invocation-passed'>
 <tr><td colspan='4' align='center'><b>PASSED TESTS</b></td></tr>
 <tr><td><b>Test method</b></td>
@@ -76,25 +141,108 @@ function toggleAllBoxes() {
 <td><b>Instance</b></td>
 </tr>
 <tr>
-<td title='TestNG.Mobile.e2eMobile.login()'><b>login</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td title='TestNG.Mobile.e2eMobile.addMultipleProducts()'><b>addMultipleProducts</b><br>Test class: TestNG.Mobile.e2eMobile</td>
 <td></td>
-<td>2</td>
-<td>TestNG.Mobile.e2eMobile@64e7619d</td></tr>
+<td>4</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
 <tr>
-<td title='TestNG.Mobile.e2eMobile.addProductsFromListing()'><b>addProductsFromListing</b><br>Test class: TestNG.Mobile.e2eMobile</td>
-<td></td>
-<td>31</td>
-<td>TestNG.Mobile.e2eMobile@64e7619d</td></tr>
-<tr>
-<td title='TestNG.Mobile.e2eMobile.sortingPrice()'><b>sortingPrice</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td title='TestNG.Mobile.e2eMobile.redirectionToProductListing()'><b>redirectionToProductListing</b><br>Test class: TestNG.Mobile.e2eMobile</td>
 <td></td>
 <td>7</td>
-<td>TestNG.Mobile.e2eMobile@64e7619d</td></tr>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.checkoutNegativeFlow()'><b>checkoutNegativeFlow</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td></td>
+<td>15</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
 <tr>
 <td title='TestNG.Mobile.e2eMobile.failedLogin()'><b>failedLogin</b><br>Test class: TestNG.Mobile.e2eMobile</td>
 <td></td>
-<td>3</td>
-<td>TestNG.Mobile.e2eMobile@64e7619d</td></tr>
+<td>4</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.addAllProductsFromListing()'><b>addAllProductsFromListing</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td></td>
+<td>31</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.verifyDetailsProductIntoCart()'><b>verifyDetailsProductIntoCart</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td></td>
+<td>9</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.checkoutPositiveFlow()'><b>checkoutPositiveFlow</b><br>Test class: TestNG.Mobile.e2eMobile<br/>
+<a href="#Output-1642043878" onClick='toggleBox("Output-1642043878", this, "Show output", "Hide output");'>Show output</a>
+
+<a href="#Output-1642043878" onClick="toggleAllBoxes();">Show all outputs</a>
+<div class='log' id="Output-1642043878">
+✅ Total Amount Price Without Taxes: 39.98<br/>
+</div>
+</td>
+<td></td>
+<td>14</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.login()'><b>login</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td></td>
+<td>4</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.sortingPrice()'><b>sortingPrice</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td></td>
+<td>6</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+<tr>
+<td title='TestNG.Mobile.e2eMobile.addProductsFromDetails()'><b>addProductsFromDetails</b><br>Test class: TestNG.Mobile.e2eMobile</td>
+<td></td>
+<td>9</td>
+<td>TestNG.Mobile.e2eMobile@352ff4da</td></tr>
+</table><p>
+<table width='100%' border='1' class='invocation-skipped'>
+<tr><td colspan='4' align='center'><b>SKIPPED TESTS</b></td></tr>
+<tr><td><b>Test method</b></td>
+<td><b>Attribute(s)</b></td>
+<td width="30%"><b>Exception</b></td>
+<td width="10%"><b>Time (seconds)</b></td>
+<td><b>Instance</b></td>
+</tr>
+<tr>
+<td title='TestNG.Mobile.Test.addMultipleProducts()'><b>addMultipleProducts</b><br>Test class: TestNG.Mobile.Test</td>
+<td><div><pre>java.lang.RuntimeException: Unable to initialize driver - unknown error.
+	at Appium.Config.AppiumServerManager.initDriver(AppiumServerManager.java:199)
+	at TestNG.Mobile.BaseTest.setUp(BaseTest.java:64)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 23 stack frames</pre></div><a href='#' onClick='toggleBox("stack-trace1502969393", this, "Click to show all stack frames", "Click to hide stack frames")'>Click to show all stack frames</a>
+<div class='stack-trace' id='stack-trace1502969393'><pre>java.lang.RuntimeException: Unable to initialize driver - unknown error.
+	at Appium.Config.AppiumServerManager.initDriver(AppiumServerManager.java:199)
+	at TestNG.Mobile.BaseTest.setUp(BaseTest.java:64)
+	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:139)
+	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethodConsideringTimeout(MethodInvocationHelper.java:69)
+	at org.testng.internal.invokers.ConfigInvoker.invokeConfigurationMethod(ConfigInvoker.java:390)
+	at org.testng.internal.invokers.ConfigInvoker.invokeConfigurations(ConfigInvoker.java:325)
+	at org.testng.internal.invokers.TestMethodWorker.invokeBeforeClassMethods(TestMethodWorker.java:180)
+	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:122)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+	at org.testng.TestRunner.privateRun(TestRunner.java:848)
+	at org.testng.TestRunner.run(TestRunner.java:621)
+	at org.testng.SuiteRunner.runTest(SuiteRunner.java:443)
+	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:437)
+	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:397)
+	at org.testng.SuiteRunner.run(SuiteRunner.java:336)
+	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
+	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
+	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1280)
+	at org.testng.TestNG.runSuitesLocally(TestNG.java:1200)
+	at org.testng.TestNG.runSuites(TestNG.java:1114)
+	at org.testng.TestNG.run(TestNG.java:1082)
+	at org.testng.remote.AbstractRemoteTestNG.run(AbstractRemoteTestNG.java:115)
+	at org.testng.remote.RemoteTestNG.initAndRun(RemoteTestNG.java:293)
+	at org.testng.remote.RemoteTestNG.main(RemoteTestNG.java:91)
+</pre></div></td>
+<td>0</td>
+<td>TestNG.Mobile.Test@62833051</td></tr>
 </table><p>
 </body>
 </html>

@@ -6,16 +6,16 @@
   </listeners>
   <test thread-count="5" name="E2E Mobile(failed)">
     <classes>
-      <class name="TestNG.Mobile.e2eMobile">
+      <class name="TestNG.Mobile.Test">
         <methods>
           <include name="setUp"/>
-          <include name="addProductsFromListing"/>
+          <include name="addMultipleProducts"/>
           <include name="resetAppState"/>
           <include name="tearDown"/>
-          <include name="setupPages"/>
           <include name="ensureDriverReady"/>
+          <include name="setupPages"/>
         </methods>
-      </class> <!-- TestNG.Mobile.e2eMobile -->
+      </class> <!-- TestNG.Mobile.Test -->
     </classes>
   </test> <!-- E2E Mobile(failed) -->
 </suite> <!-- Failed suite [Suite] -->

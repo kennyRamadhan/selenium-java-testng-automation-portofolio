@@ -39,7 +39,7 @@
         <div class="rounded-window">
           <div class="suite-header light-rounded-window-top">
             <a href="#" panel-name="suite-Suite" class="navigator-link">
-              <span class="suite-name border-passed">Suite</span>
+              <span class="suite-name border-skipped">Suite</span>
             </a> <!-- navigator-link -->
           </div> <!-- suite-header light-rounded-window-top -->
           <div class="navigator-suite-content">
@@ -92,7 +92,21 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">4 methods,   4 passed</span>
+                    <span class="method-stats">11 methods,  1 skipped,  10 passed</span>
+                  </li>
+                  <li>
+                    <span class="method-list-title skipped">Skipped methods</span>
+                    <span class="show-or-hide-methods skipped">
+                      <a href="#" panel-name="suite-Suite" class="hide-methods skipped suite-Suite"> (hide)</a> <!-- hide-methods skipped suite-Suite -->
+                      <a href="#" panel-name="suite-Suite" class="show-methods skipped suite-Suite"> (show)</a> <!-- show-methods skipped suite-Suite -->
+                    </span>
+                    <div class="method-list-content skipped suite-Suite">
+                      <span>
+                        <img src="skipped.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.Test" class="method navigator-link" hash-for-method="addMultipleProducts">addMultipleProducts</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                    </div> <!-- method-list-content skipped suite-Suite -->
                   </li>
                   <li>
                     <span class="method-list-title passed">Passed methods</span>
@@ -103,7 +117,27 @@
                     <div class="method-list-content passed suite-Suite">
                       <span>
                         <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="addProductsFromListing">addProductsFromListing</a> <!-- method navigator-link -->
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="addAllProductsFromListing">addAllProductsFromListing</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="addMultipleProducts">addMultipleProducts</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="addProductsFromDetails">addProductsFromDetails</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="checkoutNegativeFlow">checkoutNegativeFlow</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="checkoutPositiveFlow">checkoutPositiveFlow</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                       <span>
@@ -118,7 +152,17 @@
                       <br/>
                       <span>
                         <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="redirectionToProductListing">redirectionToProductListing</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
                         <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="sortingPrice">sortingPrice</a> <!-- method navigator-link -->
+                      </span>
+                      <br/>
+                      <span>
+                        <img src="passed.png" width="3%"/>
+                        <a href="#" panel-name="suite-Suite" title="TestNG.Mobile.e2eMobile" class="method navigator-link" hash-for-method="verifyDetailsProductIntoCart">verifyDetailsProductIntoCart</a> <!-- method navigator-link -->
                       </span>
                       <br/>
                     </div> <!-- method-list-content passed suite-Suite -->
@@ -133,6 +177,27 @@
     <div class="wrapper">
       <div class="main-panel-root">
         <div panel-name="suite-Suite" class="panel Suite">
+          <div class="suite-Suite-class-skipped">
+            <div class="main-panel-header rounded-window-top">
+              <img src="skipped.png"/>
+              <span class="class-name">TestNG.Mobile.Test</span>
+            </div> <!-- main-panel-header rounded-window-top -->
+            <div class="main-panel-content rounded-window-bottom">
+              <div class="method">
+                <div class="method-content">
+                  <a name="addMultipleProducts">
+                  </a> <!-- addMultipleProducts -->
+                  <span class="method-name">addMultipleProducts</span>
+                  <div class="stack-trace">java.lang.RuntimeException: Unable to initialize driver - unknown error.
+	at Appium.Config.AppiumServerManager.initDriver(AppiumServerManager.java:199)
+	at TestNG.Mobile.BaseTest.setUp(BaseTest.java:64)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
+... Removed 23 stack frames
+</div> <!-- stack-trace -->
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+            </div> <!-- main-panel-content rounded-window-bottom -->
+          </div> <!-- suite-Suite-class-skipped -->
           <div class="suite-Suite-class-passed">
             <div class="main-panel-header rounded-window-top">
               <img src="passed.png"/>
@@ -141,9 +206,37 @@
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="addProductsFromListing">
-                  </a> <!-- addProductsFromListing -->
-                  <span class="method-name">addProductsFromListing</span>
+                  <a name="addAllProductsFromListing">
+                  </a> <!-- addAllProductsFromListing -->
+                  <span class="method-name">addAllProductsFromListing</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="addMultipleProducts">
+                  </a> <!-- addMultipleProducts -->
+                  <span class="method-name">addMultipleProducts</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="addProductsFromDetails">
+                  </a> <!-- addProductsFromDetails -->
+                  <span class="method-name">addProductsFromDetails</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="checkoutNegativeFlow">
+                  </a> <!-- checkoutNegativeFlow -->
+                  <span class="method-name">checkoutNegativeFlow</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="checkoutPositiveFlow">
+                  </a> <!-- checkoutPositiveFlow -->
+                  <span class="method-name">checkoutPositiveFlow</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
               <div class="method">
@@ -162,9 +255,23 @@
               </div> <!-- method -->
               <div class="method">
                 <div class="method-content">
+                  <a name="redirectionToProductListing">
+                  </a> <!-- redirectionToProductListing -->
+                  <span class="method-name">redirectionToProductListing</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
                   <a name="sortingPrice">
                   </a> <!-- sortingPrice -->
                   <span class="method-name">sortingPrice</span>
+                </div> <!-- method-content -->
+              </div> <!-- method -->
+              <div class="method">
+                <div class="method-content">
+                  <a name="verifyDetailsProductIntoCart">
+                  </a> <!-- verifyDetailsProductIntoCart -->
+                  <span class="method-name">verifyDetailsProductIntoCart</span>
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
@@ -189,9 +296,16 @@
           &lt;include name=&quot;login&quot;/&gt;
           &lt;include name=&quot;failedLogin&quot;/&gt;
           &lt;include name=&quot;sortingPrice&quot;/&gt;
-          &lt;include name=&quot;addProductsFromListing&quot;/&gt;
+          &lt;include name=&quot;addAllProductsFromListing&quot;/&gt;
+          &lt;include name=&quot;addProductsFromDetails&quot;/&gt;
+          &lt;include name=&quot;addMultipleProducts&quot;/&gt;
+          &lt;include name=&quot;redirectionToProductListing&quot;/&gt;
+          &lt;include name=&quot;verifyDetailsProductIntoCart&quot;/&gt;
+          &lt;include name=&quot;checkoutPositiveFlow&quot;/&gt;
+          &lt;include name=&quot;checkoutNegativeFlow&quot;/&gt;
         &lt;/methods&gt;
       &lt;/class&gt; &lt;!-- TestNG.Mobile.e2eMobile --&gt;
+      &lt;class name=&quot;TestNG.Mobile.Test&quot;/&gt;
     &lt;/classes&gt;
   &lt;/test&gt; &lt;!-- E2E Mobile --&gt;
 &lt;/suite&gt; &lt;!-- Suite --&gt;
@@ -205,7 +319,7 @@
           <div class="main-panel-content rounded-window-bottom">
             <ul>
               <li>
-                <span class="test-name">E2E Mobile (1 class)</span>
+                <span class="test-name">E2E Mobile (2 classes)</span>
               </li>
             </ul>
           </div> <!-- main-panel-content rounded-window-bottom -->
@@ -231,28 +345,56 @@ data.addColumn('number', 'Number');
 data.addColumn('string', 'Method');
 data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
-data.addRows(4);
+data.addRows(11);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'addProductsFromListing')
+data.setCell(0, 1, 'addAllProductsFromListing')
 data.setCell(0, 2, 'TestNG.Mobile.e2eMobile')
-data.setCell(0, 3, 31108);
+data.setCell(0, 3, 31311);
 data.setCell(1, 0, 1)
-data.setCell(1, 1, 'sortingPrice')
+data.setCell(1, 1, 'checkoutNegativeFlow')
 data.setCell(1, 2, 'TestNG.Mobile.e2eMobile')
-data.setCell(1, 3, 7067);
+data.setCell(1, 3, 15026);
 data.setCell(2, 0, 2)
-data.setCell(2, 1, 'failedLogin')
+data.setCell(2, 1, 'checkoutPositiveFlow')
 data.setCell(2, 2, 'TestNG.Mobile.e2eMobile')
-data.setCell(2, 3, 3831);
+data.setCell(2, 3, 14201);
 data.setCell(3, 0, 3)
-data.setCell(3, 1, 'login')
+data.setCell(3, 1, 'verifyDetailsProductIntoCart')
 data.setCell(3, 2, 'TestNG.Mobile.e2eMobile')
-data.setCell(3, 3, 2797);
+data.setCell(3, 3, 9488);
+data.setCell(4, 0, 4)
+data.setCell(4, 1, 'addProductsFromDetails')
+data.setCell(4, 2, 'TestNG.Mobile.e2eMobile')
+data.setCell(4, 3, 9181);
+data.setCell(5, 0, 5)
+data.setCell(5, 1, 'redirectionToProductListing')
+data.setCell(5, 2, 'TestNG.Mobile.e2eMobile')
+data.setCell(5, 3, 7801);
+data.setCell(6, 0, 6)
+data.setCell(6, 1, 'sortingPrice')
+data.setCell(6, 2, 'TestNG.Mobile.e2eMobile')
+data.setCell(6, 3, 6723);
+data.setCell(7, 0, 7)
+data.setCell(7, 1, 'login')
+data.setCell(7, 2, 'TestNG.Mobile.e2eMobile')
+data.setCell(7, 3, 4497);
+data.setCell(8, 0, 8)
+data.setCell(8, 1, 'addMultipleProducts')
+data.setCell(8, 2, 'TestNG.Mobile.e2eMobile')
+data.setCell(8, 3, 4150);
+data.setCell(9, 0, 9)
+data.setCell(9, 1, 'failedLogin')
+data.setCell(9, 2, 'TestNG.Mobile.e2eMobile')
+data.setCell(9, 3, 4049);
+data.setCell(10, 0, 10)
+data.setCell(10, 1, 'addMultipleProducts')
+data.setCell(10, 2, 'TestNG.Mobile.Test')
+data.setCell(10, 3, 0);
 window.suiteTableData['Suite']= { tableData: data, tableDiv: 'times-div-Suite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 44 seconds</span>
+              <span class="suite-total-time">Total running time: 1 minutes</span>
               <div id="times-div-Suite">
               </div> <!-- times-div-Suite -->
             </div> <!-- times-div -->
@@ -263,13 +405,26 @@ return data;
             <span class="header-content">Reporter output for Suite</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
+            <div class="reporter-method-div">
+              <span class="reporter-method-name">checkoutPositiveFlow</span>
+              <div class="reporter-method-output-div">
+                <span class="reporter-method-output">✅ Total Amount Price Without Taxes: 39.98</span>
+              </div> <!-- reporter-method-output-div -->
+            </div> <!-- reporter-method-div -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
         <div panel-name="ignored-methods-Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">0 ignored methods</span>
+            <span class="header-content">1 ignored method</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
+            <div class="ignored-class-div">
+              <span class="ignored-class-name">TestNG.Mobile.Test</span>
+              <div class="ignored-methods-div">
+                <span class="ignored-method-name">tearDown</span>
+                <br/>
+              </div> <!-- ignored-methods-div -->
+            </div> <!-- ignored-class-div -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
         <div panel-name="chronological-Suite" class="panel">
@@ -285,71 +440,183 @@ return data;
               </div> <!-- configuration-class before -->
               <div class="configuration-method before">
                 <span class="method-name">ensureDriverReady</span>
-                <span class="method-start">12814 ms</span>
+                <span class="method-start">14499 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setupPages</span>
-                <span class="method-start">12886 ms</span>
+                <span class="method-start">14674 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">login</span>
-                <span class="method-start">13338 ms</span>
+                <span class="method-start">15229 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">resetAppState</span>
-                <span class="method-start">16418 ms</span>
+                <span class="method-start">19959 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-method before">
                 <span class="method-name">ensureDriverReady</span>
-                <span class="method-start">17566 ms</span>
+                <span class="method-start">21055 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setupPages</span>
-                <span class="method-start">20092 ms</span>
+                <span class="method-start">24151 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">failedLogin</span>
-                <span class="method-start">20263 ms</span>
+                <span class="method-start">24395 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">resetAppState</span>
-                <span class="method-start">24212 ms</span>
+                <span class="method-start">28588 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-method before">
                 <span class="method-name">ensureDriverReady</span>
-                <span class="method-start">25288 ms</span>
+                <span class="method-start">29642 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setupPages</span>
-                <span class="method-start">27138 ms</span>
+                <span class="method-start">32874 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
                 <span class="method-name">sortingPrice</span>
-                <span class="method-start">27350 ms</span>
+                <span class="method-start">33105 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">resetAppState</span>
-                <span class="method-start">34669 ms</span>
+                <span class="method-start">40125 ms</span>
               </div> <!-- configuration-method after -->
               <div class="configuration-method before">
                 <span class="method-name">ensureDriverReady</span>
-                <span class="method-start">35757 ms</span>
+                <span class="method-start">41257 ms</span>
               </div> <!-- configuration-method before -->
               <div class="configuration-method before">
                 <span class="method-name">setupPages</span>
-                <span class="method-start">37704 ms</span>
+                <span class="method-start">43422 ms</span>
               </div> <!-- configuration-method before -->
               <div class="test-method">
-                <span class="method-name">addProductsFromListing</span>
-                <span class="method-start">37944 ms</span>
+                <span class="method-name">addAllProductsFromListing</span>
+                <span class="method-start">43645 ms</span>
               </div> <!-- test-method -->
               <div class="configuration-method after">
                 <span class="method-name">resetAppState</span>
-                <span class="method-start">69174 ms</span>
+                <span class="method-start">75076 ms</span>
               </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">ensureDriverReady</span>
+                <span class="method-start">76191 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupPages</span>
+                <span class="method-start">78350 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">addProductsFromDetails</span>
+                <span class="method-start">78555 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">87903 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">ensureDriverReady</span>
+                <span class="method-start">89007 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupPages</span>
+                <span class="method-start">91023 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">addMultipleProducts</span>
+                <span class="method-start">91239 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">95635 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">ensureDriverReady</span>
+                <span class="method-start">96676 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupPages</span>
+                <span class="method-start">98955 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">redirectionToProductListing</span>
+                <span class="method-start">99140 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">107147 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">ensureDriverReady</span>
+                <span class="method-start">108230 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupPages</span>
+                <span class="method-start">110503 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">verifyDetailsProductIntoCart</span>
+                <span class="method-start">110681 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">120335 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">ensureDriverReady</span>
+                <span class="method-start">121456 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupPages</span>
+                <span class="method-start">123366 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">checkoutPositiveFlow</span>
+                <span class="method-start">123559 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">137889 ms</span>
+              </div> <!-- configuration-method after -->
+              <div class="configuration-method before">
+                <span class="method-name">ensureDriverReady</span>
+                <span class="method-start">138997 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="configuration-method before">
+                <span class="method-name">setupPages</span>
+                <span class="method-start">142623 ms</span>
+              </div> <!-- configuration-method before -->
+              <div class="test-method">
+                <span class="method-name">checkoutNegativeFlow</span>
+                <span class="method-start">143042 ms</span>
+              </div> <!-- test-method -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">158243 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">TestNG.Mobile.Test</div> <!-- chronological-class-name -->
+              <div class="configuration-class before">
+                <img src="failed.png">
+                </img>
+                <span class="method-name">setUp</span>
+                <span class="method-start">159314 ms</span>
+              </div> <!-- configuration-class before -->
+              <div class="configuration-method after">
+                <span class="method-name">resetAppState</span>
+                <span class="method-start">161624 ms</span>
+              </div> <!-- configuration-method after -->
+            </div> <!-- chronological-class -->
+            <div class="chronological-class">
+              <div class="chronological-class-name">TestNG.Mobile.e2eMobile</div> <!-- chronological-class-name -->
               <div class="configuration-suite after">
                 <span class="method-name">tearDown</span>
-                <span class="method-start">71492 ms</span>
+                <span class="method-start">163734 ms</span>
               </div> <!-- configuration-suite after -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->

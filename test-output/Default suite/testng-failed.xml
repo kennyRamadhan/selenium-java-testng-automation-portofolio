@@ -5,8 +5,8 @@
     <classes>
       <class name="TestNG.Mobile.e2eMobile">
         <methods>
+          <include name="addProductsFromDetails"/>
           <include name="setUp"/>
-          <include name="addProductsFromListing"/>
           <include name="resetAppState"/>
           <include name="setupPages"/>
           <include name="tearDown"/>
