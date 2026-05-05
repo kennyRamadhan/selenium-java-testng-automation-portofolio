@@ -101,10 +101,9 @@ public class TestListeners implements ITestListener{
 	        
 	        ExtentTest node = ExtentNode.getNode();
 	        if (node != null) {
-	            node.pass(result.getThrowable());
+	            node.pass("Test passed: " + result.getMethod().getMethodName());
 	        } else {
-	            System.out.println("[WARNING] ExtentNode.getNode() null. Logging to console instead.");
-	            result.getThrowable().printStackTrace();
+	            System.out.println("[WARNING] ExtentNode.getNode() null for: " + result.getMethod().getMethodName());
 	        }
 			
 	    }
