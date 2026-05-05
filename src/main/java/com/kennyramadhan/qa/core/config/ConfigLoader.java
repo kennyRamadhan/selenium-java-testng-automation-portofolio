@@ -28,20 +28,39 @@ import java.util.stream.Collectors;
 public class ConfigLoader {
 
     /** Menyimpan semua konfigurasi dari file config.properties */
-    private static Properties props = new Properties();
+    private static final Properties props = new Properties();
+
+    /** Resolved environment name (system property "env", default "local"). */
+    private static final String env;
 
     static {
+        env = System.getProperty("env", "local");
+        loadProperties("config/config.properties", true);
+        loadProperties("config/config-" + env + ".properties", false);
+        System.out.println("[OK] Config loaded for env=" + env + ". Total keys: " + props.size());
+    }
+
+    private static void loadProperties(String resourcePath, boolean required) {
         try (InputStream is = ConfigLoader.class.getClassLoader()
-                .getResourceAsStream("config/config.properties")) {
+                .getResourceAsStream(resourcePath)) {
             if (is == null) {
-                throw new IllegalStateException(
-                        "config/config.properties not found on classpath");
+                if (required) {
+                    throw new IllegalStateException(resourcePath + " not found on classpath");
+                }
+                return;
             }
             props.load(is);
-            System.out.println("[OK] Config loaded. Total keys: " + props.size());
         } catch (IOException e) {
-            throw new IllegalStateException("Failed to load config.properties", e);
+            throw new IllegalStateException("Failed to load " + resourcePath, e);
         }
+    }
+
+    /**
+     * Returns the resolved environment name (e.g. "local", "ci", "staging").
+     * Driven by the system property <code>env</code>; defaults to <code>local</code>.
+     */
+    public static String getEnvironment() {
+        return env;
     }
 
     private static String resolvePlaceholder(String value) {
