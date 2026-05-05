@@ -1,4 +1,4 @@
-package Appium.Config;
+package com.kennyramadhan.qa.core.driver;
 
 import io.appium.java_client.AppiumDriver;
 

@@ -1,4 +1,4 @@
-package TestNG.Mobile;
+package com.kennyramadhan.qa.tests.mobile;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,9 +8,9 @@ import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.BeforeClass;
 
-import Appium.Config.AppiumServerManager;
-import Appium.Config.DriverManager;
-import Selenium.Pages.Login;
+import com.kennyramadhan.qa.mobile.server.AppiumServerManager;
+import com.kennyramadhan.qa.core.driver.DriverManager;
+import com.kennyramadhan.qa.mobile.pages.Login;
 import io.appium.java_client.AppiumDriver;
 
 import io.appium.java_client.android.AndroidDriver;
@@ -39,7 +39,7 @@ import io.appium.java_client.ios.IOSDriver;
  * @author Kenny Ramadhan
  * @version 1.0
  */
-public class BaseTest {
+public class BaseMobileTest {
 	
 	
 	protected Login login;

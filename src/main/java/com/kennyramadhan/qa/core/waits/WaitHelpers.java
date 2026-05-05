@@ -1,4 +1,4 @@
-package Selenium.CustomHelper;
+package com.kennyramadhan.qa.core.waits;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -12,11 +12,11 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
-import Appium.Config.DriverManager;
-import Extent.Listeners.LogHelper;
+import com.kennyramadhan.qa.core.driver.DriverManager;
+import com.kennyramadhan.qa.core.reporting.LogHelper;
 import io.appium.java_client.AppiumBy;
 
-public class UtilsHelper {
+public class WaitHelpers {
 	
 	public void scrollIntoText(String text) {
 		String platformName = DriverManager.getDriver()

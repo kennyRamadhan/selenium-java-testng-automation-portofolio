@@ -1,23 +1,23 @@
-package Selenium.Pages;
+package com.kennyramadhan.qa.mobile.pages;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
 
-import Appium.Config.DriverManager;
-import Extent.Listeners.LogHelper;
-import Selenium.CustomHelper.UtilsHelper;
+import com.kennyramadhan.qa.core.driver.DriverManager;
+import com.kennyramadhan.qa.core.reporting.LogHelper;
+import com.kennyramadhan.qa.core.waits.WaitHelpers;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 public class Login {
 
-	private UtilsHelper helper;
+	private WaitHelpers helper;
 
 	public Login() {
 
-		this.helper = new UtilsHelper();
+		this.helper = new WaitHelpers();
 		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver()), this);
 	}
 

@@ -1,24 +1,24 @@
-package Selenium.Pages;
+package com.kennyramadhan.qa.mobile.pages;
 
 import java.time.Duration;
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 
-import Appium.Config.DriverManager;
+import com.kennyramadhan.qa.core.driver.DriverManager;
 
-import Selenium.CustomHelper.UtilsHelper;
+import com.kennyramadhan.qa.core.waits.WaitHelpers;
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 public class ProductsDetail {
 
-	private final UtilsHelper utils;
+	private final WaitHelpers utils;
 
 	public ProductsDetail() {
 
-		this.utils = new UtilsHelper();
+		this.utils = new WaitHelpers();
 		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver(), Duration.ofSeconds(15)), this);
 	}
 

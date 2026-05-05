@@ -1,4 +1,4 @@
-package Extent.Listeners;
+package com.kennyramadhan.qa.core.reporting;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,7 +12,7 @@ import org.testng.ITestResult;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 
-import Appium.Config.DriverManager;
+import com.kennyramadhan.qa.core.driver.DriverManager;
 import io.appium.java_client.AppiumDriver;
 
 

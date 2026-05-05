@@ -1,13 +1,13 @@
-package TestNG.Mobile;
+package com.kennyramadhan.qa.tests.mobile;
 
 import java.net.MalformedURLException;
 import com.github.javafaker.Faker;
 
-import Selenium.Pages.ProductsList;
-import Selenium.CustomHelper.UtilsHelper;
-import Selenium.Pages.CartCheckout;
-import Selenium.Pages.Login;
-import Selenium.Pages.ProductsDetail;
+import com.kennyramadhan.qa.mobile.pages.ProductsList;
+import com.kennyramadhan.qa.core.waits.WaitHelpers;
+import com.kennyramadhan.qa.mobile.pages.CartCheckout;
+import com.kennyramadhan.qa.mobile.pages.Login;
+import com.kennyramadhan.qa.mobile.pages.ProductsDetail;
 
 import java.net.URISyntaxException;
 import java.util.List;
@@ -17,14 +17,14 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-public class e2eMobile extends BaseTest {
+public class E2EMobileTest extends BaseMobileTest {
 
 	private Login login;
 	private ProductsList productsList;
 	private ProductsDetail detailProducts;
 	private CartCheckout cart;
 	@SuppressWarnings("unused")
-	private UtilsHelper helper;
+	private WaitHelpers helper;
 
 	/**
 	 * Inisialisasi page object sebelum setiap test dijalankan.
@@ -33,7 +33,7 @@ public class e2eMobile extends BaseTest {
 	public void setupPages() {
 		login = new Login();
 		productsList = new ProductsList();
-		helper = new UtilsHelper();
+		helper = new WaitHelpers();
 		detailProducts = new ProductsDetail();
 		cart = new CartCheckout();
 
@@ -66,19 +66,19 @@ public class e2eMobile extends BaseTest {
 		login.getAutoCredentials("standard_user");
 
 		// Ambil harga sebelum sorting
-		List<Double> before = UtilsHelper.extractPrices(productsList.getPriceElements(), "Before Sorting");
+		List<Double> before = WaitHelpers.extractPrices(productsList.getPriceElements(), "Before Sorting");
 
 		productsList.clickFilterBtn();
 		productsList.clickLowToHigh();
 
 		// Ambil harga setelah sorting
-		List<Double> after = UtilsHelper.extractPrices(productsList.getPriceElements(), "After Sorting");
+		List<Double> after = WaitHelpers.extractPrices(productsList.getPriceElements(), "After Sorting");
 
 		// Verifikasi urutan berubah
-		UtilsHelper.verifySortingChanged(before, after);
+		WaitHelpers.verifySortingChanged(before, after);
 
 		// Verifikasi urutan valid (ascending atau descending)
-		UtilsHelper.verifySortingOrder(after);
+		WaitHelpers.verifySortingOrder(after);
 
 	}
 

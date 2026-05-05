@@ -1,4 +1,4 @@
-package Extent.Listeners;
+package com.kennyramadhan.qa.core.reporting;
 
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;

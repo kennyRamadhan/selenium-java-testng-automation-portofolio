@@ -1,4 +1,4 @@
-package Extent.Listeners;
+package com.kennyramadhan.qa.core.reporting;
 
 import java.io.File;
 

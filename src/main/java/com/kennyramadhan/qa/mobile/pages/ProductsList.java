@@ -1,4 +1,4 @@
-package Selenium.Pages;
+package com.kennyramadhan.qa.mobile.pages;
 
 import java.time.Duration;
 import java.util.HashMap;
@@ -14,22 +14,22 @@ import org.testng.Assert;
 
 import com.google.common.collect.Iterables;
 
-import Appium.Config.DriverManager;
-import Extent.Listeners.LogHelper;
+import com.kennyramadhan.qa.core.driver.DriverManager;
+import com.kennyramadhan.qa.core.reporting.LogHelper;
 
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
-import Selenium.CustomHelper.UtilsHelper;
+import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
 public class ProductsList {
 
-	private final UtilsHelper utils;
+	private final WaitHelpers utils;
 
 	public ProductsList() {
 
-		this.utils = new UtilsHelper();
+		this.utils = new WaitHelpers();
 		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver(), Duration.ofSeconds(15)), this);
 	}
 

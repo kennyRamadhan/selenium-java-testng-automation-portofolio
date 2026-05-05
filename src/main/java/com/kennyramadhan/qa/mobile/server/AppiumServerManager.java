@@ -1,4 +1,4 @@
-package Appium.Config;
+package com.kennyramadhan.qa.mobile.server;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,7 +6,8 @@ import java.util.Random;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 
-import Selenium.CustomHelper.*;
+import com.kennyramadhan.qa.core.config.ConfigLoader;
+import com.kennyramadhan.qa.core.driver.DriverManager;
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.ios.IOSDriver;
 import io.appium.java_client.android.AndroidDriver;

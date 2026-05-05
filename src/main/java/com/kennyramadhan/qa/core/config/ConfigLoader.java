@@ -1,4 +1,4 @@
-package Selenium.CustomHelper;
+package com.kennyramadhan.qa.core.config;
 
 import java.io.FileInputStream;
 import java.io.IOException;
