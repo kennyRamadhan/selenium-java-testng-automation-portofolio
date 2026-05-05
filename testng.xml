@@ -21,7 +21,6 @@
 					<include name="checkoutNegativeFlow" />
 				</methods>
 			</class>
-			<class name="TestNG.Mobile.Test"></class>
 		</classes>
 
 	</test>

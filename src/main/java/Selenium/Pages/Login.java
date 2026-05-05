@@ -41,12 +41,12 @@ public class Login {
 	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-standard_user\"]")
 	private WebElement stdUser;
 
-	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-standard_user\"]")
-	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-standard_user\"]")
+	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-locked_out_user\"]")
+	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-locked_out_user\"]")
 	private WebElement lockedUser;
 
-	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-standard_user\"]")
-	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-standard_user\"]")
+	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-problem_user\"]")
+	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-problem_user\"]")
 	private WebElement problemUser;
 
 	@AndroidFindBy(accessibility = "test-PRODUCTS")
