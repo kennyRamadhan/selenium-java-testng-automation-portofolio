@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <h1>ConfigLoader</h1>
  * Utility class untuk membaca file konfigurasi `config.properties`
@@ -27,6 +30,8 @@ import java.util.stream.Collectors;
  */
 public class ConfigLoader {
 
+    private static final Logger log = LoggerFactory.getLogger(ConfigLoader.class);
+
     /** Menyimpan semua konfigurasi dari file config.properties */
     private static final Properties props = new Properties();
 
@@ -37,7 +42,7 @@ public class ConfigLoader {
         env = System.getProperty("env", "local");
         loadProperties("config/config.properties", true);
         loadProperties("config/config-" + env + ".properties", false);
-        System.out.println("[OK] Config loaded for env=" + env + ". Total keys: " + props.size());
+        log.info("[OK] Config loaded for env={}. Total keys: {}", env, props.size());
     }
 
     private static void loadProperties(String resourcePath, boolean required) {

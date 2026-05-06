@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
@@ -47,7 +49,9 @@ import io.appium.java_client.AppiumDriver;
  */
 
 public class TestListeners implements ITestListener{
-	
+
+	private static final Logger log = LoggerFactory.getLogger(TestListeners.class);
+
 	 ExtentReports extent = ExtentReportsManager.getExtentReports();
 	 ExtentTest test;
 	 
@@ -72,7 +76,7 @@ public class TestListeners implements ITestListener{
 	    @Override
 	    public void onTestStart(ITestResult result) {
 //	    	test = extent.createTest(result.getMethod().getMethodName());
-	    	System.out.println("[DEBUG] Creating Extent Test for: " + result.getMethod().getMethodName());
+	    	log.debug("Creating Extent Test for: {}", result.getMethod().getMethodName());
 	    	ExtentNode.createTest(result.getMethod().getMethodName());
 	    	LogHelper.resetCounter();
 	    }
@@ -92,18 +96,18 @@ public class TestListeners implements ITestListener{
 	                ExtentNode.getNode().addScreenCaptureFromPath(screenshotPath);
 	                LogHelper.pass("Test Success");
 	            } else {
-	                System.out.println("Driver is null, skipping screenshot for test: " + result.getMethod().getMethodName());
+	                log.info("Driver is null, skipping screenshot for test: {}", result.getMethod().getMethodName());
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
-	        
+
 	        }
-	        
+
 	        ExtentTest node = ExtentNode.getNode();
 	        if (node != null) {
 	            node.pass("Test passed: " + result.getMethod().getMethodName());
 	        } else {
-	            System.out.println("[WARNING] ExtentNode.getNode() null for: " + result.getMethod().getMethodName());
+	            log.warn("ExtentNode.getNode() null for: {}", result.getMethod().getMethodName());
 	        }
 			
 	    }
@@ -123,19 +127,19 @@ public class TestListeners implements ITestListener{
 	                ExtentNode.getNode().addScreenCaptureFromPath(screenshotPath);
 	                LogHelper.fail("Test Failed");
 	            } else {
-	                System.out.println("Driver is null, skipping screenshot for test: " + result.getMethod().getMethodName());
+	                log.info("Driver is null, skipping screenshot for test: {}", result.getMethod().getMethodName());
 	            }
 	        } catch (Exception e) {
 	            e.printStackTrace();
 	        }
-	        
+
 	    	 ExtentNode.getNode().fail(result.getThrowable());
-	    	 
+
 	    	 ExtentTest node = ExtentNode.getNode();
 	    	    if (node != null) {
 	    	        node.fail(result.getThrowable());
 	    	    } else {
-	    	        System.out.println("[WARNING] ExtentNode.getNode() null. Logging to console instead.");
+	    	        log.warn("ExtentNode.getNode() null. Logging to console instead.");
 	    	        result.getThrowable().printStackTrace();
 	    	    }
 			
@@ -158,10 +162,9 @@ public class TestListeners implements ITestListener{
 	     */
 	    @Override
 	    public void onFinish(ITestContext context) {
-	    	 System.out.println("Flushing Extent Report...");
+	    	 log.info("Flushing Extent Report...");
 	        extent.flush(); // Flush sekali di akhir suite
-	        System.out.println("Extent Report generated at: " +
-	                System.getProperty("user.dir") + "/reports/");
+	        log.info("Extent Report generated at: {}/reports/", System.getProperty("user.dir"));
 	    }
 	    
 	    

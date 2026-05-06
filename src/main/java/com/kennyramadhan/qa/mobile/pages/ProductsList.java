@@ -10,6 +10,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import com.google.common.collect.Iterables;
@@ -24,6 +26,8 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
 public class ProductsList {
+
+	private static final Logger log = LoggerFactory.getLogger(ProductsList.class);
 
 	private final WaitHelpers utils;
 
@@ -106,7 +110,7 @@ public class ProductsList {
 				// Klik produk sesuai index
 				listProducts.get(i).click();
 				LogHelper.detail("Clicked product: " + currentProductName);
-				System.out.println("Product Yang Terpilih Adalah " + currentProductName);
+				log.info("Product Yang Terpilih Adalah {}", currentProductName);
 
 //	            // Ambil nama produk yang tampil di detail page
 //	            String chosenProductName = listProducts.get(i).getText();
@@ -161,7 +165,7 @@ public class ProductsList {
 			// Kalau array kosong, berhenti
 			if (listAddToCart.isEmpty()) {
 				LogHelper.detail("Verify All Products Add To Cart");
-				System.out.println("✅ Semua produk berhasil ditambahkan ke keranjang!");
+				log.info("[OK] Semua produk berhasil ditambahkan ke keranjang!");
 				break;
 			}
 
@@ -175,7 +179,7 @@ public class ProductsList {
 							.until(ExpectedConditions.attributeToBe(addButton, "name", "test-REMOVE"));
 
 					totalAdded++;
-					System.out.println("🛒 Produk ke-" + totalAdded + " berhasil ditambahkan.");
+					log.info("[CART] Produk ke-{} berhasil ditambahkan.", totalAdded);
 				} catch (StaleElementReferenceException ignored) {
 					// Tombol sudah hilang dari DOM → lanjutkan saja
 				}

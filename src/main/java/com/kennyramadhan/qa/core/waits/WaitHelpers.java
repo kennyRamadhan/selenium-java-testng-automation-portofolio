@@ -10,6 +10,8 @@ import java.util.Map;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
@@ -17,7 +19,9 @@ import com.kennyramadhan.qa.core.reporting.LogHelper;
 import io.appium.java_client.AppiumBy;
 
 public class WaitHelpers {
-	
+
+	private static final Logger log = LoggerFactory.getLogger(WaitHelpers.class);
+
 	public void scrollIntoText(String text) {
 		String platformName = DriverManager.getDriver()
 		        .getCapabilities()
@@ -121,7 +125,7 @@ public class WaitHelpers {
 		  WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
 	        try {
 	            wait.until(ExpectedConditions.visibilityOf(element));
-	            System.out.println("✅ Element ditemukan: " + element);
+	            log.info("[OK] Element ditemukan: {}", element);
 	        } catch (Exception e) {
 	            throw new RuntimeException("❌ Element tidak ditemukan: " + element, e);
 	        }
@@ -138,7 +142,7 @@ public class WaitHelpers {
         Map<String, Object> tapParams = new HashMap<>();
         tapParams.put("x", centerX);
         tapParams.put("y", centerY);
-        System.out.println("🔘 Force tap at: X=" + centerX + " Y=" + centerY);
+        log.info("[TAP] Force tap at: X={} Y={}", centerX, centerY);
         DriverManager.getDriver().executeScript("mobile: tap", tapParams);
     }
 
