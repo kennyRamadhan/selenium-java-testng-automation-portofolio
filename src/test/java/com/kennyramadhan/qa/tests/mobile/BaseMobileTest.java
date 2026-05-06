@@ -160,17 +160,5 @@ public class BaseMobileTest {
 		        System.err.println("⚠️ Failed to terminate/reset app: " + e.getMessage());
 		    }
 	}
-	
-//	public void performLogin() {
-//		
-//		login.scrollIntoText("standard_user");
-//		login.getStandardUser();
-//		login.clickLoginBtn();
-//		
-//		// Verify if user success log in 
-//		login.verifySuccessLogin();
-//	}
-
-
 
 }

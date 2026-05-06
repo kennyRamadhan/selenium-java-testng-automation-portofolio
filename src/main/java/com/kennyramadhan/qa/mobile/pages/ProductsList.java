@@ -112,16 +112,6 @@ public class ProductsList {
 				LogHelper.detail("Clicked product: " + currentProductName);
 				log.info("Product Yang Terpilih Adalah {}", currentProductName);
 
-//	            // Ambil nama produk yang tampil di detail page
-//	            String chosenProductName = listProducts.get(i).getText();
-//
-//	            if (chosenProductName.equalsIgnoreCase(currentProductName)) {
-//	                LogHelper.pass("✅ Product matched! Displayed product: " + chosenProductName);
-//	            } else {
-//	                LogHelper.fail("❌ Product mismatch! Expected: " + currentProductName + " but got: " + chosenProductName);
-//	                Assert.fail("Product mismatch!");
-//	            }
-
 				break; // Stop loop setelah ketemu
 			}
 
