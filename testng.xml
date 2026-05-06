@@ -7,7 +7,7 @@
 
 	<test name="E2E Mobile">
 		<classes>
-			<class name="TestNG.Mobile.e2eMobile">
+			<class name="com.kennyramadhan.qa.tests.mobile.E2EMobileTest">
 				<methods>
 					<include name="login" />
 					<include name="failedLogin" />
@@ -21,7 +21,6 @@
 					<include name="checkoutNegativeFlow" />
 				</methods>
 			</class>
-			<class name="TestNG.Mobile.Test"></class>
 		</classes>
 
 	</test>
