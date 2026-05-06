@@ -14,8 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
-import com.google.common.collect.Iterables;
-
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
 
@@ -90,7 +88,7 @@ public class ProductsList {
 
 	public void addProductsToCartDirectlyFromListMenu() {
 
-		WebElement lastElement = (WebElement) Iterables.get(listAddToCart, 0);
+		WebElement lastElement = listAddToCart.get(0);
 		lastElement.click();
 
 	}
@@ -126,8 +124,8 @@ public class ProductsList {
 
 	public void addMultipleProducts() {
 		LogHelper.step("Select product");
-		WebElement lastElement = (WebElement) Iterables.get(listAddToCart, 0);
-		WebElement last = (WebElement) Iterables.get(listAddToCart, 1);
+		WebElement lastElement = listAddToCart.get(0);
+		WebElement last = listAddToCart.get(1);
 		lastElement.click();
 		last.click();
 		LogHelper.detail("Success Selected Products");

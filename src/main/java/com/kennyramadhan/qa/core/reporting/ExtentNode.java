@@ -42,7 +42,7 @@ public class ExtentNode {
      */
     public static synchronized ExtentTest createTest(String testName) {
         ExtentTest test = ExtentReportsManager.getExtentReports().createTest(testName);
-        parentTestMap.put(Thread.currentThread().getId(), test);
+        parentTestMap.put(Thread.currentThread().threadId(), test);
         return test;
     }
 
@@ -55,7 +55,7 @@ public class ExtentNode {
      * @return {@link ExtentTest} instance parent test saat ini.
      */
     public static synchronized ExtentTest getTest() {
-        return parentTestMap.get(Thread.currentThread().getId());
+        return parentTestMap.get(Thread.currentThread().threadId());
     }
     
     
@@ -74,10 +74,10 @@ public class ExtentNode {
     	    if (parent == null) {
     	        parent = ExtentReportsManager.getExtentReports()
     	                   .createTest("Unnamed Test (Auto Created)");
-    	        parentTestMap.put(Thread.currentThread().getId(), parent);
+    	        parentTestMap.put(Thread.currentThread().threadId(), parent);
     	    }
         ExtentTest node = getTest().createNode(stepName);
-        nodeTestMap.put(Thread.currentThread().getId(), node);
+        nodeTestMap.put(Thread.currentThread().threadId(), node);
         return node;
     }
 
@@ -91,13 +91,13 @@ public class ExtentNode {
      * @return {@link ExtentTest} instance node atau parent test jika node tidak ditemukan.
      */
     public static synchronized ExtentTest getNode() {
-    	 ExtentTest node = nodeTestMap.get(Thread.currentThread().getId());
+    	 ExtentTest node = nodeTestMap.get(Thread.currentThread().threadId());
     	 if (node == null) {
     	        ExtentTest parent = getTest();
     	        if (parent == null) {
     	            // create parent test otomatis jika hilang
     	            parent = ExtentReportsManager.getExtentReports().createTest("Unnamed Test");
-    	            parentTestMap.put(Thread.currentThread().getId(), parent);
+    	            parentTestMap.put(Thread.currentThread().threadId(), parent);
     	        }
     	        return parent;
     	    }

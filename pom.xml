@@ -23,7 +23,6 @@
         <poi.version>5.4.0</poi.version>
         <extentreports.version>5.1.1</extentreports.version>
         <commons-io.version>2.16.1</commons-io.version>
-        <javafaker.version>1.0.2</javafaker.version>
         <datafaker.version>2.4.2</datafaker.version>
         <slf4j.version>2.0.16</slf4j.version>
         <logback.version>1.5.12</logback.version>
@@ -72,14 +71,7 @@
             <version>${commons-io.version}</version>
         </dependency>
 
-        <!-- JavaFaker (transient — kept until Commit 2.7 to preserve compile invariant; replaced by Datafaker) -->
-        <dependency>
-            <groupId>com.github.javafaker</groupId>
-            <artifactId>javafaker</artifactId>
-            <version>${javafaker.version}</version>
-        </dependency>
-
-        <!-- Datafaker (replaces JavaFaker in Commit 2.7) -->
+        <!-- Datafaker (replaces JavaFaker) -->
         <dependency>
             <groupId>net.datafaker</groupId>
             <artifactId>datafaker</artifactId>

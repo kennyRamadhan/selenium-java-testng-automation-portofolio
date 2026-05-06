@@ -1,7 +1,7 @@
 package com.kennyramadhan.qa.tests.mobile;
 
 import java.net.MalformedURLException;
-import com.github.javafaker.Faker;
+import net.datafaker.Faker;
 
 import com.kennyramadhan.qa.mobile.pages.ProductsList;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
@@ -39,8 +39,7 @@ public class E2EMobileTest extends BaseMobileTest {
 
 	}
 
-	@SuppressWarnings("deprecation")
-	Faker faker = new Faker(new Locale("id_ID"));
+	Faker faker = new Faker(Locale.of("id", "ID"));
 
 	@Test(priority = 1) // a. Verify user login using given credentials.
 	public void login() throws MalformedURLException, URISyntaxException {
