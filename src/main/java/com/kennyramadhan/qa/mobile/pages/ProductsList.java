@@ -1,5 +1,7 @@
 package com.kennyramadhan.qa.mobile.pages;
 
+// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.1 rewrite.
+
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
@@ -10,9 +12,9 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
-
-import com.google.common.collect.Iterables;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
@@ -24,6 +26,8 @@ import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
 public class ProductsList {
+
+	private static final Logger log = LoggerFactory.getLogger(ProductsList.class);
 
 	private final WaitHelpers utils;
 
@@ -86,7 +90,7 @@ public class ProductsList {
 
 	public void addProductsToCartDirectlyFromListMenu() {
 
-		WebElement lastElement = (WebElement) Iterables.get(listAddToCart, 0);
+		WebElement lastElement = listAddToCart.get(0);
 		lastElement.click();
 
 	}
@@ -106,17 +110,7 @@ public class ProductsList {
 				// Klik produk sesuai index
 				listProducts.get(i).click();
 				LogHelper.detail("Clicked product: " + currentProductName);
-				System.out.println("Product Yang Terpilih Adalah " + currentProductName);
-
-//	            // Ambil nama produk yang tampil di detail page
-//	            String chosenProductName = listProducts.get(i).getText();
-//
-//	            if (chosenProductName.equalsIgnoreCase(currentProductName)) {
-//	                LogHelper.pass("✅ Product matched! Displayed product: " + chosenProductName);
-//	            } else {
-//	                LogHelper.fail("❌ Product mismatch! Expected: " + currentProductName + " but got: " + chosenProductName);
-//	                Assert.fail("Product mismatch!");
-//	            }
+				log.info("Product Yang Terpilih Adalah {}", currentProductName);
 
 				break; // Stop loop setelah ketemu
 			}
@@ -132,8 +126,8 @@ public class ProductsList {
 
 	public void addMultipleProducts() {
 		LogHelper.step("Select product");
-		WebElement lastElement = (WebElement) Iterables.get(listAddToCart, 0);
-		WebElement last = (WebElement) Iterables.get(listAddToCart, 1);
+		WebElement lastElement = listAddToCart.get(0);
+		WebElement last = listAddToCart.get(1);
 		lastElement.click();
 		last.click();
 		LogHelper.detail("Success Selected Products");
@@ -161,7 +155,7 @@ public class ProductsList {
 			// Kalau array kosong, berhenti
 			if (listAddToCart.isEmpty()) {
 				LogHelper.detail("Verify All Products Add To Cart");
-				System.out.println("✅ Semua produk berhasil ditambahkan ke keranjang!");
+				log.info("[OK] Semua produk berhasil ditambahkan ke keranjang!");
 				break;
 			}
 
@@ -175,7 +169,7 @@ public class ProductsList {
 							.until(ExpectedConditions.attributeToBe(addButton, "name", "test-REMOVE"));
 
 					totalAdded++;
-					System.out.println("🛒 Produk ke-" + totalAdded + " berhasil ditambahkan.");
+					log.info("[CART] Produk ke-{} berhasil ditambahkan.", totalAdded);
 				} catch (StaleElementReferenceException ignored) {
 					// Tombol sudah hilang dari DOM → lanjutkan saja
 				}

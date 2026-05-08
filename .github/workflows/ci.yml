@@ -1,0 +1,99 @@
+name: CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main, refactor/v2]
+
+# Cancel in-progress runs for the same ref when a new push lands.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compile:
+    name: Compile
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'maven'
+
+      - name: Compile main + test sources
+        run: mvn -B clean compile test-compile
+
+  api-smoke:
+    name: API Smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'maven'
+
+      - name: Run API smoke tests
+        run: mvn -B test -P api -Dgroups=smoke
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-api
+          path: target/allure-results
+          retention-days: 7
+
+  web-smoke:
+    name: Web Smoke (headless Chrome)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'maven'
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run web smoke tests (headless)
+        run: mvn -B test -P web -Dgroups=smoke -Dheadless=true
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-web
+          path: target/allure-results
+          retention-days: 7
+
+  # Mobile suite is intentionally NOT executed in CI.
+  #
+  # Rationale: Android emulator setup on GitHub Actions is heavyweight
+  # (large image pull, KVM acceleration availability varies per runner)
+  # and the suite targets the SauceLabs SwagLabs demo app — a real device
+  # cloud is the pragmatic execution channel. The repo ships a
+  # `browserstack` Maven profile for that purpose.
+  #
+  # Local execution: `mvn test` (default suite is testng.xml = mobile).
+  # Cloud execution: `mvn test -P web,browserstack` (web suite via
+  # BrowserStack; an analogous mobile profile can be added when Phase 3
+  # introduces App Live / App Automate capabilities).

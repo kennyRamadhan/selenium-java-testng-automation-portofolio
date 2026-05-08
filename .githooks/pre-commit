@@ -1,0 +1,14 @@
+#!/bin/sh
+# Run Spotless check before commit. Aborts on format violations.
+# Tracked source for the .git/hooks/pre-commit hook. Install via
+# `bash scripts/install-hooks.sh`.
+
+mvn -q spotless:check
+if [ $? -ne 0 ]; then
+    echo ""
+    echo "ERROR: Spotless check failed."
+    echo "Run 'mvn spotless:apply' to auto-format, then re-stage and commit."
+    exit 1
+fi
+
+exit 0

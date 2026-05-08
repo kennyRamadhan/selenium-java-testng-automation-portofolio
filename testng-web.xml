@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="Web Suite" parallel="methods" thread-count="2">
+
+    <!--
+        thread-count=2 (vs 3 for the API suite): web tests are flakier than API
+        because they involve browser rendering, network round-trips per
+        interaction, and AE.com latency. Conservative concurrency reduces
+        cross-test interference while still benefiting from parallelism.
+
+        No <listeners> block: io.qameta.allure.testng.AllureTestNg auto-registers
+        via TestNG SPI, identical to the testng-api.xml pattern proven in Phase 5.
+    -->
+
+    <test name="Web Tests">
+        <classes>
+            <class name="com.kennyramadhan.qa.tests.web.LoginWebTest"/>
+            <class name="com.kennyramadhan.qa.tests.web.ProductBrowsingWebTest"/>
+            <class name="com.kennyramadhan.qa.tests.web.CheckoutWebTest"/>
+            <class name="com.kennyramadhan.qa.tests.web.RegisterUserWebTest"/>
+        </classes>
+    </test>
+</suite>

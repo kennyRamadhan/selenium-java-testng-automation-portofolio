@@ -1,0 +1,19 @@
+#!/bin/sh
+# Block AI attribution in commit messages.
+# Tracked source for the .git/hooks/commit-msg hook. Install via
+# `bash scripts/install-hooks.sh`.
+
+COMMIT_MSG_FILE=$1
+
+if grep -iE "Co-Authored-By:.*(Claude|anthropic)" "$COMMIT_MSG_FILE" > /dev/null; then
+  echo "ERROR: AI attribution detected in commit message."
+  echo "Remove any 'Co-Authored-By: Claude' or 'Co-Authored-By: anthropic' lines."
+  exit 1
+fi
+
+if grep -iE "(Generated with|Created by).*Claude" "$COMMIT_MSG_FILE" > /dev/null; then
+  echo "ERROR: AI generation marker detected in commit message."
+  exit 1
+fi
+
+exit 0

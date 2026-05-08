@@ -7,16 +7,19 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * <h1>ConfigLoader</h1>
- * Utility class untuk membaca file konfigurasi `config.properties`
- * dan menyediakan method helper untuk mendapatkan value berdasarkan key.
+ * Utility class for reading the `config.properties` configuration file
+ * and exposing helper methods to retrieve values by key.
  *
- * Versi ini mendukung:
+ * Supported methods:
  *  - get(key)
  *  - getOrDefault(key, defaultValue)
  *  - has(key)
- *  - getAll() -> untuk mendapatkan semua konfigurasi dalam bentuk Map<String, String>
+ *  - getAll() -> returns all configuration entries as a Map<String, String>
  *
  * Values matching the pattern <code>${VAR_NAME}</code> are resolved from
  * environment variables at lookup time (with fallback to the literal value
@@ -27,7 +30,9 @@ import java.util.stream.Collectors;
  */
 public class ConfigLoader {
 
-    /** Menyimpan semua konfigurasi dari file config.properties */
+    private static final Logger log = LoggerFactory.getLogger(ConfigLoader.class);
+
+    /** Stores all configuration loaded from config.properties */
     private static final Properties props = new Properties();
 
     /** Resolved environment name (system property "env", default "local"). */
@@ -37,7 +42,7 @@ public class ConfigLoader {
         env = System.getProperty("env", "local");
         loadProperties("config/config.properties", true);
         loadProperties("config/config-" + env + ".properties", false);
-        System.out.println("[OK] Config loaded for env=" + env + ". Total keys: " + props.size());
+        log.info("[OK] Config loaded for env={}. Total keys: {}", env, props.size());
     }
 
     private static void loadProperties(String resourcePath, boolean required) {
@@ -74,14 +79,14 @@ public class ConfigLoader {
     }
 
     /**
-     * Mengambil value dari key yang ada di config.properties.
+     * Retrieves the value for the given key.
      */
     public static String get(String key) {
         return resolvePlaceholder(props.getProperty(key));
     }
 
     /**
-     * Mengambil value dari key, jika tidak ditemukan maka kembalikan defaultValue.
+     * Retrieves the value for the given key; returns defaultValue if not present.
      */
     public static String getOrDefault(String key, String defaultValue) {
         String value = resolvePlaceholder(props.getProperty(key));
@@ -89,7 +94,7 @@ public class ConfigLoader {
     }
 
     /**
-     * Mengecek apakah key memiliki value yang valid.
+     * Returns true if the key has a non-empty value.
      */
     public static boolean has(String key) {
         String value = props.getProperty(key);
@@ -97,8 +102,8 @@ public class ConfigLoader {
     }
 
     /**
-     * Mengambil semua konfigurasi sebagai Map<String, String>.
-     * Berguna untuk set capability secara otomatis.
+     * Returns all configuration entries as a Map<String, String>.
+     * Useful for bulk-applying capabilities.
      */
     public static Map<String, String> getAll() {
         if (props.isEmpty()) return Collections.emptyMap();

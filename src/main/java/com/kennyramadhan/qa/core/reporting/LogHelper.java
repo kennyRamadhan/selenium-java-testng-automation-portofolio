@@ -1,124 +1,110 @@
 package com.kennyramadhan.qa.core.reporting;
 
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
+import io.qameta.allure.Allure;
+import io.qameta.allure.model.Status;
+import io.qameta.allure.model.StepResult;
 
+import java.util.UUID;
 
 /**
  * <h1>LogHelper</h1>
- * Kelas utilitas untuk membantu penulisan log ke dalam Extent Report.
- * 
- * <p><b>Fungsi utama:</b></p>
+ * Thin shim over the Allure step API. Public method signatures are preserved
+ * from the pre-Allure implementation so existing callers in mobile page
+ * objects keep working without modification.
+ *
+ * <p><b>Methods:</b></p>
  * <ul>
- *   <li>Mencatat langkah (step) dengan nomor urut otomatis.</li>
- *   <li>Mencatat detail hasil eksekusi (PASS / FAIL).</li>
- *   <li>Mencatat warning atau informasi tambahan.</li>
+ *   <li>{@link #resetCounter()} — reset the per-thread STEP-N counter to 1.</li>
+ *   <li>{@link #step(String)} — record a numbered top-level step ("STEP N: msg").</li>
+ *   <li>{@link #detail(String)} — record additional context as a sibling step.</li>
+ *   <li>{@link #pass(String)} — record a step explicitly marked PASSED.</li>
+ *   <li>{@link #fail(String)} — record a step explicitly marked FAILED (does not throw).</li>
+ *   <li>{@link #warning(String)} — alias for {@link #detail(String)}.</li>
  * </ul>
  *
- * <p><b>Contoh Penggunaan:</b></p>
+ * <p><b>Example:</b></p>
  * <pre>
  * LogHelper.resetCounter();
- * LogHelper.step("Buka halaman login");
- * LogHelper.detail("Input username berhasil");
- * LogHelper.pass("Login berhasil");
+ * LogHelper.step("Open login page");
+ * LogHelper.detail("Username entered");
+ * LogHelper.pass("Login succeeded");
  * </pre>
  *
- * <p>Kelas ini bekerja bersama {@link ExtentNode} untuk mencatat log dalam report.
- * Jika tidak ada step aktif, log akan ditulis langsung pada parent test.</p>
- *
- * @author Kenny Ramadhan
- * @version 1.0
+ * <p>Phase 3.4 will rename this class to AllureLogger and align method names
+ * with Allure conventions; this shim keeps the migration ABI-compatible until
+ * then.</p>
  */
-
-
 public class LogHelper {
-	
-	 /** Counter otomatis untuk penomoran step */
-    private static int stepCounter = 1;
-    
-    /** Menyimpan node step yang sedang aktif */
-    private static ExtentTest currentStepNode;
-    
+
+    /** Per-thread step counter. ThreadLocal so parallel test execution is race-free. */
+    private static final ThreadLocal<Integer> stepCounter = ThreadLocal.withInitial(() -> 1);
 
     /**
-     * Reset counter step ke 1.
-     * 
-     * <p>Gunakan di awal test case untuk memastikan step dimulai dari STEP 1.</p>
+     * Reset the per-thread step counter to 1. Call at the start of every test method
+     * so step numbering restarts cleanly.
      */
     public static void resetCounter() {
-        stepCounter = 1;
+        stepCounter.set(1);
     }
-    
-    
+
     /**
-     * Membuat step baru pada report.
+     * Record a numbered top-level step in the Allure report.
      *
-     * @param message Deskripsi step.
+     * @param message human-readable step description
      */
     public static void step(String message) {
-        String stepMessage = "STEP " + stepCounter++ + ": " + message;
-        //currentStepNode = ExtentNode.getTest().createNode(stepMessage);
-        currentStepNode = ExtentNode.createNode(stepMessage);
-        //currentStepNode.log(Status.INFO,stepMessage);
+        int n = stepCounter.get();
+        stepCounter.set(n + 1);
+        Allure.step("STEP " + n + ": " + message);
     }
-    
 
-    
-    
     /**
-     * Menambahkan detail (log PASS) ke step aktif.
-     * Jika step belum ada, maka akan mencatat log FAIL di parent test.
+     * Record additional context as a sibling step in the Allure report.
      *
-     * @param message Pesan detail yang akan ditampilkan di report.
+     * <p><b>Note:</b> Allure does not support free-form info logs nested inside an
+     * already-completed step. This shim records details as <em>sibling</em> steps
+     * (flat in the timeline) rather than children of the most recent step. Phase 3.4
+     * will redesign the API to use {@code Allure.step(String, ThrowableRunnable)}
+     * lambdas and proper nesting.</p>
+     *
+     * @param message detail message
      */
     public static void detail(String message) {
-        if (currentStepNode != null) {
-            currentStepNode.log(Status.INFO, message);
-        } else {
-            ExtentNode.getTest().log(Status.INFO, message);
-        }
+        Allure.step(message);
     }
 
-    
-    
-    
     /**
-     * Menandai step atau test sebagai PASS.
+     * Record a step explicitly marked PASSED.
      *
-     * @param message Pesan keberhasilan.
+     * @param message pass message
      */
     public static void pass(String message) {
-    	if (currentStepNode != null) {
-            currentStepNode.log(Status.PASS, message);
-        } else {
-            ExtentNode.getTest().log(Status.PASS, message);
-        }
+        emitStep(message, Status.PASSED);
     }
-    
-    
+
     /**
-     * Menandai step atau test sebagai FAIL.
+     * Record a step explicitly marked FAILED. Does not throw; the test method
+     * decides whether to fail the test (typically via TestNG Assert).
      *
-     * @param message Pesan kegagalan.
+     * @param message fail message
      */
-
     public static void fail(String message) {
-    	if (currentStepNode != null) {
-            currentStepNode.log(Status.FAIL, message);
-        } else {
-            ExtentNode.getTest().log(Status.FAIL, message);
-        }
+        emitStep(message, Status.FAILED);
     }
 
-    
-    
     /**
-     * Menambahkan log warning atau informasi tambahan ke node yang sedang aktif.
+     * Alias for {@link #detail(String)}.
      *
-     * @param message Pesan peringatan atau informasi.
+     * @param message warning message
      */
     public static void warning(String message) {
-        ExtentNode.getNode().info(message);
+        Allure.step(message);
     }
 
+    private static void emitStep(String message, Status status) {
+        String uuid = UUID.randomUUID().toString();
+        StepResult step = new StepResult().setName(message).setStatus(status);
+        Allure.getLifecycle().startStep(uuid, step);
+        Allure.getLifecycle().stopStep(uuid);
+    }
 }

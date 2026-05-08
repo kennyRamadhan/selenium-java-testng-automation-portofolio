@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.Random;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.kennyramadhan.qa.core.config.ConfigLoader;
 import com.kennyramadhan.qa.core.driver.DriverManager;
@@ -35,6 +37,8 @@ import io.appium.java_client.service.local.AppiumServiceBuilder;
  * @version 2.0 (multi-platform)
  */
 public class AppiumServerManager {
+
+    private static final Logger log = LoggerFactory.getLogger(AppiumServerManager.class);
 
     /** Singleton instance of the Appium service */
     private static AppiumDriverLocalService service;
@@ -131,7 +135,7 @@ public class AppiumServerManager {
         if (!service.isRunning()) {
             throw new RuntimeException("Failed to start Appium Server!");
         }
-        System.out.println("✅ Appium Server started at: " + service.getUrl());
+        log.info("[OK] Appium Server started at: {}", service.getUrl());
     }
 
     /**
@@ -140,7 +144,7 @@ public class AppiumServerManager {
     public static void stopAppiumServer() {
         if (service != null && service.isRunning()) {
             service.stop();
-            System.out.println("🛑 Appium Server stopped.");
+            log.info("[STOP] Appium Server stopped.");
         }
     }
 
@@ -177,10 +181,10 @@ public class AppiumServerManager {
 
                 if (platform.contains("ios")) {
                     driver = new IOSDriver(service.getUrl(), caps);
-                    System.out.println("🍏 iOS Driver initialized for: " + ConfigLoader.getOrDefault("deviceName", "iPhone Simulator"));
+                    log.info("[iOS] Driver initialized for: {}", ConfigLoader.getOrDefault("deviceName", "iPhone Simulator"));
                 } else if (platform.contains("android")) {
                     driver = new AndroidDriver(service.getUrl(), caps);
-                    System.out.println("🤖 Android Driver initialized for: " + ConfigLoader.getOrDefault("deviceName", "Android Emulator"));
+                    log.info("[Android] Driver initialized for: {}", ConfigLoader.getOrDefault("deviceName", "Android Emulator"));
                 } else {
                     throw new IllegalArgumentException("Unsupported platform: " + platform);
                 }
@@ -189,7 +193,7 @@ public class AppiumServerManager {
                 return driver;
 
             } catch (Exception e) {
-                System.err.println("[WARN] Failed to create driver (attempt " + attempt + "): " + e.getMessage());
+                log.warn("Failed to create driver (attempt {}): {}", attempt, e.getMessage());
                 if (attempt == maxRetry) {
                     throw new RuntimeException("Failed to initialize driver after " + maxRetry + " attempts", e);
                 }

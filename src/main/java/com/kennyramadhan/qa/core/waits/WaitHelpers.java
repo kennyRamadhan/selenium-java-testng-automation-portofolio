@@ -10,6 +10,8 @@ import java.util.Map;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
@@ -17,7 +19,9 @@ import com.kennyramadhan.qa.core.reporting.LogHelper;
 import io.appium.java_client.AppiumBy;
 
 public class WaitHelpers {
-	
+
+	private static final Logger log = LoggerFactory.getLogger(WaitHelpers.class);
+
 	public void scrollIntoText(String text) {
 		String platformName = DriverManager.getDriver()
 		        .getCapabilities()
@@ -27,23 +31,23 @@ public class WaitHelpers {
 
 
 	    if (platformName.contains("android")) {
-	        // ✅ Scroll khusus Android
+	        // Android-specific scroll
 	        DriverManager.getDriver().findElement(
 	                AppiumBy.androidUIAutomator(
 	                        "new UiScrollable(new UiSelector().scrollable(true))"
 	                                + ".scrollIntoView(new UiSelector().text(\"" + text + "\"));"));
-	    } 
+	    }
 	    else if (platformName.contains("ios")) {
-	        // ✅ Scroll khusus iOS dengan loop sampai element ketemu atau max scroll tercapai
+	        // iOS-specific scroll: loop until the element is found or max scroll attempts reached
 	        boolean found = false;
-	        int maxScroll = 5; // batas scroll maksimal
+	        int maxScroll = 5; // max scroll attempts
 
 	        while (!found && maxScroll > 0) {
 	            List<WebElement> elements = DriverManager.getDriver()
 	                    .findElements(AppiumBy.iOSNsPredicateString("name CONTAINS '" + text + "'"));
 
 	            if (!elements.isEmpty()) {
-	                found = true; // element ditemukan
+	                found = true; // element found
 	            } else {
 	                Map<String, Object> params = new HashMap<>();
 	                params.put("direction", "down");
@@ -63,25 +67,25 @@ public class WaitHelpers {
 	
 	
 	  /**
-     * Ambil semua harga dari list WebElement, konversi ke Double, dan log ke report.
+     * Extract all prices from a list of WebElements, parse to Double, and log to the report.
      *
-     * @param elements Daftar WebElement yang berisi harga.
-     * @param label Label log (misal: "Before Sorting" atau "After Sorting").
-     * @return List<Double> berisi harga dalam format numerik.
+     * @param elements list of WebElements that hold prices
+     * @param label log label (e.g. "Before Sorting" or "After Sorting").
+     * @return list of prices in numeric form
      */
     public static List<Double> extractPrices(List<WebElement> elements, String label) {
         List<Double> prices = new ArrayList<>();
         for (WebElement el : elements) {
             double price = Double.parseDouble(el.getText().replace("$", "").trim());
             prices.add(price);
-            LogHelper.step("Verifikasi Product List");
-            LogHelper.detail(" Mendapatkan Nilai "+label + " : " + price);
+            LogHelper.step("Verify Product List");
+            LogHelper.detail("Captured value " + label + " : " + price);
         }
         return prices;
     }
 
     /**
-     * Periksa apakah urutan harga sudah ascending.
+     * Check whether the prices are sorted ascending.
      */
     public static boolean isSortedAscending(List<Double> prices) {
         List<Double> sorted = new ArrayList<>(prices);
@@ -90,7 +94,7 @@ public class WaitHelpers {
     }
 
     /**
-     * Periksa apakah urutan harga sudah descending.
+     * Check whether the prices are sorted descending.
      */
     public static boolean isSortedDescending(List<Double> prices) {
         List<Double> sorted = new ArrayList<>(prices);
@@ -99,21 +103,21 @@ public class WaitHelpers {
     }
 
     /**
-     * Verifikasi apakah urutan berubah (setelah klik sort).
+     * Verify the order changed after the sort action.
      */
     public static void verifySortingChanged(List<Double> before, List<Double> after) {
-        Assert.assertNotEquals(after, before, "Urutan produk tidak berubah setelah sorting!");
+        Assert.assertNotEquals(after, before, "Product order did not change after sorting!");
     }
 
     /**
-     * Verifikasi apakah list sudah dalam urutan ascending atau descending.
+     * Verify the list is sorted either ascending or descending.
      */
     public static void verifySortingOrder(List<Double> prices) {
         boolean asc = isSortedAscending(prices);
         boolean desc = isSortedDescending(prices);
-        LogHelper.step("Verifikasi Urutan Product");
-        Assert.assertTrue(asc || desc, "Urutan produk tidak ASC dan tidak DESC!");
-        LogHelper.detail("Urutan produk valid (" + (asc ? "Ascending" : "Descending") + ")");
+        LogHelper.step("Verify Product Order");
+        Assert.assertTrue(asc || desc, "Product order is neither ASC nor DESC!");
+        LogHelper.detail("Product order valid (" + (asc ? "Ascending" : "Descending") + ")");
     }
     
     
@@ -121,9 +125,9 @@ public class WaitHelpers {
 		  WebDriverWait wait = new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(10));
 	        try {
 	            wait.until(ExpectedConditions.visibilityOf(element));
-	            System.out.println("✅ Element ditemukan: " + element);
+	            log.info("[OK] Element found: {}", element);
 	        } catch (Exception e) {
-	            throw new RuntimeException("❌ Element tidak ditemukan: " + element, e);
+	            throw new RuntimeException("Element not found: " + element, e);
 	        }
 
 	}
@@ -138,7 +142,7 @@ public class WaitHelpers {
         Map<String, Object> tapParams = new HashMap<>();
         tapParams.put("x", centerX);
         tapParams.put("y", centerY);
-        System.out.println("🔘 Force tap at: X=" + centerX + " Y=" + centerY);
+        log.info("[TAP] Force tap at: X={} Y={}", centerX, centerY);
         DriverManager.getDriver().executeScript("mobile: tap", tapParams);
     }
 
