@@ -14,7 +14,10 @@
 
     <test name="Web Tests">
         <classes>
-            <!-- Populated in Commit 4.3 -->
+            <class name="com.kennyramadhan.qa.tests.web.LoginWebTest"/>
+            <class name="com.kennyramadhan.qa.tests.web.ProductBrowsingWebTest"/>
+            <class name="com.kennyramadhan.qa.tests.web.CheckoutWebTest"/>
+            <class name="com.kennyramadhan.qa.tests.web.RegisterUserWebTest"/>
         </classes>
     </test>
 </suite>

@@ -43,11 +43,14 @@ public class ProductsPage extends BaseWebPage {
         return new ProductDetailsPage();
     }
 
+    private static final By CART_MODAL = By.id("cartModal");
+    private static final By CART_MODAL_CONTINUE = By.cssSelector("#cartModal .close-modal");
+
     /**
-     * Hover product card at index to surface the overlay 'Add to cart'
-     * button, then click it. AE.com requires hover for overlay visibility
-     * in a real browser; in headless mode the overlay is rendered but the
-     * click target is still the {@code .add-to-cart} link inside the card.
+     * Click the 'Add to cart' overlay button on the product card at the given
+     * index, then dismiss the resulting AE confirmation modal so subsequent
+     * navigation clicks (e.g. View Cart) are not intercepted. The page is
+     * left in its original state — back on /products with the modal closed.
      */
     @Step("Add product at index {index} to cart")
     public ProductsPage addProductToCartByIndex(int index) {
@@ -59,6 +62,9 @@ public class ProductsPage extends BaseWebPage {
         WebElement addButton = cards.get(index).findElement(
                 By.cssSelector(".product-overlay .add-to-cart, .productinfo .add-to-cart"));
         addButton.click();
+        // Wait for the confirmation modal to render and dismiss it.
+        waitForVisible(CART_MODAL);
+        safeClick(CART_MODAL_CONTINUE);
         return this;
     }
 
