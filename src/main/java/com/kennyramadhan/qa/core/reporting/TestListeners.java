@@ -1,216 +1,60 @@
 package com.kennyramadhan.qa.core.reporting;
 
-// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.4 deletion.
-
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
 import org.openqa.selenium.OutputType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import io.appium.java_client.AppiumDriver;
+import io.qameta.allure.Allure;
 
+import java.io.ByteArrayInputStream;
 
 /**
  * <h1>TestListeners</h1>
- * Implementasi custom TestNG {@link ITestListener} untuk mengelola event test 
- * seperti start, success, failure, skip, dan selesai eksekusi suite.
+ * TestNG listener that resets per-test step counters and attaches a screenshot
+ * to the Allure report on test success or failure.
  *
- * <p><b>Fitur Utama:</b></p>
- * <ul>
- *   <li>Inisialisasi ExtentReports di awal suite</li>
- *   <li>Membuat node report untuk setiap test case</li>
- *   <li>Menangkap screenshot pada saat test sukses atau gagal</li>
- *   <li>Menambahkan log PASS/FAIL ke Extent Report</li>
- *   <li>Melakukan flush report setelah semua test selesai</li>
- * </ul>
- *
- * <p><b>Penggunaan:</b></p>
- * <pre>
- * &commat;Listeners(TestListeners.class)
- * public class AddNewClientTest {
- *     // Test case di sini
- * }
- * </pre>
- *
- * <p>Class ini membantu membuat reporting lebih informatif dengan menambahkan screenshot 
- * dan log status setiap test case.</p>
+ * <p>Allure status (PASSED/FAILED/SKIPPED) is driven by the AllureTestNg
+ * listener registered alongside this one in testng.xml; this listener is
+ * scoped to artifact attachment and step-counter lifecycle.</p>
  *
  * @author Kenny Ramadhan
- * @since 2025-09-03
- * @version 1.0
  */
+public class TestListeners implements ITestListener {
 
-public class TestListeners implements ITestListener{
+    private static final Logger log = LoggerFactory.getLogger(TestListeners.class);
 
-	private static final Logger log = LoggerFactory.getLogger(TestListeners.class);
+    @Override
+    public void onTestStart(ITestResult result) {
+        log.debug("Starting test: {}", result.getMethod().getMethodName());
+        LogHelper.resetCounter();
+    }
 
-	 ExtentReports extent = ExtentReportsManager.getExtentReports();
-	 ExtentTest test;
-	 
-	 	/**
-	     * Dipanggil sekali sebelum suite dimulai.
-	     * Menginisialisasi ExtentReports dan menambahkan informasi suite.
-	     */
-	    @Override
-	    public void onStart(ITestContext context) {
-	        // Ambil instance dari ExtentReportsManager (sudah otomatis bikin folder & file)
-	        extent = ExtentReportsManager.getExtentReports();
+    @Override
+    public void onTestSuccess(ITestResult result) {
+        attachScreenshot(result, "success");
+    }
 
-	        // Kalau perlu, update system info tambahan
-	        extent.setSystemInfo("Test Suite", context.getSuite().getName());
-	    }
+    @Override
+    public void onTestFailure(ITestResult result) {
+        attachScreenshot(result, "failure");
+    }
 
-	    
-	    /**
-	     * Dipanggil setiap kali sebuah test method dimulai.
-	     * Membuat node test baru di Extent Report dan reset counter log.
-	     */
-	    @Override
-	    public void onTestStart(ITestResult result) {
-//	    	test = extent.createTest(result.getMethod().getMethodName());
-	    	log.debug("Creating Extent Test for: {}", result.getMethod().getMethodName());
-	    	ExtentNode.createTest(result.getMethod().getMethodName());
-	    	LogHelper.resetCounter();
-	    }
-	    
-	    
-	    /**
-	     * Dipanggil jika test berhasil.
-	     * Menyimpan screenshot ke folder reports/pass dan melog status PASS.
-	     */
-	    @Override
-	    public void onTestSuccess(ITestResult result) {
-	    	 AppiumDriver driver = DriverManager.getDriver();
-	        try {
-
-	            if (driver != null) {
-	                String screenshotPath = getSuccesScreenshotPath(result.getMethod().getMethodName());
-	                ExtentNode.getNode().addScreenCaptureFromPath(screenshotPath);
-	                LogHelper.pass("Test Success");
-	            } else {
-	                log.info("Driver is null, skipping screenshot for test: {}", result.getMethod().getMethodName());
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-
-	        }
-
-	        ExtentTest node = ExtentNode.getNode();
-	        if (node != null) {
-	            node.pass("Test passed: " + result.getMethod().getMethodName());
-	        } else {
-	            log.warn("ExtentNode.getNode() null for: {}", result.getMethod().getMethodName());
-	        }
-			
-	    }
-	    
-	    
-	    /**
-	     * Dipanggil jika test gagal.
-	     * Menyimpan screenshot ke folder reports/fail dan melog status FAIL.
-	     */
-	    @Override
-	    public void onTestFailure(ITestResult result) {    
-	    	 AppiumDriver driver = DriverManager.getDriver();
-	    	try {
-	    		
-	            if (driver != null) {
-	                String screenshotPath = getFailedScreenshotPath(result.getMethod().getMethodName());
-	                ExtentNode.getNode().addScreenCaptureFromPath(screenshotPath);
-	                LogHelper.fail("Test Failed");
-	            } else {
-	                log.info("Driver is null, skipping screenshot for test: {}", result.getMethod().getMethodName());
-	            }
-	        } catch (Exception e) {
-	            e.printStackTrace();
-	        }
-
-	    	 ExtentNode.getNode().fail(result.getThrowable());
-
-	    	 ExtentTest node = ExtentNode.getNode();
-	    	    if (node != null) {
-	    	        node.fail(result.getThrowable());
-	    	    } else {
-	    	        log.warn("ExtentNode.getNode() null. Logging to console instead.");
-	    	        result.getThrowable().printStackTrace();
-	    	    }
-			
-	    }
-	    
-	    
-	    /**
-	     * Dipanggil jika test dilewati (skip).
-	     * Bisa ditambahkan log atau screenshot jika diperlukan.
-	     */
-	    @Override
-	    public void onTestSkipped(ITestResult result) {
-	    }
-	    
-	    
-
-	    /**
-	     * Dipanggil sekali setelah suite selesai dijalankan.
-	     * Melakukan flush ExtentReports agar file report final dibuat.
-	     */
-	    @Override
-	    public void onFinish(ITestContext context) {
-	    	 log.info("Flushing Extent Report...");
-	        extent.flush(); // Flush sekali di akhir suite
-	        log.info("Extent Report generated at: {}/reports/", System.getProperty("user.dir"));
-	    }
-	    
-	    
-	    
-	    
-	    
-	    
-	    /**
-	     * Membuat screenshot untuk test yang berhasil.
-	     *
-	     * @param testCasesName nama test case
-	     * @param driver instance IOSDriver
-	     * @return path file screenshot
-	     * @throws IOException jika file gagal disimpan
-	     */
-	   
-	    
-	    private String getSuccesScreenshotPath(String testCasesName) throws IOException {
-	    	AppiumDriver driver = DriverManager.getDriver();
-			
-			File source = driver.getScreenshotAs(OutputType.FILE);
-			String destinationFile = System.getProperty("user.dir")+"/reports/pass/"+testCasesName+".png";
-			FileUtils.copyFile(source,new File(destinationFile));
-			return destinationFile;
-		}
-	    
-	    
-	    
-	    
-	    /**
-	     * Membuat screenshot untuk test yang gagal.
-	     *
-	     * @param testCasesName nama test case
-	     * @param driver instance IOSDriver
-	     * @return path file screenshot
-	     * @throws IOException jika file gagal disimpan
-	     */
-	    
-	    private String getFailedScreenshotPath(String testCasesName) throws IOException {
-	    	AppiumDriver driver = DriverManager.getDriver();
-			File source = driver.getScreenshotAs(OutputType.FILE);
-			String destinationFile = System.getProperty("user.dir")+"/reports/fail/"+testCasesName+".png";
-			FileUtils.copyFile(source,new File(destinationFile));
-			return destinationFile;
-		}
-
+    private void attachScreenshot(ITestResult result, String label) {
+        AppiumDriver driver = DriverManager.getDriver();
+        if (driver == null) {
+            log.info("Driver is null, skipping {} screenshot for: {}", label, result.getMethod().getMethodName());
+            return;
+        }
+        try {
+            byte[] png = driver.getScreenshotAs(OutputType.BYTES);
+            String name = result.getMethod().getMethodName() + "-" + label;
+            Allure.addAttachment(name, "image/png", new ByteArrayInputStream(png), ".png");
+        } catch (Exception e) {
+            log.warn("Failed to attach {} screenshot for {}: {}", label, result.getMethod().getMethodName(), e.getMessage());
+        }
+    }
 }

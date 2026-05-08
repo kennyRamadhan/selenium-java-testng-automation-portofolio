@@ -21,7 +21,6 @@
         <appium.version>8.6.0</appium.version>
         <testng.version>7.10.2</testng.version>
         <poi.version>5.4.0</poi.version>
-        <extentreports.version>5.1.1</extentreports.version>
         <commons-io.version>2.16.1</commons-io.version>
         <datafaker.version>2.4.2</datafaker.version>
         <slf4j.version>2.0.16</slf4j.version>
@@ -57,13 +56,6 @@
             <version>${poi.version}</version>
         </dependency>
 
-        <!-- ExtentReports (transient — will be removed in Commit 2.5 once Allure migration lands) -->
-        <dependency>
-            <groupId>com.aventstack</groupId>
-            <artifactId>extentreports</artifactId>
-            <version>${extentreports.version}</version>
-        </dependency>
-
         <!-- Apache Commons IO -->
         <dependency>
             <groupId>commons-io</groupId>
@@ -97,7 +89,7 @@
             <version>${assertj.version}</version>
         </dependency>
 
-        <!-- Allure TestNG integration (fully replaces ExtentReports starting Commit 2.5) -->
+        <!-- Allure TestNG integration -->
         <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
