@@ -27,6 +27,8 @@
         <logback.version>1.5.12</logback.version>
         <assertj.version>3.26.3</assertj.version>
         <allure.version>2.29.0</allure.version>
+        <rest-assured.version>5.5.0</rest-assured.version>
+        <jackson.version>2.18.1</jackson.version>
 
         <!-- Plugin versions -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -95,6 +97,32 @@
             <artifactId>allure-testng</artifactId>
             <version>${allure.version}</version>
         </dependency>
+
+        <!-- RestAssured (API testing) — compile scope because BaseApiClient lives in src/main/java -->
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${rest-assured.version}</version>
+        </dependency>
+
+        <!-- Jackson (JSON serialization for API models) -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr310</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+
+        <!-- Allure RestAssured filter (per-request trace attached to Allure report) — compile scope, see RestAssured note -->
+        <dependency>
+            <groupId>io.qameta.allure</groupId>
+            <artifactId>allure-rest-assured</artifactId>
+            <version>${allure.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -131,4 +159,25 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- API profile: runs the API suite (testng-api.xml) instead of the default mobile suite. -->
+        <profile>
+            <id>api</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven-surefire-plugin.version}</version>
+                        <configuration>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>testng-api.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
