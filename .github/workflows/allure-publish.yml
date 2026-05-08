@@ -1,7 +1,6 @@
 name: Allure Report Publish
-
-# Publishes the Allure report to gh-pages on every push to main or refactor/v2.
-# Manual workflow_dispatch trigger lets you regenerate without a push.
+# Publishes the Allure report to gh-pages on every push to main.
+# Manual workflow_dispatch trigger lets you regenerate or run a specific suite.
 #
 # One-time manual setup required:
 #   Repo Settings → Pages → Source: gh-pages branch
@@ -11,15 +10,24 @@ name: Allure Report Publish
 
 on:
   push:
-    branches: [main, refactor/v2]
+    branches: [main]
   workflow_dispatch:
+    inputs:
+      suite:
+        description: 'Which suite to run (mobile not yet supported on CI runners)'
+        type: choice
+        options:
+          - all
+          - api
+          - web
+        default: all
 
 permissions:
   contents: write
   pages: write
   id-token: write
 
-# Only one publish run at a time per ref to avoid gh-pages history collisions.
+# One publish run at a time per ref to avoid gh-pages history collisions.
 concurrency:
   group: allure-publish-${{ github.ref }}
   cancel-in-progress: false
@@ -43,13 +51,20 @@ jobs:
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
 
-      - name: Run API suite (continue on failure)
-        # `|| true` so a test failure still produces Allure results to publish.
-        # The report itself shows the failure; CI workflow ci.yml is the gate
-        # for pass/fail.
+      - name: Install Allure CLI
+        run: |
+          ALLURE_VERSION=2.29.0
+          wget -q -O allure.tgz "https://github.com/allure-framework/allure2/releases/download/${ALLURE_VERSION}/allure-${ALLURE_VERSION}.tgz"
+          tar -xzf allure.tgz -C $HOME
+          sudo ln -sf $HOME/allure-${ALLURE_VERSION}/bin/allure /usr/local/bin/allure
+          allure --version
+
+      - name: Run API suite
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'api' }}
         run: mvn -B test -P api || true
 
-      - name: Run Web suite headless (continue on failure)
+      - name: Run Web suite (headless Chrome)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'web' }}
         run: mvn -B test -P web -Dheadless=true || true
 
       - name: Checkout existing gh-pages history
@@ -60,14 +75,19 @@ jobs:
           ref: gh-pages
           path: gh-pages
 
+      - name: Restore Allure history from gh-pages
+        if: always()
+        run: |
+          mkdir -p target/allure-results/history
+          if [ -d "gh-pages/history" ]; then
+            cp -r gh-pages/history/* target/allure-results/history/ 2>/dev/null || true
+          fi
+
       - name: Generate Allure report
         if: always()
-        uses: simple-elf/allure-report-action@v1.7
-        with:
-          allure_results: target/allure-results
-          allure_history: allure-history
-          gh_pages: gh-pages
-          keep_reports: 30
+        run: |
+          rm -rf allure-history
+          allure generate target/allure-results --clean -o allure-history
 
       - name: Deploy to gh-pages
         if: always()
