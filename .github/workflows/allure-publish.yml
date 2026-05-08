@@ -1,0 +1,79 @@
+name: Allure Report Publish
+
+# Publishes the Allure report to gh-pages on every push to main or refactor/v2.
+# Manual workflow_dispatch trigger lets you regenerate without a push.
+#
+# One-time manual setup required:
+#   Repo Settings → Pages → Source: gh-pages branch
+#
+# After first publish, the report is served at:
+#   https://kennyRamadhan.github.io/selenium-java-testng-automation-portofolio/
+
+on:
+  push:
+    branches: [main, refactor/v2]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Only one publish run at a time per ref to avoid gh-pages history collisions.
+concurrency:
+  group: allure-publish-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  publish-allure:
+    name: Generate and publish Allure report
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'maven'
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run API suite (continue on failure)
+        # `|| true` so a test failure still produces Allure results to publish.
+        # The report itself shows the failure; CI workflow ci.yml is the gate
+        # for pass/fail.
+        run: mvn -B test -P api || true
+
+      - name: Run Web suite headless (continue on failure)
+        run: mvn -B test -P web -Dheadless=true || true
+
+      - name: Checkout existing gh-pages history
+        uses: actions/checkout@v4
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Generate Allure report
+        if: always()
+        uses: simple-elf/allure-report-action@v1.7
+        with:
+          allure_results: target/allure-results
+          allure_history: allure-history
+          gh_pages: gh-pages
+          keep_reports: 30
+
+      - name: Deploy to gh-pages
+        if: always()
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
+          keep_files: true
