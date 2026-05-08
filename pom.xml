@@ -29,6 +29,8 @@
         <allure.version>2.29.0</allure.version>
         <rest-assured.version>5.5.0</rest-assured.version>
         <jackson.version>2.18.1</jackson.version>
+        <selenium.version>4.27.0</selenium.version>
+        <webdrivermanager.version>5.9.2</webdrivermanager.version>
 
         <!-- Plugin versions -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -37,11 +39,31 @@
     </properties>
 
     <dependencies>
-        <!-- Appium client (transitive: Selenium 4.x) -->
+        <!--
+            Appium client. Excludes its own selenium-api and selenium-remote-driver
+            (pinned at 4.13.0) so the explicit Selenium 4.27.0 pins below decide
+            the version uniformly across the project. Without these exclusions
+            Appium's transitives win Maven's mediation and produce a 4.13/4.27
+            version skew at runtime.
+        -->
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>
             <version>${appium.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-remote-driver</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.seleniumhq.selenium</groupId>
+                    <artifactId>selenium-support</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- TestNG -->
@@ -123,6 +145,38 @@
             <artifactId>allure-rest-assured</artifactId>
             <version>${allure.version}</version>
         </dependency>
+
+        <!--
+            Selenium WebDriver. Both selenium-java AND the lower-level modules
+            (selenium-api, selenium-remote-driver) are pinned explicitly because
+            Appium 8.6.0 directly declares selenium-api/remote-driver at 4.13.0;
+            without these explicit pins Maven's "nearest wins" rule picks the
+            Appium-declared 4.13 and mixes it with selenium-java 4.27 → runtime
+            NoSuchMethodError risk. Forcing the whole Selenium family to a
+            consistent 4.27.0 avoids the version skew.
+        -->
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-api</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-remote-driver</artifactId>
+            <version>${selenium.version}</version>
+        </dependency>
+
+        <!-- WebDriverManager (auto-resolves chromedriver/geckodriver/edgedriver binaries) -->
+        <dependency>
+            <groupId>io.github.bonigarcia</groupId>
+            <artifactId>webdrivermanager</artifactId>
+            <version>${webdrivermanager.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -173,6 +227,25 @@
                         <configuration>
                             <suiteXmlFiles>
                                 <suiteXmlFile>testng-api.xml</suiteXmlFile>
+                            </suiteXmlFiles>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <!-- Web profile: runs the Web suite (testng-web.xml) instead of the default mobile suite. -->
+        <profile>
+            <id>web</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven-surefire-plugin.version}</version>
+                        <configuration>
+                            <suiteXmlFiles>
+                                <suiteXmlFile>testng-web.xml</suiteXmlFile>
                             </suiteXmlFiles>
                         </configuration>
                     </plugin>
