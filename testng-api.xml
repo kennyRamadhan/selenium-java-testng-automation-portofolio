@@ -11,7 +11,10 @@
 
     <test name="API Tests">
         <classes>
-            <!-- Populated in Commit 5.3 -->
+            <class name="com.kennyramadhan.qa.tests.api.ProductsApiTest"/>
+            <class name="com.kennyramadhan.qa.tests.api.BrandsApiTest"/>
+            <class name="com.kennyramadhan.qa.tests.api.AuthApiTest"/>
+            <class name="com.kennyramadhan.qa.tests.api.UserApiTest"/>
         </classes>
     </test>
 </suite>

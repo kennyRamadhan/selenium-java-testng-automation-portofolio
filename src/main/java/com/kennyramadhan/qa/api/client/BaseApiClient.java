@@ -4,6 +4,7 @@ import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
+import io.restassured.parsing.Parser;
 import io.restassured.specification.RequestSpecification;
 
 /**
@@ -30,6 +31,14 @@ import io.restassured.specification.RequestSpecification;
  * {@link com.kennyramadhan.qa.api.models.ApiResponse}.</p>
  */
 public abstract class BaseApiClient {
+
+    static {
+        // automationexercise.com returns JSON bodies with Content-Type:
+        // text/html; charset=utf-8. RestAssured refuses to deserialize unless
+        // it recognizes the content type. Register JSON as the default parser
+        // so .extract().as(Class) falls back correctly.
+        RestAssured.defaultParser = Parser.JSON;
+    }
 
     /**
      * Build a fresh {@link RequestSpecification} for a single request. Each
