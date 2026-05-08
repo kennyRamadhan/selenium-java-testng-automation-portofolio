@@ -52,3 +52,11 @@ Thumbs.db
 
 # Claude Code session config
 .claude/
+
+# Internal planning / agent artifacts (not for public repo)
+CLAUDE.md
+MASTER_PLAN.md
+handoffs/
+
+# TestNG default output directory
+test-output/
