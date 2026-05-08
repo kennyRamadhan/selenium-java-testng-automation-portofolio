@@ -1,137 +1,165 @@
-###  Automation Project Description
+# QA Automation Portfolio — Mobile + Web + API
 
-		This project provides a complete mobile,web & API automation testing framework using **Selenium + Appium + TestNG**,   
-        with built-in reporting extent report. You can run this project with simple configuration just set your capabilities on config.properties for mobile test.
-        No need to set path node js and appium main.js you can run this project from Windows and iOS.
-				
----
+[![CI](https://github.com/kennyRamadhan/selenium-java-testng-automation-portofolio/actions/workflows/ci.yml/badge.svg)](https://github.com/kennyRamadhan/selenium-java-testng-automation-portofolio/actions/workflows/ci.yml)
+[![Allure Report](https://img.shields.io/badge/Allure-Report-brightgreen)](https://kennyRamadhan.github.io/selenium-java-testng-automation-portofolio/)
+[![Java](https://img.shields.io/badge/Java-25%20LTS-orange)](https://adoptium.net/)
+[![Maven](https://img.shields.io/badge/Maven-3.9-blue)](https://maven.apache.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-###  Requirements & Tech Stack
+A production-grade test automation framework demonstrating end-to-end testing across **mobile (Appium)**, **web (Selenium)**, and **API (RestAssured)** layers using a unified Java 25 + TestNG architecture.
 
-				- **Java 17**
-				- **Appium 2.11.2+**
-				- **Node.js v24.4.1+**
-				- **Xcode** (for iOS testing)
-				- **Eclipse IDE** / **IntelliJ IDEA**
-
- ---
-
-### Automation Tools & Server
-
-				- **Selenium**
-				- **Appium**
----
-	
-### Test Framework
-
-				- **TestNG**
----
-
-### Reporting
-
-				- **ExtentReports** – for detailed HTML reports with logs, screenshots, and system info
+> Companion to my [Python framework](https://github.com/kennyRamadhan/playwright-api-web-mobile) — same architectural principles, different stack.
 
 ---
 
-###  Environment Setup
+## 🎯 Demo Targets
 
-				Install Required Tools
-				- [Java JDK 17](https://adoptium.net/)
-				- [Maven](https://maven.apache.org/)
-				- [Node.js](https://nodejs.org/) + [Appium](https://appium.io/)
-				  
-				  ```bash
-				  npm install -g appium
-				- Xcode (for iOS Simulator support)
-				- Real Device (if running tests on a real device)
----
-
-### Running Tests
-
-    Preparation Before Run Test :
-
-        - Get ipa,app or apk in https://github.com/saucelabs/sample-app-mobile/releases to matched with your device if using simulator for ios using app and bundle id for real device
-        - Ensure the device or simulator is running before executing tests.
-				- For real devices, make sure WebDriverAgent (WDA) is installed and trusted on the device.
-				- Keep dependencies and Node/Appium versions up to date for better compatibility.
-        - set config.properties (see project structure) to matched with your current device
-
-		Run via Terminal (Command Description) :
-
-				- mvn clean test	Run all tests based on testng.xml
-				- mvn clean test -Dsurefire.suiteXmlFiles=testng.xml	Run a specific suite file
-				- mvn clean test -Dtest=ClassNameTest	Run tests by class name
-				- mvn clean test -Dtest=ClassNameTest#methodName	Run tests by specific method
-				- mvn clean install -DskipTests	Compile project but skip tests
-				- mvn clean test -X or mvn clean test -e	Run tests with debug output
-
-		Run via Eclipse/IntelliJ
-
-				- Run All Tests: Right-click testng.xml → Run As → TestNG Suite
-				- Run Single Class: Right-click the test class → Run As → TestNG Test
----
-### Project Structure
-
-				
-				src/
-				 ├── main/java
-				 │    ├── Appium/Config/                   # Handles Appium start/stop
-				 │    ├── Selenium/Pages/                  # Page Object Models (POM)
-				 │    ├── Selenium/CustomHelper/           # Utility/helper functions
-				 │    ├── Extent/Listeners/                # Listeners for logging, screenshots, reporting , config appium capabilites and app resource for iOS & Android
-				 │   
-				 │
-				 └── test/java
-				      └── TestNG/Mobile/                   # Test Case Mobile
-              ├── TestNG/API/                      # Test Case API
-              ├── TestNG/Web/                      # Test Casse Web
-		  		reports/
-				 ├──  /pass
-				 │    ├── Screnshots Pass Test Case
-	 			 │
-				 └── /fail
-				 |     └── Screnshots Fail Test Case
-				 │   
-				 │
-				 └── #ExtentReport.....html		   # File HTML Extent Report For Test Suite Run
-		  
-				pom.xml → Maven dependencies & build configuration
-				testng.xml → TestNG suite & listener configuration
----
-
-### Key Files
-
-				- BaseTest – Global setup & teardown logic for all tests
-				- ConfigLoader – Loads configuration values from .properties files
-				- Utils – Custom utility functions (e.g. verifyElementExist, tapWhenElementVisible)
-				- AppiumServerManager – Starts and stops Appium server automatically
-				- Listeners – Custom TestNG listeners for logging, screenshots, and report generation
-				
-
-### Reports & Screenshots are automatically generated after each run test suite and stored in:
-				
-				plaintext
-				Copy code
-				reports/
-				 ├── pass/
-				 └── fail/
-				Each report includes:
-								- Test execution summary
-								- Logs and step details
-								- Screenshots for failed steps
----
-
-### Test Execution Flow
-
-				- Execute testng.xml
-				- Listeners are triggered (logging, screenshot, reporting)
-				- BaseTest initializes driver & environment
-				- Test cases are executed via Page Object Model
-				- Results are saved in reports/ directory
+| Layer  | Target                       | Address                                                  |
+| ------ | ---------------------------- | -------------------------------------------------------- |
+| Web    | Automation Exercise          | https://automationexercise.com                           |
+| API    | Automation Exercise API      | https://automationexercise.com/api_list                  |
+| Mobile | SauceLabs SwagLabs Demo App  | iOS / Android (local emulator or BrowserStack)           |
 
 ---
-				
-				
-				
 
+## 🛠 Tech Stack
 
+| Concern         | Tool                                  |
+| --------------- | ------------------------------------- |
+| Language        | Java 25 LTS (Temurin)                 |
+| Build           | Maven 3.9                             |
+| Test framework  | TestNG 7.10                           |
+| Mobile          | Appium java-client 8.6                |
+| Web             | Selenium 4.27 + WebDriverManager 5.9  |
+| API             | RestAssured 5.5 + Jackson 2.18        |
+| Reporting       | Allure 2.29                           |
+| Logging         | SLF4J 2.0 + Logback 1.5               |
+| Assertion       | AssertJ 3.26                          |
+| Test data       | Datafaker 2.4                         |
+| Code quality    | Spotless 2.43 (Google Java Format)    |
+| CI              | GitHub Actions                        |
+
+---
+
+## 📁 Architecture
+
+```mermaid
+graph TB
+    subgraph Tests["Test Suites"]
+        MOB[Mobile Tests<br/>testng.xml]
+        WEB[Web Tests<br/>testng-web.xml]
+        API[API Tests<br/>testng-api.xml]
+    end
+
+    subgraph Layer["Page / Client Layer"]
+        MP[Mobile Pages<br/>com.kennyramadhan.qa.mobile.pages]
+        WP[Web Pages<br/>com.kennyramadhan.qa.web.pages]
+        AC[API Clients<br/>com.kennyramadhan.qa.api.endpoints]
+    end
+
+    subgraph Core["Core Infrastructure"]
+        DM[DriverManager<br/>ThreadLocal AppiumDriver]
+        WF[WebDriverFactory<br/>ThreadLocal WebDriver]
+        CL[ConfigLoader<br/>env-overlay config]
+        LH[LogHelper<br/>Allure shim]
+    end
+
+    subgraph Report["Reporting"]
+        ALL[Allure 2.29<br/>target/allure-results]
+        GHP[GitHub Pages<br/>gh-pages branch]
+    end
+
+    MOB --> MP --> DM
+    WEB --> WP --> WF
+    API --> AC
+    MP --> LH
+    WP --> LH
+    AC --> ALL
+    LH --> ALL
+    ALL --> GHP
+```
+
+The three test layers share `ConfigLoader` for environment-overlay configuration but each owns its own driver/client lifecycle. Allure is the single reporting backend; `LogHelper` is a thin shim preserving the legacy ExtentReports-style API while delegating to Allure under the hood. See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the full design rationale.
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Java 25 LTS** (Temurin recommended) — verify with `java -version`
+- **Maven 3.9+** — verify with `mvn -version`
+- **Chrome / Firefox / Edge** for web tests (WebDriverManager auto-resolves the driver binary)
+- **Appium server + Android Studio or Xcode** for mobile tests (mobile suite is excluded from default CI; see [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for execution channels)
+
+### Clone and build
+
+```bash
+git clone https://github.com/kennyRamadhan/selenium-java-testng-automation-portofolio.git
+cd selenium-java-testng-automation-portofolio
+mvn clean compile
+```
+
+### (Optional) Install local git hooks
+
+```bash
+bash scripts/install-hooks.sh
+```
+
+Installs a `pre-commit` hook that runs Spotless and a `commit-msg` hook that blocks AI-attribution lines. Hooks are tracked under `.githooks/` and copied into `.git/hooks/` by the script.
+
+### Run tests
+
+| Goal                       | Command                                                              |
+| -------------------------- | -------------------------------------------------------------------- |
+| API smoke (3 tests, ~10s)  | `mvn test -P api -Dgroups=smoke`                                     |
+| API full (15 tests, ~30s)  | `mvn test -P api`                                                    |
+| Web smoke (4 tests, ~80s)  | `mvn test -P web -Dgroups=smoke -Dheadless=true`                     |
+| Web full (8 tests)         | `mvn test -P web -Dheadless=true`                                    |
+| Mobile (default suite)     | `mvn test`  *(requires running Appium + emulator/device)*            |
+| Web on BrowserStack cloud  | `mvn test -P web,browserstack -Dbrowser=chrome`  *(requires creds)*  |
+
+For a full local-development walkthrough including IDE setup, see [docs/GETTING_STARTED.md](docs/GETTING_STARTED.md).
+
+---
+
+## 📊 Reports
+
+Allure report auto-published to GitHub Pages on every push:
+**[https://kennyRamadhan.github.io/selenium-java-testng-automation-portofolio/](https://kennyRamadhan.github.io/selenium-java-testng-automation-portofolio/)**
+
+> Screenshot pending — first CI publish will populate this section.
+
+To view the report locally after a test run:
+
+```bash
+mvn allure:serve
+```
+
+This starts a local web server with the report rendered from `target/allure-results/`.
+
+---
+
+## 🏗 Design Decisions
+
+See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for in-depth rationale on:
+
+- **Why Allure over ExtentReports** — first-class TestNG SPI integration, GitHub Pages publishing, less infra around it
+- **Why no PageFactory** — explicit `By` constants are easier to grep, easier to refactor, and avoid the proxy magic that made test failures hard to debug
+- **Why ThreadLocal driver** — TestNG `parallel="methods"` requires per-thread isolation; ThreadLocal is the simplest correct primitive
+- **Why cross-layer cleanup (web → API)** — the AE.com `/api/deleteAccount` endpoint is more reliable than its web equivalent for tearing down test fixtures
+- **Multi-environment config strategy** — base `config.properties` + per-env overlay (`config-{env}.properties`) + runtime variable resolution
+
+---
+
+## 📚 Documentation
+
+- [Getting Started](docs/GETTING_STARTED.md) — local dev setup walkthrough
+- [Architecture](docs/ARCHITECTURE.md) — design decisions and rationale
+- [Contributing](CONTRIBUTING.md) — branch naming, commit format, PR template
+
+---
+
+## 📜 License
+
+MIT — see [LICENSE](LICENSE).
