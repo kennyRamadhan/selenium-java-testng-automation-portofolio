@@ -36,6 +36,7 @@
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>3.5.2</maven-surefire-plugin.version>
         <allure-maven.version>2.13.0</allure-maven.version>
+        <spotless-maven-plugin.version>2.43.0</spotless-maven-plugin.version>
     </properties>
 
     <dependencies>
@@ -210,6 +211,48 @@
                 <groupId>io.qameta.allure</groupId>
                 <artifactId>allure-maven</artifactId>
                 <version>${allure-maven.version}</version>
+            </plugin>
+
+            <!--
+                Spotless: enforces Google Java Format on changed code only.
+                ratchetFrom is pinned to commit fb08d70 (Phase 4 final, end of
+                Phase 5+4 refactor) so all pre-Phase-6 source is grandfathered
+                — Spotless inspects only files modified between fb08d70 and
+                HEAD. Existing code is not auto-reformatted.
+
+                To rebaseline (e.g. after a major refactor that touches most
+                files anyway): bump ratchetFrom to a new SHA, then run
+                `mvn spotless:apply` once to normalize, then commit the
+                normalized result. Future commits ratchet from the new SHA.
+
+                The check goal is bound to the verify phase so `mvn verify`
+                fails the build on format violations. Run `mvn spotless:apply`
+                to auto-fix.
+            -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${spotless-maven-plugin.version}</version>
+                <configuration>
+                    <ratchetFrom>fb08d70c2c883b6fc1830185c31b4fcc22f5d3dd</ratchetFrom>
+                    <java>
+                        <googleJavaFormat>
+                            <version>1.22.0</version>
+                            <style>GOOGLE</style>
+                        </googleJavaFormat>
+                        <removeUnusedImports/>
+                        <importOrder>
+                            <order>java,javax,org,com,com.kennyramadhan</order>
+                        </importOrder>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
