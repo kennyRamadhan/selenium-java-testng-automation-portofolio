@@ -252,5 +252,29 @@
                 </plugins>
             </build>
         </profile>
+
+        <!--
+            BrowserStack profile: routes WebDriver creation through BrowserStack's
+            cloud hub. Credentials live in BROWSERSTACK_USERNAME and
+            BROWSERSTACK_ACCESS_KEY environment variables (NEVER committed).
+            Activate with: mvn test -P web,browserstack -Dbrowser=chrome
+        -->
+        <profile>
+            <id>browserstack</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <version>${maven-surefire-plugin.version}</version>
+                        <configuration>
+                            <systemPropertyVariables>
+                                <web.target>browserstack</web.target>
+                            </systemPropertyVariables>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
     </profiles>
 </project>

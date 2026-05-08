@@ -2,6 +2,7 @@ package com.kennyramadhan.qa.core.driver;
 
 import com.kennyramadhan.qa.web.client.WebConfig;
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -9,11 +10,17 @@ import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URL;
 import java.time.Duration;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * Per-thread WebDriver lifecycle. Independent from the Appium-side
@@ -45,8 +52,16 @@ public final class WebDriverFactory {
      * Build a new WebDriver for the given browser + headless mode. Configures
      * common options (no-sandbox, disabled /dev/shm, 1920×1080 window) and
      * disables implicit waits (we rely on explicit {@code WebDriverWait}).
+     *
+     * <p>If the system property {@code web.target=browserstack} is set, the
+     * factory dispatches to {@link #createBrowserStackDriver(Browser)} which
+     * builds a {@link RemoteWebDriver} pointed at BrowserStack's hub. See
+     * that method for credential and capability requirements.</p>
      */
     public static WebDriver create(Browser browser, boolean headless) {
+        if ("browserstack".equalsIgnoreCase(System.getProperty("web.target"))) {
+            return createBrowserStackDriver(browser);
+        }
         log.info("Creating WebDriver: browser={}, headless={}", browser, headless);
         WebDriver driver = switch (browser) {
             case CHROME -> {
@@ -136,5 +151,53 @@ public final class WebDriverFactory {
     public static boolean shouldRunHeadless() {
         return "true".equalsIgnoreCase(System.getProperty("headless"))
                 || "true".equalsIgnoreCase(System.getenv("CI"));
+    }
+
+    /**
+     * Build a {@link RemoteWebDriver} pointed at BrowserStack's hub.
+     *
+     * <h3>Required environment variables</h3>
+     * <ul>
+     *   <li>{@code BROWSERSTACK_USERNAME}</li>
+     *   <li>{@code BROWSERSTACK_ACCESS_KEY}</li>
+     * </ul>
+     * Both are set in CI / local shell — never committed to the repo. If
+     * either is missing the method throws {@link IllegalStateException} with
+     * a clear message rather than constructing an unauthenticated session.
+     *
+     * <h3>Activation</h3>
+     * <pre>{@code mvn test -P web,browserstack -Dbrowser=chrome}</pre>
+     *
+     * <p>The {@code browserstack} Maven profile sets {@code web.target=browserstack}
+     * via surefire system properties; this dispatches {@link #create} to this
+     * factory method instead of the local-driver path.</p>
+     */
+    private static WebDriver createBrowserStackDriver(Browser browser) {
+        String user = System.getenv("BROWSERSTACK_USERNAME");
+        String key = System.getenv("BROWSERSTACK_ACCESS_KEY");
+        if (user == null || user.isBlank() || key == null || key.isBlank()) {
+            throw new IllegalStateException(
+                    "BrowserStack target requested (web.target=browserstack) but " +
+                    "BROWSERSTACK_USERNAME and/or BROWSERSTACK_ACCESS_KEY env vars are not set.");
+        }
+        log.info("Creating RemoteWebDriver via BrowserStack for browser={}", browser);
+
+        MutableCapabilities caps = new MutableCapabilities();
+        caps.setCapability("browserName", browser.name().toLowerCase(Locale.ROOT));
+
+        Map<String, Object> bstack = new HashMap<>();
+        bstack.put("os", "Windows");
+        bstack.put("osVersion", "11");
+        bstack.put("projectName", "selenium-java-testng-automation-portofolio");
+        bstack.put("buildName", System.getenv().getOrDefault("BUILD_NAME", "local-dev"));
+        bstack.put("sessionName", "Web suite — " + browser);
+        caps.setCapability("bstack:options", bstack);
+
+        try {
+            URL hub = URI.create("https://" + user + ":" + key + "@hub-cloud.browserstack.com/wd/hub").toURL();
+            return new RemoteWebDriver(hub, caps);
+        } catch (MalformedURLException e) {
+            throw new IllegalStateException("Failed to build BrowserStack hub URL", e);
+        }
     }
 }
