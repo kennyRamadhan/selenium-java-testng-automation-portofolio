@@ -3,6 +3,8 @@ package com.kennyramadhan.qa.tests.mobile;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeMethod;
@@ -18,49 +20,45 @@ import io.appium.java_client.ios.IOSDriver;
 
 
 /**
- * <h1>BaseTest</h1> Kelas ini berfungsi sebagai kelas dasar untuk semua test
- * case mobile automation.
- * 
+ * <h1>BaseMobileTest</h1>
+ * Base class for all mobile automation test cases.
+ *
  * <p>
- * <b>Fungsi Utama:</b>
+ * <b>Responsibilities:</b>
  * </p>
  * <ul>
- * <li>Mengelola siklus hidup Appium server (start & stop)</li>
- * <li>Mengelola inisialisasi dan pemeliharaan driver iOS</li>
- * <li>Menangani login sebelum test case dijalankan</li>
- * <li>Reset state aplikasi setelah test case selesai</li>
+ * <li>Manage the Appium server lifecycle (start &amp; stop)</li>
+ * <li>Initialize and maintain the mobile driver</li>
+ * <li>Handle login before each test case runs</li>
+ * <li>Reset application state after each test case completes</li>
  * </ul>
  *
  * <p>
- * <b>Usage:</b> Extend kelas ini pada setiap kelas test case sehingga driver
- * dan konfigurasi login akan otomatis disiapkan sebelum eksekusi test.
+ * <b>Usage:</b> Extend this class in every test class so the driver and login
+ * configuration are set up before test execution.
  * </p>
  *
  * @author Kenny Ramadhan
  * @version 1.0
  */
 public class BaseMobileTest {
-	
-	
+
+	private static final Logger log = LoggerFactory.getLogger(BaseMobileTest.class);
+
 	protected Login login;
 
 
 
 	/**
-	 * Menjalankan Appium server dan menginisialisasi driver sebelum semua test case
-	 * dijalankan.
-	 * <p>
-	 * Method ini juga akan memanggil {@link #performLogin()} agar semua test case
-	 * langsung dijalankan dalam kondisi user sudah login.
-	 * </p>
+	 * Starts the Appium server and initializes the driver before all test cases run.
 	 *
-	 * @throws Exception jika gagal memulai Appium server atau menginisialisasi driver
+	 * @throws Exception if the Appium server fails to start or driver initialization fails
 	 */
 	@BeforeClass(alwaysRun = true)
 	public void setUp() throws Exception {
-		 
+
 		AppiumServerManager.startAppiumServer();
-	    // Ambil driver dari AppiumServerManager + simpan di DriverManager
+	    // Get driver from AppiumServerManager and store in DriverManager
 	    DriverManager.setDriver(AppiumServerManager.initDriver());
 	    
 	  
@@ -69,8 +67,7 @@ public class BaseMobileTest {
 	}
 
 	/**
-	 * Menghentikan Appium server dan menutup driver setelah semua test selesai
-	 * dijalankan.
+	 * Stops the Appium server and closes the driver after all tests complete.
 	 */
 	@AfterSuite(alwaysRun = true)
 	public void tearDown() {
@@ -78,59 +75,59 @@ public class BaseMobileTest {
 		AppiumDriver driver = DriverManager.getDriver();
         if (driver != null) {
             driver.quit();
-            DriverManager.unload(); // bersihkan ThreadLocal
+            DriverManager.unload(); // clear ThreadLocal
         }
         AppiumServerManager.stopAppiumServer();
 	}
 
 	/**
-	 * Memastikan driver selalu tersedia sebelum setiap test case dijalankan.
+	 * Ensures the driver is available before each test case runs.
 	 * <p>
-	 * Jika driver null, maka akan dilakukan re-inisialisasi driver dan login ulang.
+	 * If the driver is null, re-initialize the driver.
 	 * </p>
 	 *
-	 * @throws Exception jika gagal melakukan re-inisialisasi driver
+	 * @throws Exception if driver re-initialization fails
 	 */
 
 	@BeforeMethod
 	public void ensureDriverReady() throws Exception {
 		  if (DriverManager.getDriver() == null) {
-	            System.out.println("Driver null, inisialisasi ulang...");
+	            log.warn("Driver null, re-initializing...");
 	            AppiumDriver driver = AppiumServerManager.initDriver();
 	            DriverManager.setDriver(driver);
 
 	            if (DriverManager.getDriver() == null) {
-	                throw new RuntimeException("Gagal inisialisasi Appium Driver!");
+	                throw new RuntimeException("Failed to initialize Appium Driver!");
 	            }
 
 		}
-		  
-		  // Pastikan app kembali terbuka
+
+		  // Ensure the app is launched again
 			 AppiumDriver driver = DriverManager.getDriver();
 		    String platformName = driver.getCapabilities().getCapability("platformName").toString().toLowerCase();
 
 		    if (platformName.contains("android")) {
-		        // Untuk Android: gunakan launchApp()
+		        // Android: use launchApp()
 		    	 driver.executeScript("mobile: launchApp", new HashMap<>());
 		    } else if (platformName.contains("ios")) {
-		        // Untuk iOS: gunakan bundleId untuk launch ulang
+		        // iOS: use bundleId to relaunch
 		        Map<String, Object> launchAppArgs = new HashMap<>();
 		        launchAppArgs.put("bundleId", "com.saucelabs.SwagLabsMobileApp");
 		        driver.executeScript("mobile: launchApp", launchAppArgs);
 		    }
 
-		    System.out.println("Driver & App siap digunakan.");
+		    log.info("Driver and app ready.");
 	}
 
 	/**
-	 * Close Aplikasi setiap test case selesai.
+	 * Close the application after each test case finishes.
 	 */
 	@AfterMethod(alwaysRun = true)
 	public void resetAppState() {
 		 AppiumDriver driver = DriverManager.getDriver();
 
 		    if (driver == null) {
-		        System.out.println("⚠️ Driver is null, skipping resetAppState.");
+		        log.warn("Driver is null, skipping resetAppState.");
 		        return;
 		    }
 
@@ -141,23 +138,23 @@ public class BaseMobileTest {
 
 		    try {
 		        if (platformName.contains("android")) {
-		            // ✅ Android: terminate or reset app
+		            // Android: terminate or reset app
 		            String appPackage = driver.getCapabilities().getCapability("appPackage").toString();
 		            if (driver instanceof AndroidDriver) {
 		                ((AndroidDriver) driver).terminateApp(appPackage); // Close app
-		                System.out.println("✅ Android app terminated: " + appPackage);
+		                log.info("[OK] Android app terminated: {}", appPackage);
 		            }
 		        } else if (platformName.contains("ios")) {
-		            // ✅ iOS: terminate app using bundleId
+		            // iOS: terminate app using bundleId
 		            if (driver instanceof IOSDriver) {
 		                Map<String, Object> closeAppArgs = new HashMap<>();
 		                closeAppArgs.put("bundleId", driver.getCapabilities().getCapability("bundleId"));
 		                driver.executeScript("mobile: terminateApp", closeAppArgs);
-		                System.out.println("✅ iOS app terminated.");
+		                log.info("[OK] iOS app terminated.");
 		            }
 		        }
 		    } catch (Exception e) {
-		        System.err.println("⚠️ Failed to terminate/reset app: " + e.getMessage());
+		        log.warn("Failed to terminate/reset app: {}", e.getMessage());
 		    }
 	}
 

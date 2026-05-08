@@ -1,5 +1,7 @@
 package com.kennyramadhan.qa.core.reporting;
 
+// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.4 deletion.
+
 import java.io.File;
 
 import com.aventstack.extentreports.ExtentReports;

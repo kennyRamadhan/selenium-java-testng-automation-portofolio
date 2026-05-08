@@ -1,5 +1,7 @@
 package com.kennyramadhan.qa.mobile.pages;
 
+// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.1 rewrite.
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;

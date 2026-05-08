@@ -5,10 +5,10 @@ import io.appium.java_client.AppiumDriver;
 
 /**
  * <h1>DriverManager</h1>
- * Kelas ini menyimpan instance IOSDriver per-thread agar mendukung parallel test.
+ * Stores the IOSDriver instance per thread to support parallel test execution.
  *
  * <p>
- * Menggunakan ThreadLocal untuk memastikan setiap thread test punya driver sendiri.
+ * Uses ThreadLocal so each test thread has its own driver instance.
  * </p>
  *
  * <b>Usage:</b>
@@ -25,23 +25,23 @@ public class DriverManager {
     private static ThreadLocal<AppiumDriver> driverThreadLocal = new ThreadLocal<>();
 
     /**
-     * Menyimpan instance driver untuk thread yang sedang berjalan.
+     * Stores the driver instance for the current thread.
      */
     public static void setDriver(AppiumDriver driver) {
     	driverThreadLocal.set(driver);
     }
 
     /**
-     * Mengambil instance driver untuk thread yang sedang berjalan.
+     * Retrieves the driver instance for the current thread.
      *
-     * @return IOSDriver aktif
+     * @return the active IOSDriver
      */
     public static AppiumDriver getDriver() {
         return driverThreadLocal.get();
     }
 
     /**
-     * Menghapus driver dari ThreadLocal setelah test selesai.
+     * Removes the driver from ThreadLocal after the test finishes.
      */
     public static void unload() {
     	driverThreadLocal.remove();

@@ -1,5 +1,7 @@
 package com.kennyramadhan.qa.tests.mobile;
 
+// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.2 test split.
+
 import java.net.MalformedURLException;
 import net.datafaker.Faker;
 
