@@ -31,6 +31,7 @@
         <jackson.version>2.18.1</jackson.version>
         <selenium.version>4.27.0</selenium.version>
         <webdrivermanager.version>6.3.3</webdrivermanager.version>
+        <aspectj.version>1.9.25</aspectj.version>
 
         <!-- Plugin versions -->
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -178,6 +179,19 @@
             <artifactId>webdrivermanager</artifactId>
             <version>${webdrivermanager.version}</version>
         </dependency>
+
+        <!--
+            AspectJ weaver — loaded as a javaagent by surefire's argLine so
+            allure-java's runtime AOP can scan @Step annotations and emit
+            step nodes into the Allure report. Without this, every @Step is
+            inert and the Allure trace shows test methods only, not the
+            page-object/api-client narrative.
+        -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>${aspectj.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -200,6 +214,7 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven-surefire-plugin.version}</version>
                 <configuration>
+                    <argLine>-javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/${aspectj.version}/aspectjweaver-${aspectj.version}.jar"</argLine>
                     <suiteXmlFiles>
                         <suiteXmlFile>testng.xml</suiteXmlFile>
                     </suiteXmlFiles>

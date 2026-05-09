@@ -3,6 +3,7 @@ package com.kennyramadhan.qa.web.pages;
 import java.io.ByteArrayInputStream;
 import java.time.Duration;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
@@ -16,7 +17,6 @@ import com.kennyramadhan.qa.core.driver.WebDriverFactory;
 import com.kennyramadhan.qa.web.client.WebConfig;
 
 import io.qameta.allure.Allure;
-import io.qameta.allure.Step;
 
 /**
  * Abstract base for all web page objects. Holds the per-thread
@@ -53,27 +53,23 @@ public abstract class BaseWebPage {
 		this.wait = new WebDriverWait(driver, Duration.ofSeconds(WebConfig.TIMEOUT_SECONDS));
 	}
 
-	@Step("Wait for element visible: {by}")
 	protected WebElement waitForVisible(By by) {
 		return wait.until(ExpectedConditions.visibilityOfElementLocated(by));
 	}
 
-	@Step("Click {by}")
 	protected void safeClick(By by) {
 		WebElement el = wait.until(ExpectedConditions.elementToBeClickable(by));
 		el.click();
-		captureScreenshot("After click: " + by);
+		captureScreenshot();
 	}
 
-	@Step("Type into {by}: {text}")
 	protected void safeSendKeys(By by, String text) {
 		WebElement el = waitForVisible(by);
 		el.clear();
 		el.sendKeys(text);
-		captureScreenshot("After input: " + by);
+		captureScreenshot();
 	}
 
-	@Step("Read text of {by}")
 	protected String getText(By by) {
 		return waitForVisible(by).getText();
 	}
@@ -95,22 +91,49 @@ public abstract class BaseWebPage {
 
 	/**
 	 * Captures a PNG screenshot of the current page and attaches it to the active
-	 * Allure step. Invoked automatically after state-mutating actions (safeClick,
-	 * safeSendKeys). Read-only helpers (getText, isDisplayed, waitForVisible)
-	 * intentionally do not capture, to keep assertion-heavy tests from producing
-	 * visual noise in the Allure report.
+	 * Allure step. The attachment label is derived from the parent step's name
+	 * (typically the calling page object method's @Step annotation), which keeps
+	 * the report narrative business-focused instead of leaking implementation
+	 * details like CSS selectors.
 	 *
+	 * <p>
+	 * If no active Allure step is found (e.g. during teardown or when called
+	 * outside a @Step-annotated method), the label falls back to "State after
+	 * action".
+	 *
+	 * <p>
 	 * Capture failures are swallowed: a screenshot exception must never cause the
 	 * underlying test action to fail.
 	 */
-	private void captureScreenshot(String name) {
+	private void captureScreenshot() {
 		try {
 			if (driver instanceof TakesScreenshot screenshotter) {
 				byte[] png = screenshotter.getScreenshotAs(OutputType.BYTES);
-				Allure.addAttachment(name, "image/png", new ByteArrayInputStream(png), ".png");
+				String label = currentStepNameOrDefault();
+				Allure.addAttachment(label, "image/png", new ByteArrayInputStream(png), ".png");
 			}
 		} catch (Exception e) {
 			// Intentionally silent — screenshot failure must not break the test.
 		}
+	}
+
+	/**
+	 * Reads the name of the current Allure step (typically the calling page object
+	 * method's @Step annotation). Returns "State after action" if no step is
+	 * active.
+	 */
+	private String currentStepNameOrDefault() {
+		AtomicReference<String> name = new AtomicReference<>("State after action");
+		try {
+			Allure.getLifecycle().updateStep(step -> {
+				String stepName = step.getName();
+				if (stepName != null && !stepName.isBlank()) {
+					name.set(stepName);
+				}
+			});
+		} catch (Exception ignored) {
+			// Allure lifecycle inaccessible or no active step — fallback applies.
+		}
+		return name.get();
 	}
 }
