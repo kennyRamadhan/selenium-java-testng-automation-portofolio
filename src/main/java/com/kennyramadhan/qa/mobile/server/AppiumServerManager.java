@@ -3,6 +3,7 @@ package com.kennyramadhan.qa.mobile.server;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.Set;
 
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.slf4j.Logger;
@@ -50,6 +51,16 @@ public class AppiumServerManager {
 
 	/** AppiumDriver instance (can be IOSDriver or AndroidDriver) */
 	private static AppiumDriver driver;
+
+	/**
+	 * W3C WebDriver standard capability keys. Per W3C protocol, only these may
+	 * appear unprefixed in a capabilities payload; all vendor extensions (Appium's
+	 * appPackage, appActivity, automationName, etc.) must carry the "appium:"
+	 * prefix. Appium 9.x enforces this strictly via Selenium 4.x's
+	 * NewSessionPayload validator.
+	 */
+	private static final Set<String> W3C_STANDARD_KEYS = Set.of("platformName", "browserName", "browserVersion",
+			"acceptInsecureCerts", "pageLoadStrategy", "proxy", "setWindowRect", "timeouts", "unhandledPromptBehavior");
 
 	/**
 	 * Retrieves value from System Property or Environment Variable, falling back to
@@ -185,7 +196,16 @@ public class AppiumServerManager {
 			try {
 				DesiredCapabilities caps = new DesiredCapabilities();
 
-				ConfigLoader.getAll().forEach(caps::setCapability);
+				// Filter non-mobile keys (web.*, api.*) and apply W3C "appium:" prefix to
+				// vendor-specific mobile capabilities. Appium 9.x rejects unprefixed vendor
+				// keys with IllegalArgumentException at session creation.
+				ConfigLoader.getAll().forEach((key, value) -> {
+					if (key.startsWith("web.") || key.startsWith("api.")) {
+						return;
+					}
+					String capKey = W3C_STANDARD_KEYS.contains(key) ? key : "appium:" + key;
+					caps.setCapability(capKey, value);
+				});
 
 				String platform = ConfigLoader.getOrDefault("platformName", "Android").toLowerCase();
 
