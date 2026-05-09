@@ -18,7 +18,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- Dependency versions -->
-        <appium.version>8.6.0</appium.version>
+        <appium.version>9.3.0</appium.version>
         <testng.version>7.10.2</testng.version>
         <poi.version>5.4.0</poi.version>
         <commons-io.version>2.16.1</commons-io.version>
