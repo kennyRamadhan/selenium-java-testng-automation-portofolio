@@ -50,6 +50,41 @@ The three test layers (mobile / web / API) are siblings under the `qa` root. The
 - `LogHelper` retains its public API (`step`, `detail`, `pass`, `fail`, `warning`) but internals are a thin Allure shim. Existing mobile page-object callers (51 sites in `CartCheckout`, `Login`, `ProductsList`) continue compiling unchanged.
 - `LogHelper.detail()` semantics degrade slightly: under ExtentReports it nested as a child log under the active step; under Allure it emits a sibling step. Documented in the `LogHelper.detail` JavaDoc; future redesign will rename to `AllureLogger` with proper step nesting via `Allure.step(name, ThrowableRunnable)` lambdas.
 
+**Implementation note — AspectJ runtime weaving:**
+
+allure-java's @Step annotation processing is implemented as runtime
+AOP via aspectjweaver. For @Step-annotated methods to actually
+produce step nodes in the Allure report, the aspectjweaver javaagent
+must be loaded into the JVM at test time.
+
+The repo wires this via maven-surefire-plugin's `<argLine>`:
+
+    -javaagent:"${settings.localRepository}/org/aspectj/aspectjweaver/1.9.25/aspectjweaver-1.9.25.jar"
+
+Plus the `org.aspectj:aspectjweaver:1.9.25` dependency declaration.
+Version 1.9.25 is pinned because earlier AspectJ releases lack
+Java 25 class file compatibility (major version 69) and crash with
+`Unsupported class file major version 69` at agent load.
+
+Without this wiring, @Step annotations compile and resolve normally
+but produce no runtime effect — the resulting Allure trace shows
+empty `steps:[]` arrays. The wiring was added in the post-v2.0.0
+hotfix series (commit ac78625) after live dashboard inspection
+surfaced the gap.
+
+**Convention — @Step on state-mutating methods only:**
+
+Page object public methods that mutate driver/page state (clicks,
+form input, navigation) carry @Step with business-intent
+descriptions. Read-only getters and state-readers (e.g.
+`getCartItemCount()`, `isOrderConfirmedMessageDisplayed()`) do NOT
+carry @Step — adding them would produce noisy "Get cart item
+count" entries between meaningful actions in the Allure trace.
+
+This convention applies to BaseApiClient methods and endpoint
+client methods symmetrically: HTTP-issuing methods carry @Step;
+internal helpers do not.
+
 ---
 
 ## ADR 2 — No PageFactory in page objects
@@ -64,7 +99,7 @@ The three test layers (mobile / web / API) are siblings under the `qa` root. The
 **Decision rationale:** Plain `By` constants are easier to grep (`grep -rn "By.id" src/`), refactor (rename a constant, IDE catches every reference), and debug (stack traces point directly at `driver.findElement(LOGIN_BTN)`). The cost is one extra method call per interaction (`safeClick(LOCATOR)` vs `loginButton.click()`) — negligible compared to network round-trips in browser/device automation.
 
 **Consequences:**
-- `BaseWebPage` / `BaseMobilePage` expose helpers: `waitForVisible(By)`, `safeClick(By)`, `safeSendKeys(By, String)`, `getText(By)`, `isDisplayed(By)`. All `@Step`-annotated for Allure trace.
+- `BaseWebPage` / `BaseMobilePage` expose helpers: `waitForVisible(By)`, `safeClick(By)`, `safeSendKeys(By, String)`, `getText(By)`, `isDisplayed(By)`. Helpers are deliberately not `@Step`-annotated; the `@Step` layer lives on the page object methods that call them, keeping the Allure trace business-focused (see ADR-1 convention).
 - Implicit waits are disabled (`Duration.ZERO`); helpers use explicit `WebDriverWait`. Mixed implicit + explicit waits compound unpredictably — picking one was a clarity win.
 - Mobile page objects under `com.kennyramadhan.qa.mobile.pages` still use the legacy PageFactory pattern as an interim state. They will be migrated to the same `By`-constants-plus-helpers shape when the mobile test target moves off the SauceLabs SwagLabs demo.
 
