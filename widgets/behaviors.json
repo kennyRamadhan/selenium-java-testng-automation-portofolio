@@ -1,1 +1,1 @@
-{"total":2,"items":[{"uid":"78892faaa4544dddf01f6f956cf1491b","name":"Web","statistic":{"failed":0,"broken":2,"skipped":0,"passed":2,"unknown":0,"total":4}},{"uid":"dabdcff99fa27c22cdaab8da3377f857","name":"API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":4,"unknown":0,"total":4}}]}
+{"total":1,"items":[{"uid":"dabdcff99fa27c22cdaab8da3377f857","name":"API","statistic":{"failed":0,"broken":0,"skipped":0,"passed":4,"unknown":0,"total":4}}]}
