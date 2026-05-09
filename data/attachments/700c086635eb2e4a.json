@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1687193,
+    "name" : "Rozella Sanford",
+    "email" : "qa-user-5516593331@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Connie",
+    "last_name" : "Upton",
+    "company" : "Acme Corp",
+    "address1" : "01373 Wuckert Alley",
+    "address2" : "Apt. 879",
+    "country" : "Canada",
+    "state" : "Minnesota",
+    "city" : "Wisozkchester",
+    "zipcode" : "11410"
+  }
+}
