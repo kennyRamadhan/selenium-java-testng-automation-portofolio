@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1687102,
+    "name" : "Jutta Swift",
+    "email" : "qa-user-5239092287@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Major",
+    "last_name" : "Feil",
+    "company" : "Acme Corp",
+    "address1" : "5326 Champlin Cliffs",
+    "address2" : "Apt. 716",
+    "country" : "Canada",
+    "state" : "North Dakota",
+    "city" : "East Sageshire",
+    "zipcode" : "20645"
+  }
+}
