@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1687284,
+    "name" : "Sharan Huel",
+    "email" : "qa-user-8225768661@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Raymundo",
+    "last_name" : "Cummings",
+    "company" : "Acme Corp",
+    "address1" : "84161 Georgette Point",
+    "address2" : "Suite 511",
+    "country" : "Canada",
+    "state" : "Kansas",
+    "city" : "Otisland",
+    "zipcode" : "16677"
+  }
+}
