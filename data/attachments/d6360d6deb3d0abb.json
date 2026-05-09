@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1687166,
+    "name" : "Buster Bartell Jr.",
+    "email" : "qa-user-0827932909@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Belen",
+    "last_name" : "Weimann",
+    "company" : "Acme Corp",
+    "address1" : "02678 Jordan Garden",
+    "address2" : "Suite 433",
+    "country" : "Canada",
+    "state" : "Pennsylvania",
+    "city" : "New Fabianland",
+    "zipcode" : "46467"
+  }
+}
