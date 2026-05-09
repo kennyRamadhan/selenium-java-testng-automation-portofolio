@@ -2,6 +2,8 @@ package com.kennyramadhan.qa.mobile.pages;
 
 // TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.1 rewrite.
 
+import java.util.Map;
+
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import org.testng.Assert;
@@ -9,12 +11,22 @@ import org.testng.Assert;
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
+
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
 
 public class Login {
 
+	/**
+	 * SwagLabs canonical test credentials. The current APK no longer renders the
+	 * in-page quick-login user buttons (test-standard_user, etc.); tests type
+	 * credentials directly via {@link #getAutoCredentials(String)}.
+	 */
+	private static final Map<String, String> CREDENTIALS = Map.of("standard_user", "secret_sauce", "locked_out_user",
+			"secret_sauce", "problem_user", "secret_sauce");
+
+	@SuppressWarnings("unused")
 	private WaitHelpers helper;
 
 	public Login() {
@@ -39,50 +51,36 @@ public class Login {
 	@iOSXCUITFindBy(accessibility = "test-Error message")
 	private WebElement alertMessage;
 
-	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-standard_user\"]")
-	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-standard_user\"]")
-	private WebElement stdUser;
-
-	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-locked_out_user\"]")
-	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-locked_out_user\"]")
-	private WebElement lockedUser;
-
-	@AndroidFindBy(xpath = "//android.view.ViewGroup[@content-desc=\"test-problem_user\"]")
-	@iOSXCUITFindBy(xpath = "//XCUIElementTypeOther[@name=\"test-problem_user\"]")
-	private WebElement problemUser;
-
 	@AndroidFindBy(accessibility = "test-PRODUCTS")
 	@iOSXCUITFindBy(iOSNsPredicate = "name == 'assets/src/img/swag-labs-logo.png'")
 	private WebElement listProducts;
 
+	/**
+	 * Logs in using a SwagLabs canonical test username. Looks up the matching
+	 * password from {@link #CREDENTIALS}, types both into the credential fields,
+	 * and submits.
+	 *
+	 * <p>
+	 * Replaces the prior quick-login-button approach: the current SwagLabs APK no
+	 * longer renders the in-page user buttons, so credentials must be typed.
+	 *
+	 * @param username
+	 *            one of "standard_user", "locked_out_user", "problem_user"
+	 * @throws IllegalArgumentException
+	 *             if the username is not in CREDENTIALS
+	 */
 	public void getAutoCredentials(String username) {
-
-		helper.scrollIntoText(username);
-
-		switch (username.toLowerCase()) {
-		case "standard_user":
-			LogHelper.step("Get Credentials");
-			stdUser.click();
-			submitBtn.click();
-			LogHelper.detail("Selected User " + username);
-			break;
-		case "locked_out_user":
-			LogHelper.step("Get Credentials");
-			lockedUser.click();
-			submitBtn.click();
-			LogHelper.detail("Selected User " + username);
-			break;
-
-		case "problem_user":
-			LogHelper.step("Get Credentials");
-			problemUser.click();
-			submitBtn.click();
-			LogHelper.detail("Selected User " + username);
-			break;
-		default:
+		String password = CREDENTIALS.get(username.toLowerCase());
+		if (password == null) {
 			Assert.fail("Username '" + username + "' tidak dikenali!");
 			return;
 		}
+
+		LogHelper.step("Get Credentials");
+		usernameField.sendKeys(username);
+		passwordField.sendKeys(password);
+		submitBtn.click();
+		LogHelper.detail("Selected User " + username);
 
 		if (listProducts.isDisplayed()) {
 			LogHelper.detail("Succesfully Login");
@@ -90,7 +88,17 @@ public class Login {
 			LogHelper.detail("Failed Login");
 			Assert.fail("Login validation failed - PRODUCT list not visible");
 		}
+	}
 
+	/**
+	 * Logs in with explicit username and password. Forward-compatible thin wrapper
+	 * for tests that want explicit credentials rather than the canonical SwagLabs
+	 * aliases.
+	 */
+	public void loginAs(String username, String password) {
+		usernameField.sendKeys(username);
+		passwordField.sendKeys(password);
+		submitBtn.click();
 	}
 
 	public void setManualCredentials(String username, String password) {

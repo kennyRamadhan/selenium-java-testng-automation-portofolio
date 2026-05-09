@@ -18,12 +18,11 @@ import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
+import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
 import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import io.appium.java_client.pagefactory.iOSXCUITFindBy;
-
-import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
 public class ProductsList {
 
@@ -45,7 +44,7 @@ public class ProductsList {
 	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name == \"test-Item title\"`]")
 	private List<WebElement> listProducts;
 
-	@AndroidFindBy(xpath = "//android.widget.TextView[@content-desc='PRODUCTS']")
+	@AndroidFindBy(xpath = "//android.widget.TextView[@content-desc='test-PRODUCTS']")
 	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name == \"PRODUCTS\"`]")
 	private WebElement productsTextTitle;
 
