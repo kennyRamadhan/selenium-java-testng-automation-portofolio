@@ -8,8 +8,7 @@ import java.util.Map;
 import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.FluentWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -158,8 +157,17 @@ public class ProductsList extends BaseMobilePage {
 				try {
 					addButton.click();
 
-					new WebDriverWait(driver, Duration.ofSeconds(2))
-							.until(ExpectedConditions.attributeToBe(addButton, "name", "test-REMOVE"));
+					// Poll the button's identifier attribute until it flips to "test-REMOVE",
+					// indicating the add-to-cart click took effect. Replaces
+					// ExpectedConditions.attributeToBe which routes through Selenium's
+					// getElementValueOfCssProperty — UiAutomator2 7.x doesn't support that
+					// CSS-era query path. FluentWait with element.getAttribute(...) goes
+					// through Appium's native attribute API instead. Android exposes the
+					// identifier via "content-desc"; iOS via "name".
+					String attrKey = isIOS() ? "name" : "content-desc";
+					new FluentWait<>(driver).withTimeout(Duration.ofSeconds(2)).pollingEvery(Duration.ofMillis(250))
+							.ignoring(StaleElementReferenceException.class)
+							.until(d -> "test-REMOVE".equals(addButton.getAttribute(attrKey)));
 
 					totalAdded++;
 					log.info("[CART] Product #{} added", totalAdded);
