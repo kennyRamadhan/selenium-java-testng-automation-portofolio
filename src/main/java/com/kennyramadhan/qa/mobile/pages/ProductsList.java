@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
@@ -127,8 +126,8 @@ public class ProductsList {
 		}
 
 		if (!productFound) {
-			LogHelper.fail("❌ Product '" + productName + "' not found in the list.");
-			Assert.fail("Product '" + productName + "' not found!");
+			LogHelper.fail("Product '" + productName + "' not found in the list.");
+			throw new IllegalStateException("Product '" + productName + "' not found in list");
 		}
 	}
 
@@ -142,14 +141,16 @@ public class ProductsList {
 		LogHelper.detail("Success Selected Products");
 	}
 
-	public void verifyBackToListProducts() {
+	/**
+	 * Returns true when the products-list title element is currently visible, used
+	 * by tests to verify navigation back to the list screen.
+	 */
+	public boolean isProductsTitleDisplayed() {
 		By titleLocator = isIOS() ? PRODUCTS_TITLE_IOS : PRODUCTS_TITLE_ANDROID;
-		if (waitFor(titleLocator).isDisplayed()) {
-			LogHelper.step("Verify Back To List Products Menu");
-			LogHelper.detail("Success Back To Menu List Products");
-		} else {
-			LogHelper.step("Verify Back To List Products Menu");
-			Assert.fail("Failed Back To List Menu");
+		try {
+			return waitFor(titleLocator).isDisplayed();
+		} catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
+			return false;
 		}
 	}
 
@@ -196,18 +197,18 @@ public class ProductsList {
 				LogHelper.detail("Cart button berhasil di-tap.");
 
 				if (isIOS() && waitFor(YOUR_CART_TEXT_IOS).isDisplayed()) {
-					LogHelper.detail("Verifikasi Masuk Keranjang");
+					LogHelper.detail("Cart page reached");
 				} else if (!isIOS()) {
-					LogHelper.detail("Verifikasi Masuk Keranjang (Android: cart-text validation skipped)");
+					LogHelper.detail("Cart page reached (Android: cart-text validation skipped)");
 				} else {
-					Assert.fail("Halaman Cart tidak muncul setelah tap.");
+					throw new IllegalStateException("Cart page did not appear after tap");
 				}
 			} else {
-				Assert.fail("Cart button tidak ditemukan.");
+				throw new IllegalStateException("Cart button not found");
 			}
-		} catch (Exception e) {
+		} catch (RuntimeException e) {
 			LogHelper.detail("Exception: " + e.getMessage());
-			Assert.fail("Gagal tap cart button atau verifikasi cart page.", e);
+			throw new IllegalStateException("Failed to tap cart button or verify cart page", e);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package com.kennyramadhan.qa.tests.mobile;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 
+import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
@@ -28,10 +29,12 @@ public class LoginTests extends BaseMobileTest {
 	@Test(priority = 1)
 	public void login() throws MalformedURLException, URISyntaxException {
 		login.getAutoCredentials("standard_user");
+		Assert.assertTrue(login.isProductsListVisible(), "Login should land on products list");
 	}
 
 	@Test(priority = 2)
 	public void failedLogin() throws MalformedURLException, URISyntaxException {
 		login.setManualCredentials("Wrong Username", "Wrong Password");
+		Assert.assertTrue(login.isErrorMessageDisplayed(), "Negative login should show error message");
 	}
 }

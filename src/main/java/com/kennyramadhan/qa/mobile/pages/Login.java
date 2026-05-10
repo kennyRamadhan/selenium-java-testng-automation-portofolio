@@ -4,10 +4,10 @@ import java.time.Duration;
 import java.util.Map;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
@@ -20,7 +20,9 @@ import io.appium.java_client.AppiumDriver;
  *
  * <p>
  * Phase 3 refactor: PageFactory dropped in favor of explicit {@code By} locator
- * constants and {@code driver.findElement(...)} at use site.
+ * constants and {@code driver.findElement(...)} at use site. Phase 3 commit 3:
+ * assertions removed; page object exposes state via getters, tests invoke
+ * assertions.
  */
 public class Login {
 
@@ -50,11 +52,6 @@ public class Login {
 		return "iOS".equalsIgnoreCase(String.valueOf(driver.getCapabilities().getCapability("platformName")));
 	}
 
-	/**
-	 * Waits up to 15s for the element to be visible, then returns it. Replaces
-	 * PageFactory's implicit per-field wait that the AppiumFieldDecorator provided
-	 * before this refactor.
-	 */
 	private WebElement waitFor(By locator) {
 		return new WebDriverWait(driver, Duration.ofSeconds(15))
 				.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -65,14 +62,19 @@ public class Login {
 	 * password from {@link #CREDENTIALS}, types both into the credential fields,
 	 * and submits.
 	 *
+	 * <p>
+	 * Does not assert post-login state — call {@link #isProductsListVisible()} from
+	 * the test class for that.
+	 *
 	 * @param username
 	 *            one of "standard_user", "locked_out_user", "problem_user"
+	 * @throws IllegalArgumentException
+	 *             if username not in CREDENTIALS map
 	 */
 	public void getAutoCredentials(String username) {
 		String password = CREDENTIALS.get(username.toLowerCase());
 		if (password == null) {
-			Assert.fail("Username '" + username + "' tidak dikenali!");
-			return;
+			throw new IllegalArgumentException("Unknown username: " + username);
 		}
 
 		LogHelper.step("Get Credentials");
@@ -80,14 +82,6 @@ public class Login {
 		waitFor(PASSWORD_FIELD).sendKeys(password);
 		waitFor(LOGIN_BTN).click();
 		LogHelper.detail("Selected User " + username);
-
-		By productsLocator = isIOS() ? PRODUCTS_LIST_IOS : PRODUCTS_LIST_ANDROID;
-		if (waitFor(productsLocator).isDisplayed()) {
-			LogHelper.detail("Succesfully Login");
-		} else {
-			LogHelper.detail("Failed Login");
-			Assert.fail("Login validation failed - PRODUCT list not visible");
-		}
 	}
 
 	/**
@@ -100,26 +94,48 @@ public class Login {
 		waitFor(LOGIN_BTN).click();
 	}
 
+	/**
+	 * Types the given credentials and submits the login form. Used for
+	 * negative-case tests where the credentials are expected to be rejected. Does
+	 * not assert; call {@link #isErrorMessageDisplayed()} from the test class to
+	 * verify the negative-path outcome.
+	 */
 	public void setManualCredentials(String username, String password) {
 		LogHelper.step("Input Username");
 		waitFor(USERNAME_FIELD).sendKeys(username);
-		LogHelper.detail("Username Yang Diinput" + username);
+		LogHelper.detail("Username entered: " + username);
 
 		LogHelper.step("Input Password");
 		waitFor(PASSWORD_FIELD).sendKeys(password);
-		LogHelper.detail("Berhasil Input Password");
+		LogHelper.detail("Password entered");
 
 		LogHelper.step("Tap Login Button");
 		waitFor(LOGIN_BTN).click();
-		LogHelper.detail("Success Tap Login Button");
+		LogHelper.detail("Login button tapped");
+	}
 
-		if (waitFor(ERROR_MSG).isDisplayed()) {
-			LogHelper.step("Verify Negative Login ");
-			LogHelper.detail("Succesfully Negative Case");
-		} else {
-			LogHelper.step("Verify Negative Login");
-			LogHelper.detail("Login Success");
-			Assert.fail("Verify Negative Login failed");
+	/**
+	 * Returns true when the products list landmark element is visible on screen,
+	 * indicating successful login navigation.
+	 */
+	public boolean isProductsListVisible() {
+		By productsLocator = isIOS() ? PRODUCTS_LIST_IOS : PRODUCTS_LIST_ANDROID;
+		try {
+			return waitFor(productsLocator).isDisplayed();
+		} catch (NoSuchElementException | org.openqa.selenium.TimeoutException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Returns true when the login-error message is visible, used to verify
+	 * negative-case login flows.
+	 */
+	public boolean isErrorMessageDisplayed() {
+		try {
+			return waitFor(ERROR_MSG).isDisplayed();
+		} catch (NoSuchElementException | org.openqa.selenium.TimeoutException e) {
+			return false;
 		}
 	}
 }

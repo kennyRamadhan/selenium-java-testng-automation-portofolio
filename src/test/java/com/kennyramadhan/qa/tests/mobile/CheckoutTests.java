@@ -34,6 +34,7 @@ public class CheckoutTests extends BaseMobileTest {
 	@Test(priority = 1)
 	public void checkoutPositiveFlow() throws MalformedURLException, URISyntaxException {
 		login.getAutoCredentials("standard_user");
+		Assert.assertTrue(login.isProductsListVisible(), "Login should land on products list");
 
 		productsList.addMultipleProducts();
 		productsList.tapCart();
@@ -44,22 +45,23 @@ public class CheckoutTests extends BaseMobileTest {
 
 		double actualTotalPrice = cart.getItemTotal();
 
-		Assert.assertEquals(expectedTotalPrice, actualTotalPrice);
+		Assert.assertEquals(expectedTotalPrice, actualTotalPrice, "Item Total should match cart total");
 
 		cart.clickFinishBtn();
 
-		cart.verifyOrderComplete();
+		Assert.assertTrue(cart.isOrderCompleteDisplayed(), "Order complete screen should appear");
 	}
 
 	@Test(priority = 2)
 	public void checkoutNegativeFlow() throws MalformedURLException, URISyntaxException {
 		login.getAutoCredentials("standard_user");
+		Assert.assertTrue(login.isProductsListVisible(), "Login should land on products list");
 
 		productsList.addMultipleProducts();
 		productsList.tapCart();
 
 		cart.checkoutInformation("", "Ackerman", "123123");
 
-		cart.verifyErrorMessage();
+		Assert.assertTrue(cart.isErrorMessageDisplayed(), "Validation error should appear");
 	}
 }

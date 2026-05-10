@@ -7,7 +7,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
 import org.testng.Reporter;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
@@ -93,22 +92,28 @@ public class CartCheckout {
 		LogHelper.detail("Tap Continue Button");
 	}
 
-	public void verifyOrderComplete() {
+	/**
+	 * Returns true when the order-complete confirmation element is visible. Tests
+	 * assert on this getter.
+	 */
+	public boolean isOrderCompleteDisplayed() {
 		By locator = isIOS() ? ORDER_COMPLETE_IOS : ORDER_COMPLETE_ANDROID;
-		if (waitFor(locator).isDisplayed()) {
-			LogHelper.step("Verify Order Complete");
-		} else {
-			LogHelper.step("Verify Order Complete");
-			Assert.fail();
+		try {
+			return waitFor(locator).isDisplayed();
+		} catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
+			return false;
 		}
 	}
 
-	public void verifyErrorMessage() {
-		if (waitFor(ERROR_MSG).isDisplayed()) {
-			LogHelper.step("Verify Order Complete");
-		} else {
-			LogHelper.step("Verify Order Complete");
-			Assert.fail();
+	/**
+	 * Returns true when the validation-error message element is visible. Tests
+	 * assert on this getter.
+	 */
+	public boolean isErrorMessageDisplayed() {
+		try {
+			return waitFor(ERROR_MSG).isDisplayed();
+		} catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
+			return false;
 		}
 	}
 
@@ -175,34 +180,6 @@ public class CartCheckout {
 		String value = driver.findElement(TOTAL_IOS).getAttribute("value");
 		LogHelper.detail("Grand Total ditemukan → " + value);
 		return parsePrice(value);
-	}
-
-	public void verifyItemTotalMatchesCart(double cartTotal) {
-		LogHelper.step("Verifikasi Item Total sesuai dengan total harga keranjang");
-		double itemTotal = getItemTotal();
-		LogHelper.detail("Expected (Cart Total): $" + cartTotal);
-		LogHelper.detail("Actual (Item Total): $" + itemTotal);
-
-		if (Math.abs(itemTotal - cartTotal) > 0.01) {
-			throw new AssertionError("❌ Item Total tidak sesuai dengan total di keranjang!");
-		}
-		LogHelper.detail("✅ Item Total sesuai dengan total di keranjang.");
-	}
-
-	public void verifyGrandTotalCalculation() {
-		LogHelper.step("Verifikasi perhitungan Grand Total (Item Total + Tax)");
-		double itemTotal = getItemTotal();
-		double tax = getTax();
-		double grandTotal = getGrandTotal();
-
-		double expected = itemTotal + tax;
-		LogHelper.detail("Expected Grand Total: $" + expected);
-		LogHelper.detail("Actual Grand Total: $" + grandTotal);
-
-		if (Math.abs(grandTotal - expected) > 0.01) {
-			throw new AssertionError("❌ Grand Total tidak sesuai perhitungan!");
-		}
-		LogHelper.detail("✅ Grand Total sesuai perhitungan.");
 	}
 
 	private double parsePrice(String rawText) {

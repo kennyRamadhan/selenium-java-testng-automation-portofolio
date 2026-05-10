@@ -12,7 +12,6 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
@@ -100,21 +99,23 @@ public class WaitHelpers {
 	}
 
 	/**
-	 * Verify the order changed after the sort action.
+	 * Returns true when {@code after} differs from {@code before}, indicating the
+	 * sort operation reordered the list. Tests assert on the boolean return.
 	 */
-	public static void verifySortingChanged(List<Double> before, List<Double> after) {
-		Assert.assertNotEquals(after, before, "Product order did not change after sorting!");
+	public static boolean isSortingChanged(List<Double> before, List<Double> after) {
+		return !after.equals(before);
 	}
 
 	/**
-	 * Verify the list is sorted either ascending or descending.
+	 * Returns true when the prices are sorted either ascending or descending. Tests
+	 * assert on the boolean return.
 	 */
-	public static void verifySortingOrder(List<Double> prices) {
+	public static boolean isSortingOrderValid(List<Double> prices) {
 		boolean asc = isSortedAscending(prices);
 		boolean desc = isSortedDescending(prices);
 		LogHelper.step("Verify Product Order");
-		Assert.assertTrue(asc || desc, "Product order is neither ASC nor DESC!");
-		LogHelper.detail("Product order valid (" + (asc ? "Ascending" : "Descending") + ")");
+		LogHelper.detail("Sort outcome: " + (asc ? "Ascending" : desc ? "Descending" : "Neither"));
+		return asc || desc;
 	}
 
 	public void verifyElementExist(WebElement element) {
