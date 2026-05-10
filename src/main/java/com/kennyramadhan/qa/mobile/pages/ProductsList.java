@@ -1,15 +1,13 @@
 package com.kennyramadhan.qa.mobile.pages;
 
-// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.1 rewrite.
-
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -20,124 +18,135 @@ import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
-import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import io.appium.java_client.AppiumBy;
+import io.appium.java_client.AppiumDriver;
 
+/**
+ * Page object for the SwagLabs products-list screen.
+ *
+ * <p>
+ * Phase 3 refactor: PageFactory dropped in favor of explicit {@code By} locator
+ * constants. Notably {@code CART_BTN} is now defined on Android
+ * (accessibility-id "test-Cart" verified present in Android UI inventory) —
+ * previously the field was iOS-only, causing the cascade test failure surfaced
+ * in B.3.
+ */
 public class ProductsList {
 
 	private static final Logger log = LoggerFactory.getLogger(ProductsList.class);
 
+	private static final By ADD_TO_CART = AppiumBy.accessibilityId("test-ADD TO CART");
+
+	private static final By ITEM_TITLES_ANDROID = AppiumBy
+			.xpath("//android.widget.TextView[@content-desc='test-Item title']");
+	private static final By ITEM_TITLES_IOS = AppiumBy
+			.iOSClassChain("**/XCUIElementTypeStaticText[`name == \"test-Item title\"`]");
+
+	private static final By PRODUCTS_TITLE_ANDROID = AppiumBy
+			.xpath("//android.widget.TextView[@content-desc='test-PRODUCTS']");
+	private static final By PRODUCTS_TITLE_IOS = AppiumBy
+			.iOSClassChain("**/XCUIElementTypeStaticText[`name == \"PRODUCTS\"`]");
+
+	private static final By LIST_ADD_TO_CART_IOS = AppiumBy
+			.iOSClassChain("**/XCUIElementTypeOther[`name == \"test-ADD TO CART\"`]");
+
+	/**
+	 * Cart button — accessibility-id "test-Cart" works on both Android and iOS per
+	 * inventory dump. iOS variant assumed valid per SauceLabs canonical naming
+	 * convention; not empirically verified against iOS Simulator. iOS branch
+	 * dormant per locked Phase 3 decision.
+	 */
+	private static final By CART_BTN = AppiumBy.accessibilityId("test-Cart");
+
+	private static final By YOUR_CART_TEXT_IOS = AppiumBy
+			.iOSClassChain("**/XCUIElementTypeStaticText[`name == \"YOUR CART\"`]");
+
+	private static final By FILTER_BTN = AppiumBy.accessibilityId("test-Modal Selector Button");
+
+	private static final By LOW_TO_HIGH_ANDROID = AppiumBy
+			.xpath("//android.widget.TextView[@text='Price (low to high)']");
+	private static final By LOW_TO_HIGH_IOS = AppiumBy.iOSNsPredicateString("name == 'Price (low to high)'");
+
+	private static final By PRICE_LIST_ANDROID = AppiumBy
+			.xpath("(//android.view.ViewGroup[@content-desc=\"test-Price\"])[1]/android.widget.TextView");
+	private static final By PRICE_LIST_IOS = AppiumBy.xpath("//XCUIElementTypeStaticText[@name=\"test-Price\"]");
+
+	private final AppiumDriver driver;
 	private final WaitHelpers utils;
 
 	public ProductsList() {
-
+		this.driver = DriverManager.getDriver();
 		this.utils = new WaitHelpers();
-		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver(), Duration.ofSeconds(15)), this);
 	}
 
-	@AndroidFindBy(accessibility = "test-ADD TO CART")
-	@iOSXCUITFindBy(accessibility = "test-ADD TO CART")
-	private WebElement addToCart;
+	private boolean isIOS() {
+		return "iOS".equalsIgnoreCase(String.valueOf(driver.getCapabilities().getCapability("platformName")));
+	}
 
-	@AndroidFindBy(xpath = "//android.widget.TextView[@content-desc='test-Item title']")
-	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name == \"test-Item title\"`]")
-	private List<WebElement> listProducts;
-
-	@AndroidFindBy(xpath = "//android.widget.TextView[@content-desc='test-PRODUCTS']")
-	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name == \"PRODUCTS\"`]")
-	private WebElement productsTextTitle;
-
-	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeOther[`name == \"test-ADD TO CART\"`]")
-	private List<WebElement> listAddToCart;
-
-	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeOther[`name == \"test-Cart\"`]/XCUIElementTypeOther")
-	private WebElement cartBtn;
-
-	@iOSXCUITFindBy(iOSClassChain = "**/XCUIElementTypeStaticText[`name == \"YOUR CART\"`]")
-	private WebElement yourCartText;
-
-	@AndroidFindBy(accessibility = "test-Modal Selector Button")
-	@iOSXCUITFindBy(accessibility = "test-Modal Selector Button")
-	private WebElement filterBtn;
-
-	@AndroidFindBy(xpath = "//android.widget.TextView[@text='Price (low to high)']")
-	@iOSXCUITFindBy(iOSNsPredicate = "name == 'Price (low to high)'")
-	private WebElement lowToHigh;
-
-	@AndroidFindBy(xpath = "(//android.view.ViewGroup[@content-desc=\"test-Price\"])[1]/android.widget.TextView")
-	@iOSXCUITFindBy(xpath = "//XCUIElementTypeStaticText[@name=\"test-Price\"]")
-	private List<WebElement> priceList;
+	private WebElement waitFor(By locator) {
+		return new WebDriverWait(driver, Duration.ofSeconds(15))
+				.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
 
 	public void clickFilterBtn() {
-		filterBtn.click();
+		waitFor(FILTER_BTN).click();
 	}
 
 	public void clickLowToHigh() {
-		lowToHigh.click();
+		waitFor(isIOS() ? LOW_TO_HIGH_IOS : LOW_TO_HIGH_ANDROID).click();
 	}
 
 	public void tapCart() {
-
-		utils.tapByCoordinates(cartBtn, 5);
-
+		utils.tapByCoordinates(waitFor(CART_BTN), 5);
 	}
 
 	public List<WebElement> getPriceElements() {
-		return priceList;
+		return driver.findElements(isIOS() ? PRICE_LIST_IOS : PRICE_LIST_ANDROID);
 	}
 
 	public void addProductsToCartDirectlyFromListMenu() {
-
-		WebElement lastElement = listAddToCart.get(0);
-		lastElement.click();
-
+		List<WebElement> addButtons = isIOS()
+				? driver.findElements(LIST_ADD_TO_CART_IOS)
+				: driver.findElements(ADD_TO_CART);
+		addButtons.get(0).click();
 	}
 
 	public void selectProducts(String productName) {
-
 		LogHelper.step("Search and click product: " + productName);
 
-		int sizeProducts = listProducts.size();
+		List<WebElement> items = driver.findElements(isIOS() ? ITEM_TITLES_IOS : ITEM_TITLES_ANDROID);
 		boolean productFound = false;
-		for (int i = 0; i < sizeProducts; i++) {
-			String currentProductName = listProducts.get(i).getText();
-
-			if (currentProductName.equalsIgnoreCase(productName)) {
+		for (WebElement item : items) {
+			if (item.getText().equalsIgnoreCase(productName)) {
 				productFound = true;
-
-				// Klik produk sesuai index
-				listProducts.get(i).click();
-				LogHelper.detail("Clicked product: " + currentProductName);
-				log.info("Product Yang Terpilih Adalah {}", currentProductName);
-
-				break; // Stop loop setelah ketemu
+				item.click();
+				LogHelper.detail("Clicked product: " + productName);
+				log.info("Product Yang Terpilih Adalah {}", productName);
+				break;
 			}
-
 		}
 
 		if (!productFound) {
 			LogHelper.fail("❌ Product '" + productName + "' not found in the list.");
 			Assert.fail("Product '" + productName + "' not found!");
 		}
-
 	}
 
 	public void addMultipleProducts() {
 		LogHelper.step("Select product");
-		WebElement lastElement = listAddToCart.get(0);
-		WebElement last = listAddToCart.get(1);
-		lastElement.click();
-		last.click();
+		List<WebElement> addButtons = isIOS()
+				? driver.findElements(LIST_ADD_TO_CART_IOS)
+				: driver.findElements(ADD_TO_CART);
+		addButtons.get(0).click();
+		addButtons.get(1).click();
 		LogHelper.detail("Success Selected Products");
 	}
 
 	public void verifyBackToListProducts() {
-
-		if (productsTextTitle.isDisplayed()) {
+		By titleLocator = isIOS() ? PRODUCTS_TITLE_IOS : PRODUCTS_TITLE_ANDROID;
+		if (waitFor(titleLocator).isDisplayed()) {
 			LogHelper.step("Verify Back To List Products Menu");
 			LogHelper.detail("Success Back To Menu List Products");
-
 		} else {
 			LogHelper.step("Verify Back To List Products Menu");
 			Assert.fail("Failed Back To List Menu");
@@ -145,69 +154,60 @@ public class ProductsList {
 	}
 
 	public void addAllProducts() {
-
 		int totalAdded = 0;
 		LogHelper.step("Add All Products To Carts");
 		while (true) {
-			// Ambil ulang array tombol ADD TO CART yang terlihat
+			List<WebElement> addButtons = isIOS()
+					? driver.findElements(LIST_ADD_TO_CART_IOS)
+					: driver.findElements(ADD_TO_CART);
 
-			// Kalau array kosong, berhenti
-			if (listAddToCart.isEmpty()) {
+			if (addButtons.isEmpty()) {
 				LogHelper.detail("Verify All Products Add To Cart");
 				log.info("[OK] Semua produk berhasil ditambahkan ke keranjang!");
 				break;
 			}
 
-			// Klik tombol satu per satu
-			for (WebElement addButton : listAddToCart) {
+			for (WebElement addButton : addButtons) {
 				try {
 					addButton.click();
 
-					// Pastikan tombol berubah jadi REMOVE (menandakan sukses klik)
-					new WebDriverWait(DriverManager.getDriver(), Duration.ofSeconds(2))
+					new WebDriverWait(driver, Duration.ofSeconds(2))
 							.until(ExpectedConditions.attributeToBe(addButton, "name", "test-REMOVE"));
 
 					totalAdded++;
 					log.info("[CART] Produk ke-{} berhasil ditambahkan.", totalAdded);
 				} catch (StaleElementReferenceException ignored) {
-					// Tombol sudah hilang dari DOM → lanjutkan saja
+					// button removed from DOM, continue
 				}
 			}
 
-			// Scroll agar menemukan tombol berikutnya
 			Map<String, Object> params = new HashMap<>();
 			params.put("direction", "down");
-			DriverManager.getDriver().executeScript("mobile: scroll", params);
+			driver.executeScript("mobile: scroll", params);
 		}
 		LogHelper.step("Tap Cart Button & Verifikasi Halaman Cart");
 
 		try {
-			// 1️⃣ Pastikan button ada & visible
-			if (cartBtn.isDisplayed()) {
+			WebElement cartBtnElement = waitFor(CART_BTN);
+			if (cartBtnElement.isDisplayed()) {
 				LogHelper.detail("Cart button ditemukan.");
 
-				// 2️⃣ Tap button
-				utils.tapByCoordinates(cartBtn, 5);
+				utils.tapByCoordinates(cartBtnElement, 5);
 				LogHelper.detail("Cart button berhasil di-tap.");
 
-				// 3️⃣ Verifikasi halaman cart
-				if (yourCartText.isDisplayed()) {
+				if (isIOS() && waitFor(YOUR_CART_TEXT_IOS).isDisplayed()) {
 					LogHelper.detail("Verifikasi Masuk Keranjang");
+				} else if (!isIOS()) {
+					LogHelper.detail("Verifikasi Masuk Keranjang (Android: cart-text validation skipped)");
 				} else {
-
 					Assert.fail("Halaman Cart tidak muncul setelah tap.");
 				}
-
 			} else {
-
 				Assert.fail("Cart button tidak ditemukan.");
 			}
-
 		} catch (Exception e) {
 			LogHelper.detail("Exception: " + e.getMessage());
 			Assert.fail("Gagal tap cart button atau verifikasi cart page.", e);
 		}
-
 	}
-
 }

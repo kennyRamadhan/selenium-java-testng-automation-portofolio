@@ -1,73 +1,72 @@
 package com.kennyramadhan.qa.mobile.pages;
 
-// TODO Phase 3: Bahasa Indonesia content pending — translation absorbed into Phase 3.1 rewrite.
-
+import java.time.Duration;
 import java.util.Map;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
-import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
-import io.appium.java_client.pagefactory.AndroidFindBy;
-import io.appium.java_client.pagefactory.AppiumFieldDecorator;
-import io.appium.java_client.pagefactory.iOSXCUITFindBy;
+import io.appium.java_client.AppiumBy;
+import io.appium.java_client.AppiumDriver;
 
+/**
+ * Page object for the SwagLabs login screen.
+ *
+ * <p>
+ * Phase 3 refactor: PageFactory dropped in favor of explicit {@code By} locator
+ * constants and {@code driver.findElement(...)} at use site.
+ */
 public class Login {
 
 	/**
-	 * SwagLabs canonical test credentials. The current APK no longer renders the
-	 * in-page quick-login user buttons (test-standard_user, etc.); tests type
-	 * credentials directly via {@link #getAutoCredentials(String)}.
+	 * SwagLabs canonical test credentials. Current APK 2.7.1 no longer renders the
+	 * in-page quick-login user buttons; tests type credentials directly.
 	 */
 	private static final Map<String, String> CREDENTIALS = Map.of("standard_user", "secret_sauce", "locked_out_user",
 			"secret_sauce", "problem_user", "secret_sauce");
 
-	@SuppressWarnings("unused")
-	private WaitHelpers helper;
+	private static final By USERNAME_FIELD = AppiumBy.accessibilityId("test-Username");
+	private static final By PASSWORD_FIELD = AppiumBy.accessibilityId("test-Password");
+	private static final By LOGIN_BTN = AppiumBy.accessibilityId("test-LOGIN");
+	private static final By ERROR_MSG = AppiumBy.accessibilityId("test-Error message");
+
+	private static final By PRODUCTS_LIST_ANDROID = AppiumBy.accessibilityId("test-PRODUCTS");
+	private static final By PRODUCTS_LIST_IOS = AppiumBy
+			.iOSNsPredicateString("name == 'assets/src/img/swag-labs-logo.png'");
+
+	private final AppiumDriver driver;
 
 	public Login() {
-
-		this.helper = new WaitHelpers();
-		PageFactory.initElements(new AppiumFieldDecorator(DriverManager.getDriver()), this);
+		this.driver = DriverManager.getDriver();
 	}
 
-	@AndroidFindBy(accessibility = "test-Username")
-	@iOSXCUITFindBy(accessibility = "test-Username")
-	private WebElement usernameField;
+	private boolean isIOS() {
+		return "iOS".equalsIgnoreCase(String.valueOf(driver.getCapabilities().getCapability("platformName")));
+	}
 
-	@AndroidFindBy(accessibility = "test-Password")
-	@iOSXCUITFindBy(accessibility = "test-Password")
-	private WebElement passwordField;
-
-	@AndroidFindBy(accessibility = "test-LOGIN")
-	@iOSXCUITFindBy(accessibility = "test-LOGIN")
-	private WebElement submitBtn;
-
-	@AndroidFindBy(accessibility = "test-Error message")
-	@iOSXCUITFindBy(accessibility = "test-Error message")
-	private WebElement alertMessage;
-
-	@AndroidFindBy(accessibility = "test-PRODUCTS")
-	@iOSXCUITFindBy(iOSNsPredicate = "name == 'assets/src/img/swag-labs-logo.png'")
-	private WebElement listProducts;
+	/**
+	 * Waits up to 15s for the element to be visible, then returns it. Replaces
+	 * PageFactory's implicit per-field wait that the AppiumFieldDecorator provided
+	 * before this refactor.
+	 */
+	private WebElement waitFor(By locator) {
+		return new WebDriverWait(driver, Duration.ofSeconds(15))
+				.until(ExpectedConditions.visibilityOfElementLocated(locator));
+	}
 
 	/**
 	 * Logs in using a SwagLabs canonical test username. Looks up the matching
 	 * password from {@link #CREDENTIALS}, types both into the credential fields,
 	 * and submits.
 	 *
-	 * <p>
-	 * Replaces the prior quick-login-button approach: the current SwagLabs APK no
-	 * longer renders the in-page user buttons, so credentials must be typed.
-	 *
 	 * @param username
 	 *            one of "standard_user", "locked_out_user", "problem_user"
-	 * @throws IllegalArgumentException
-	 *             if the username is not in CREDENTIALS
 	 */
 	public void getAutoCredentials(String username) {
 		String password = CREDENTIALS.get(username.toLowerCase());
@@ -77,12 +76,13 @@ public class Login {
 		}
 
 		LogHelper.step("Get Credentials");
-		usernameField.sendKeys(username);
-		passwordField.sendKeys(password);
-		submitBtn.click();
+		waitFor(USERNAME_FIELD).sendKeys(username);
+		waitFor(PASSWORD_FIELD).sendKeys(password);
+		waitFor(LOGIN_BTN).click();
 		LogHelper.detail("Selected User " + username);
 
-		if (listProducts.isDisplayed()) {
+		By productsLocator = isIOS() ? PRODUCTS_LIST_IOS : PRODUCTS_LIST_ANDROID;
+		if (waitFor(productsLocator).isDisplayed()) {
 			LogHelper.detail("Succesfully Login");
 		} else {
 			LogHelper.detail("Failed Login");
@@ -91,32 +91,29 @@ public class Login {
 	}
 
 	/**
-	 * Logs in with explicit username and password. Forward-compatible thin wrapper
-	 * for tests that want explicit credentials rather than the canonical SwagLabs
-	 * aliases.
+	 * Logs in with explicit username and password. Forward-compatible wrapper for
+	 * tests that want explicit credentials.
 	 */
 	public void loginAs(String username, String password) {
-		usernameField.sendKeys(username);
-		passwordField.sendKeys(password);
-		submitBtn.click();
+		waitFor(USERNAME_FIELD).sendKeys(username);
+		waitFor(PASSWORD_FIELD).sendKeys(password);
+		waitFor(LOGIN_BTN).click();
 	}
 
 	public void setManualCredentials(String username, String password) {
-
 		LogHelper.step("Input Username");
-		usernameField.sendKeys(username);
+		waitFor(USERNAME_FIELD).sendKeys(username);
 		LogHelper.detail("Username Yang Diinput" + username);
 
 		LogHelper.step("Input Password");
-		passwordField.sendKeys(password);
+		waitFor(PASSWORD_FIELD).sendKeys(password);
 		LogHelper.detail("Berhasil Input Password");
 
 		LogHelper.step("Tap Login Button");
-		submitBtn.click();
+		waitFor(LOGIN_BTN).click();
 		LogHelper.detail("Success Tap Login Button");
 
-		if (alertMessage.isDisplayed()) {
-
+		if (waitFor(ERROR_MSG).isDisplayed()) {
 			LogHelper.step("Verify Negative Login ");
 			LogHelper.detail("Succesfully Negative Case");
 		} else {
@@ -125,5 +122,4 @@ public class Login {
 			Assert.fail("Verify Negative Login failed");
 		}
 	}
-
 }
