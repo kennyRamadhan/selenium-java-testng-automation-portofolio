@@ -34,10 +34,18 @@ public class CartCheckout extends BaseMobilePage {
 			"//android.widget.ScrollView[@content-desc=\"test-CHECKOUT: COMPLETE!\"]/android.view.ViewGroup/android.widget.TextView[1]");
 	private static final By ORDER_COMPLETE_IOS = AppiumBy.accessibilityId("THANK YOU FOR YOU ORDER");
 
-	// iOS-only fields (no Android equivalent; methods using these throw on
-	// Android).
+	// Cart line item price locators. Android xpath inferred from SauceLabs
+	// canonical content-desc convention (matches ProductsList.PRICE_LIST_ANDROID
+	// pattern, but without [1] index — cart enumerates all items, not just first).
+	private static final By PRICE_LIST_CART_ANDROID = AppiumBy
+			.xpath("//android.view.ViewGroup[@content-desc=\"test-Price\"]/android.widget.TextView");
 	private static final By PRICE_LIST_CART_IOS = AppiumBy
 			.iOSClassChain("**/XCUIElementTypeOther[`name == \"test-Price\"`]");
+
+	// iOS-only fields below (no Android equivalent in current UI; methods using
+	// these throw on Android). Queued for dedicated follow-up commit when the
+	// checkout-overview screen can be empirically captured for ground-truth
+	// locator text.
 	private static final By ITEM_TOTAL_IOS = AppiumBy
 			.iOSClassChain("**/XCUIElementTypeStaticText[`name BEGINSWITH 'Item total:'`]");
 	private static final By TAX_IOS = AppiumBy.iOSClassChain("**/XCUIElementTypeStaticText[`name BEGINSWITH 'Tax:'`]");
@@ -91,7 +99,8 @@ public class CartCheckout extends BaseMobilePage {
 	public Double getTotalPriceBeforeCheckout() {
 		double totalAmount = 0.0;
 
-		List<WebElement> priceElements = driver.findElements(PRICE_LIST_CART_IOS);
+		By locator = isIOS() ? PRICE_LIST_CART_IOS : PRICE_LIST_CART_ANDROID;
+		List<WebElement> priceElements = driver.findElements(locator);
 		for (WebElement priceElement : priceElements) {
 			String rawText = priceElement.getText();
 			if (rawText == null || rawText.isEmpty()) {
