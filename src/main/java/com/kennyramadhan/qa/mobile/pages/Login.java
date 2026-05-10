@@ -1,30 +1,21 @@
 package com.kennyramadhan.qa.mobile.pages;
 
-import java.time.Duration;
 import java.util.Map;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
 
 import io.appium.java_client.AppiumBy;
-import io.appium.java_client.AppiumDriver;
 
 /**
  * Page object for the SwagLabs login screen.
  *
  * <p>
- * Phase 3 refactor: PageFactory dropped in favor of explicit {@code By} locator
- * constants and {@code driver.findElement(...)} at use site. Phase 3 commit 3:
- * assertions removed; page object exposes state via getters, tests invoke
- * assertions.
+ * Phase 3 commit 4: extends {@link BaseMobilePage} for shared driver + waitFor
+ * + per-action screenshot helpers.
  */
-public class Login {
+public class Login extends BaseMobilePage {
 
 	/**
 	 * SwagLabs canonical test credentials. Current APK 2.7.1 no longer renders the
@@ -42,21 +33,6 @@ public class Login {
 	private static final By PRODUCTS_LIST_IOS = AppiumBy
 			.iOSNsPredicateString("name == 'assets/src/img/swag-labs-logo.png'");
 
-	private final AppiumDriver driver;
-
-	public Login() {
-		this.driver = DriverManager.getDriver();
-	}
-
-	private boolean isIOS() {
-		return "iOS".equalsIgnoreCase(String.valueOf(driver.getCapabilities().getCapability("platformName")));
-	}
-
-	private WebElement waitFor(By locator) {
-		return new WebDriverWait(driver, Duration.ofSeconds(15))
-				.until(ExpectedConditions.visibilityOfElementLocated(locator));
-	}
-
 	/**
 	 * Logs in using a SwagLabs canonical test username. Looks up the matching
 	 * password from {@link #CREDENTIALS}, types both into the credential fields,
@@ -66,8 +42,6 @@ public class Login {
 	 * Does not assert post-login state — call {@link #isProductsListVisible()} from
 	 * the test class for that.
 	 *
-	 * @param username
-	 *            one of "standard_user", "locked_out_user", "problem_user"
 	 * @throws IllegalArgumentException
 	 *             if username not in CREDENTIALS map
 	 */
@@ -78,9 +52,9 @@ public class Login {
 		}
 
 		LogHelper.step("Get Credentials");
-		waitFor(USERNAME_FIELD).sendKeys(username);
-		waitFor(PASSWORD_FIELD).sendKeys(password);
-		waitFor(LOGIN_BTN).click();
+		safeSendKeys(USERNAME_FIELD, username);
+		safeSendKeys(PASSWORD_FIELD, password);
+		safeClick(LOGIN_BTN);
 		LogHelper.detail("Selected User " + username);
 	}
 
@@ -89,9 +63,9 @@ public class Login {
 	 * tests that want explicit credentials.
 	 */
 	public void loginAs(String username, String password) {
-		waitFor(USERNAME_FIELD).sendKeys(username);
-		waitFor(PASSWORD_FIELD).sendKeys(password);
-		waitFor(LOGIN_BTN).click();
+		safeSendKeys(USERNAME_FIELD, username);
+		safeSendKeys(PASSWORD_FIELD, password);
+		safeClick(LOGIN_BTN);
 	}
 
 	/**
@@ -102,15 +76,15 @@ public class Login {
 	 */
 	public void setManualCredentials(String username, String password) {
 		LogHelper.step("Input Username");
-		waitFor(USERNAME_FIELD).sendKeys(username);
+		safeSendKeys(USERNAME_FIELD, username);
 		LogHelper.detail("Username entered: " + username);
 
 		LogHelper.step("Input Password");
-		waitFor(PASSWORD_FIELD).sendKeys(password);
+		safeSendKeys(PASSWORD_FIELD, password);
 		LogHelper.detail("Password entered");
 
 		LogHelper.step("Tap Login Button");
-		waitFor(LOGIN_BTN).click();
+		safeClick(LOGIN_BTN);
 		LogHelper.detail("Login button tapped");
 	}
 
@@ -119,12 +93,7 @@ public class Login {
 	 * indicating successful login navigation.
 	 */
 	public boolean isProductsListVisible() {
-		By productsLocator = isIOS() ? PRODUCTS_LIST_IOS : PRODUCTS_LIST_ANDROID;
-		try {
-			return waitFor(productsLocator).isDisplayed();
-		} catch (NoSuchElementException | org.openqa.selenium.TimeoutException e) {
-			return false;
-		}
+		return isDisplayedQuiet(isIOS() ? PRODUCTS_LIST_IOS : PRODUCTS_LIST_ANDROID);
 	}
 
 	/**
@@ -132,10 +101,6 @@ public class Login {
 	 * negative-case login flows.
 	 */
 	public boolean isErrorMessageDisplayed() {
-		try {
-			return waitFor(ERROR_MSG).isDisplayed();
-		} catch (NoSuchElementException | org.openqa.selenium.TimeoutException e) {
-			return false;
-		}
+		return isDisplayedQuiet(ERROR_MSG);
 	}
 }

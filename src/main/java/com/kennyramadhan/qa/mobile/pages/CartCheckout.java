@@ -1,33 +1,25 @@
 package com.kennyramadhan.qa.mobile.pages;
 
-import java.time.Duration;
 import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Reporter;
 
-import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.reporting.LogHelper;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
 
 import io.appium.java_client.AppiumBy;
-import io.appium.java_client.AppiumDriver;
 
 /**
  * Page object for the SwagLabs cart + checkout flow.
  *
  * <p>
- * Phase 3 refactor: PageFactory dropped. iOS-only locator constants preserved
- * alongside Android constants per locked decision (keep iOS compilable but
- * dormant). iOS-only methods (getItemTotal, getTax, getGrandTotal,
- * verifyItemTotalMatchesCart, verifyGrandTotalCalculation) will throw
- * NoSuchElementException on Android — pre-existing behavior, not introduced by
- * this refactor.
+ * Phase 3 commit 4: extends {@link BaseMobilePage} for shared driver +
+ * per-action screenshot helpers. iOS-only locator constants preserved alongside
+ * Android constants per locked decision (keep iOS compilable but dormant).
  */
-public class CartCheckout {
+public class CartCheckout extends BaseMobilePage {
 
 	private static final By CHECKOUT_BTN = AppiumBy.accessibilityId("test-CHECKOUT");
 	private static final By FIRST_NAME = AppiumBy.accessibilityId("test-First Name");
@@ -42,8 +34,8 @@ public class CartCheckout {
 			"//android.widget.ScrollView[@content-desc=\"test-CHECKOUT: COMPLETE!\"]/android.view.ViewGroup/android.widget.TextView[1]");
 	private static final By ORDER_COMPLETE_IOS = AppiumBy.accessibilityId("THANK YOU FOR YOU ORDER");
 
-	// iOS-only fields (no Android equivalent in current UI; methods using these
-	// will throw on Android — iOS dormant per locked Phase 3 decision).
+	// iOS-only fields (no Android equivalent; methods using these throw on
+	// Android).
 	private static final By PRICE_LIST_CART_IOS = AppiumBy
 			.iOSClassChain("**/XCUIElementTypeOther[`name == \"test-Price\"`]");
 	private static final By ITEM_TOTAL_IOS = AppiumBy
@@ -52,73 +44,48 @@ public class CartCheckout {
 	private static final By TOTAL_IOS = AppiumBy
 			.iOSClassChain("**/XCUIElementTypeStaticText[`name BEGINSWITH 'Total:'`]");
 
-	private final AppiumDriver driver;
 	private final WaitHelpers utils;
 
 	public CartCheckout() {
-		this.driver = DriverManager.getDriver();
+		super();
 		this.utils = new WaitHelpers();
-	}
-
-	private boolean isIOS() {
-		return "iOS".equalsIgnoreCase(String.valueOf(driver.getCapabilities().getCapability("platformName")));
-	}
-
-	private WebElement waitFor(By locator) {
-		return new WebDriverWait(driver, Duration.ofSeconds(15))
-				.until(ExpectedConditions.visibilityOfElementLocated(locator));
 	}
 
 	public void clickContinueShoppingBtn() {
 		utils.scrollIntoText("CONTINUE SHOPPING");
-		waitFor(CONTINUE_SHOPPING_BTN).click();
+		safeClick(CONTINUE_SHOPPING_BTN);
 	}
 
 	public void checkoutInformation(String firstName, String lastName, String postalCode) {
 		utils.scrollIntoText("CHECKOUT");
-		waitFor(CHECKOUT_BTN).click();
+		safeClick(CHECKOUT_BTN);
 		LogHelper.step("Input Information Customer");
 
-		waitFor(FIRST_NAME).sendKeys(firstName);
+		safeSendKeys(FIRST_NAME, firstName);
 		LogHelper.detail("Input First Name");
 
-		waitFor(LAST_NAME).sendKeys(lastName);
+		safeSendKeys(LAST_NAME, lastName);
 		LogHelper.detail("Input Last Name");
 
-		waitFor(ZIP_CODE).sendKeys(postalCode);
+		safeSendKeys(ZIP_CODE, postalCode);
 		LogHelper.detail("Input Postal Code");
 
-		waitFor(CONTINUE_BTN).click();
+		safeClick(CONTINUE_BTN);
 		LogHelper.detail("Tap Continue Button");
 	}
 
-	/**
-	 * Returns true when the order-complete confirmation element is visible. Tests
-	 * assert on this getter.
-	 */
+	/** Returns true when the order-complete confirmation element is visible. */
 	public boolean isOrderCompleteDisplayed() {
-		By locator = isIOS() ? ORDER_COMPLETE_IOS : ORDER_COMPLETE_ANDROID;
-		try {
-			return waitFor(locator).isDisplayed();
-		} catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
-			return false;
-		}
+		return isDisplayedQuiet(isIOS() ? ORDER_COMPLETE_IOS : ORDER_COMPLETE_ANDROID);
 	}
 
-	/**
-	 * Returns true when the validation-error message element is visible. Tests
-	 * assert on this getter.
-	 */
+	/** Returns true when the validation-error message element is visible. */
 	public boolean isErrorMessageDisplayed() {
-		try {
-			return waitFor(ERROR_MSG).isDisplayed();
-		} catch (org.openqa.selenium.NoSuchElementException | org.openqa.selenium.TimeoutException e) {
-			return false;
-		}
+		return isDisplayedQuiet(ERROR_MSG);
 	}
 
 	public void clickFinishBtn() {
-		waitFor(FINISH_BTN).click();
+		safeClick(FINISH_BTN);
 	}
 
 	public Double getTotalPriceBeforeCheckout() {
@@ -128,7 +95,7 @@ public class CartCheckout {
 		for (WebElement priceElement : priceElements) {
 			String rawText = priceElement.getText();
 			if (rawText == null || rawText.isEmpty()) {
-				Reporter.log("⚠️ Skipping empty price element");
+				Reporter.log("Skipping empty price element");
 				continue;
 			}
 
@@ -138,11 +105,11 @@ public class CartCheckout {
 				double price = Double.parseDouble(cleanPrice);
 				totalAmount += price;
 			} catch (NumberFormatException e) {
-				Reporter.log("❌ Failed to parse price: " + rawText);
+				Reporter.log("Failed to parse price: " + rawText);
 			}
 		}
 
-		Reporter.log("✅ Total Amount Price Without Taxes: " + totalAmount);
+		Reporter.log("Total amount price without taxes: " + totalAmount);
 		return totalAmount;
 	}
 
@@ -152,9 +119,9 @@ public class CartCheckout {
 	 * iOS-only: throws on Android (locator unavailable).
 	 */
 	public double getItemTotal() {
-		LogHelper.step("Ambil nilai Item Total di halaman Checkout");
+		LogHelper.step("Read Item Total on Checkout");
 		String value = driver.findElement(ITEM_TOTAL_IOS).getAttribute("value");
-		LogHelper.detail("Item Total ditemukan → " + value);
+		LogHelper.detail("Item Total: " + value);
 		return parsePrice(value);
 	}
 
@@ -164,9 +131,9 @@ public class CartCheckout {
 	 * iOS-only: throws on Android (locator unavailable).
 	 */
 	public double getTax() {
-		LogHelper.step("Ambil nilai Tax di halaman Checkout");
+		LogHelper.step("Read Tax on Checkout");
 		String value = driver.findElement(TAX_IOS).getAttribute("value");
-		LogHelper.detail("Tax ditemukan → " + value);
+		LogHelper.detail("Tax: " + value);
 		return parsePrice(value);
 	}
 
@@ -176,9 +143,9 @@ public class CartCheckout {
 	 * iOS-only: throws on Android (locator unavailable).
 	 */
 	public double getGrandTotal() {
-		LogHelper.step("Ambil nilai Grand Total di halaman Checkout");
+		LogHelper.step("Read Grand Total on Checkout");
 		String value = driver.findElement(TOTAL_IOS).getAttribute("value");
-		LogHelper.detail("Grand Total ditemukan → " + value);
+		LogHelper.detail("Grand Total: " + value);
 		return parsePrice(value);
 	}
 
