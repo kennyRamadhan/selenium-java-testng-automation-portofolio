@@ -8,22 +8,10 @@
 
 	<test name="E2E Mobile">
 		<classes>
-			<class name="com.kennyramadhan.qa.tests.mobile.E2EMobileTest">
-				<methods>
-					<include name="login" />
-					<include name="failedLogin" />
-					<include name="sortingPrice" />
-					<include name="addAllProductsFromListing" />
-					<include name="addProductsFromDetails" />
-					<include name="addMultipleProducts" />
-					<include name="redirectionToProductListing" />
-					<include name="verifyDetailsProductIntoCart" />
-					<include name="checkoutPositiveFlow" />
-					<include name="checkoutNegativeFlow" />
-				</methods>
-			</class>
+			<class name="com.kennyramadhan.qa.tests.mobile.LoginTests" />
+			<class name="com.kennyramadhan.qa.tests.mobile.ProductsAndCartTests" />
+			<class name="com.kennyramadhan.qa.tests.mobile.CheckoutTests" />
 		</classes>
-
 	</test>
 
 </suite> <!--

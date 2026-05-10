@@ -7,8 +7,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.AfterSuite;
-import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.mobile.pages.Login;
@@ -46,14 +46,17 @@ public class BaseMobileTest {
 	protected Login login;
 
 	/**
-	 * Starts the Appium server and initializes the driver before all test cases
-	 * run.
+	 * Starts the Appium server and initializes the driver before any test class
+	 * runs. Promoted from {@code @BeforeClass} to {@code @BeforeSuite} in Phase 3
+	 * commit 2 so that splitting tests across multiple classes does not produce
+	 * orphaned Appium services (the previous per-class setup overwrote the static
+	 * service field on each invocation, leaking the prior service).
 	 *
 	 * @throws Exception
 	 *             if the Appium server fails to start or driver initialization
 	 *             fails
 	 */
-	@BeforeClass(alwaysRun = true)
+	@BeforeSuite(alwaysRun = true)
 	public void setUp() throws Exception {
 
 		AppiumServerManager.startAppiumServer();
