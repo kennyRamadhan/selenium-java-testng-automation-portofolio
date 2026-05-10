@@ -107,7 +107,10 @@ public class BaseMobileTest {
 		String platformName = driver.getCapabilities().getCapability("platformName").toString().toLowerCase();
 
 		if (platformName.contains("android")) {
-			// Android: activate app by appId (UiAutomator2 7.x removed mobile:launchApp)
+			// Android: clear app data per-test, then activate. mobile: clearApp wipes
+			// shared prefs / login state / cart cache that noReset=true would otherwise
+			// preserve across tests, eliminating the state cascade where a prior test's
+			// authenticated session leaks into the next test's login-screen expectation.
 			Object appPackageRaw = driver.getCapabilities().getCapability("appPackage");
 			if (appPackageRaw == null) {
 				appPackageRaw = driver.getCapabilities().getCapability("appium:appPackage");
@@ -115,7 +118,14 @@ public class BaseMobileTest {
 			if (appPackageRaw == null) {
 				throw new IllegalStateException("appPackage capability not found in either unprefixed or appium: form");
 			}
-			driver.executeScript("mobile: activateApp", Map.of("appId", appPackageRaw.toString()));
+			String appId = appPackageRaw.toString();
+			try {
+				driver.executeScript("mobile: clearApp", Map.of("appId", appId));
+				log.info("[Reset] mobile: clearApp succeeded for {}", appId);
+			} catch (Exception e) {
+				log.warn("[Reset] mobile: clearApp failed ({}); continuing with activateApp only", e.getMessage());
+			}
+			driver.executeScript("mobile: activateApp", Map.of("appId", appId));
 		} else if (platformName.contains("ios")) {
 			// iOS: activate app by bundleId (XCUITest equivalent)
 			Object bundleIdRaw = driver.getCapabilities().getCapability("bundleId");

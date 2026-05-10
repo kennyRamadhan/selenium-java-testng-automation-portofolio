@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 
 import com.kennyramadhan.qa.core.config.ConfigLoader;
 import com.kennyramadhan.qa.core.driver.DriverManager;
+import com.kennyramadhan.qa.core.util.AdbHelper;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -208,6 +209,25 @@ public class AppiumServerManager {
 				});
 
 				String platform = ConfigLoader.getOrDefault("platformName", "Android").toLowerCase();
+
+				// Auto-detect Android device + version (real-device priority over emulator).
+				// Overrides any stale udid/platformVersion from config.properties so a
+				// freshly connected device is targeted without manual config edits.
+				if (platform.contains("android")) {
+					try {
+						String detectedUdid = AdbHelper.detectFirstConnectedDevice();
+						String detectedVersion = AdbHelper.getAndroidVersion(detectedUdid);
+						caps.setCapability("appium:udid", detectedUdid);
+						if (!detectedVersion.isEmpty()) {
+							caps.setCapability("appium:platformVersion", detectedVersion);
+						}
+						log.info("[Auto-detect] Selected device: udid={}, platformVersion={}", detectedUdid,
+								detectedVersion);
+					} catch (IllegalStateException e) {
+						log.warn("Device auto-detect failed: {} — falling back to config-supplied udid",
+								e.getMessage());
+					}
+				}
 
 				if (platform.contains("ios")) {
 					driver = new IOSDriver(service.getUrl(), caps);

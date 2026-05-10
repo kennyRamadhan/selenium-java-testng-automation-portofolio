@@ -5,8 +5,10 @@ import java.net.URISyntaxException;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.kennyramadhan.qa.core.listeners.MobileRetryListener;
 import com.kennyramadhan.qa.mobile.pages.CartCheckout;
 import com.kennyramadhan.qa.mobile.pages.Login;
 import com.kennyramadhan.qa.mobile.pages.ProductsList;
@@ -18,6 +20,7 @@ import com.kennyramadhan.qa.mobile.pages.ProductsList;
  * Phase 3 commit 2 split: extracted from E2EMobileTest. Covers the
  * checkout-form positive and negative paths.
  */
+@Listeners(MobileRetryListener.class)
 public class CheckoutTests extends BaseMobileTest {
 
 	private Login login;

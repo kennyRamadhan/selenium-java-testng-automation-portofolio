@@ -5,8 +5,10 @@ import java.net.URISyntaxException;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.kennyramadhan.qa.core.listeners.MobileRetryListener;
 import com.kennyramadhan.qa.mobile.pages.Login;
 
 /**
@@ -17,6 +19,7 @@ import com.kennyramadhan.qa.mobile.pages.Login;
  * interactions only; product/cart/checkout flows live in
  * {@link ProductsAndCartTests} and {@link CheckoutTests}.
  */
+@Listeners(MobileRetryListener.class)
 public class LoginTests extends BaseMobileTest {
 
 	private Login login;

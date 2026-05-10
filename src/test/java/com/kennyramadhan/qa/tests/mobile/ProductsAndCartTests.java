@@ -6,8 +6,10 @@ import java.util.List;
 
 import org.testng.Assert;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
+import com.kennyramadhan.qa.core.listeners.MobileRetryListener;
 import com.kennyramadhan.qa.core.waits.WaitHelpers;
 import com.kennyramadhan.qa.mobile.pages.CartCheckout;
 import com.kennyramadhan.qa.mobile.pages.Login;
@@ -23,6 +25,7 @@ import com.kennyramadhan.qa.mobile.pages.ProductsList;
  * the products list (login → products → cart → action), making them inseparable
  * feature flows in this app.
  */
+@Listeners(MobileRetryListener.class)
 public class ProductsAndCartTests extends BaseMobileTest {
 
 	private Login login;

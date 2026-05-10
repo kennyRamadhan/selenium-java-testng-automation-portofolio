@@ -169,9 +169,7 @@ public class ProductsList extends BaseMobilePage {
 			}
 			captureScreenshot();
 
-			Map<String, Object> params = new HashMap<>();
-			params.put("direction", "down");
-			driver.executeScript("mobile: scroll", params);
+			scrollDown();
 		}
 		LogHelper.step("Tap Cart Button & Verify Cart Page");
 
@@ -198,5 +196,23 @@ public class ProductsList extends BaseMobilePage {
 			LogHelper.detail("Exception: " + e.getMessage());
 			throw new IllegalStateException("Failed to tap cart button or verify cart page", e);
 		}
+	}
+
+	/**
+	 * Scrolls the products list down using {@code mobile: scrollGesture} (the
+	 * UiAutomator2 7.x replacement for the removed {@code mobile: scroll} script).
+	 * Uses screen-area-bound coordinates so the gesture does not depend on a
+	 * specific scrollable container element being findable — works on both real
+	 * devices (Xiaomi 1080×2460) and emulators with different screen geometries.
+	 */
+	private void scrollDown() {
+		Map<String, Object> params = new HashMap<>();
+		params.put("left", 100);
+		params.put("top", 400);
+		params.put("width", 800);
+		params.put("height", 1500);
+		params.put("direction", "down");
+		params.put("percent", 0.7);
+		driver.executeScript("mobile: scrollGesture", params);
 	}
 }

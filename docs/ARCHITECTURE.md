@@ -165,7 +165,7 @@ internal helpers do not.
 
 **Context:** Web tests are flakier than API tests. Network timeouts, AE.com modal-render races, headless-Chrome paint timing — none are bugs in our code, all are real signal that retry can absorb.
 
-**Status:** Stub. The retry analyzer class is not yet implemented at time of writing — the framework runs without it. The decision is **how** retry will be handled when it lands.
+**Status:** Concretized in Phase 3 commit 5 for the mobile suite via `MobileRetryAnalyzer` + `MobileRetryListener` (in `com.kennyramadhan.qa.core.listeners`). Web/API suites still run without retry.
 
 **Plan:**
 - `RetryAnalyzer` retries each test up to 1 time on failure (so total of 2 attempts max).

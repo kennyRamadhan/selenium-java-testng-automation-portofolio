@@ -1,9 +1,6 @@
 package com.kennyramadhan.qa.util;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,6 +21,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
+
+import com.kennyramadhan.qa.core.util.AdbHelper;
 
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
@@ -56,9 +55,9 @@ public class UiDumpHelper {
 		AppiumDriverLocalService service = null;
 		AndroidDriver driver = null;
 		try {
-			String udid = detectTargetUdid();
-			String platformVersion = adbGetProp(udid, "ro.build.version.release");
-			String model = adbGetProp(udid, "ro.product.model");
+			String udid = AdbHelper.detectFirstConnectedDevice();
+			String platformVersion = AdbHelper.getAndroidVersion(udid);
+			String model = AdbHelper.getProp(udid, "ro.product.model");
 			log.info("Selected device: {} (model {}, Android {})", udid, model, platformVersion);
 			INVENTORY_LOG.add("UDID: " + udid);
 			INVENTORY_LOG.add("Model: " + model);
@@ -72,7 +71,7 @@ public class UiDumpHelper {
 			// ANDROID_SDK_ROOT environment variable was exported" even when adb
 			// is reachable from this Java process.
 			Map<String, String> env = new HashMap<>(System.getenv());
-			String androidHome = resolveAndroidHome();
+			String androidHome = AdbHelper.resolveAndroidHome();
 			if (androidHome != null) {
 				env.put("ANDROID_HOME", androidHome);
 				log.info("Injecting ANDROID_HOME={} for Appium server subprocess", androidHome);
@@ -257,96 +256,6 @@ public class UiDumpHelper {
 		} catch (Exception ignored) {
 			// best-effort
 		}
-	}
-
-	private static String detectTargetUdid() throws IOException, InterruptedException {
-		List<String> udids = parseAdbDevices();
-		if (udids.isEmpty()) {
-			throw new IllegalStateException("No connected Android devices found via adb");
-		}
-		// Real device priority: first non-emulator entry, else first emulator
-		return udids.stream().filter(u -> !u.startsWith("emulator-")).findFirst().orElse(udids.get(0));
-	}
-
-	private static List<String> parseAdbDevices() throws IOException, InterruptedException {
-		ProcessBuilder pb = new ProcessBuilder(adbPath(), "devices");
-		pb.redirectErrorStream(true);
-		Process p = pb.start();
-		List<String> udids = new ArrayList<>();
-		try (BufferedReader r = new BufferedReader(new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-			String line;
-			while ((line = r.readLine()) != null) {
-				line = line.trim();
-				if (line.isEmpty() || line.startsWith("List of")) {
-					continue;
-				}
-				String[] parts = line.split("\\s+");
-				if (parts.length >= 2 && "device".equals(parts[1])) {
-					udids.add(parts[0]);
-				}
-			}
-		}
-		p.waitFor();
-		return udids;
-	}
-
-	private static String adbGetProp(String udid, String key) {
-		try {
-			ProcessBuilder pb = new ProcessBuilder(adbPath(), "-s", udid, "shell", "getprop", key);
-			pb.redirectErrorStream(true);
-			Process p = pb.start();
-			try (BufferedReader r = new BufferedReader(
-					new InputStreamReader(p.getInputStream(), StandardCharsets.UTF_8))) {
-				String line = r.readLine();
-				p.waitFor();
-				return line == null ? "" : line.trim();
-			}
-		} catch (Exception e) {
-			log.warn("adb getprop {} failed: {}", key, e.getMessage());
-			return "";
-		}
-	}
-
-	private static String adbPath() {
-		String home = resolveAndroidHome();
-		boolean isWin = System.getProperty("os.name").toLowerCase().contains("win");
-		String exe = isWin ? "adb.exe" : "adb";
-		if (home != null) {
-			File f = new File(home, "platform-tools" + File.separator + exe);
-			if (f.exists()) {
-				return f.getAbsolutePath();
-			}
-		}
-		return "adb";
-	}
-
-	/**
-	 * Resolves the Android SDK root directory. Checks ANDROID_HOME and
-	 * ANDROID_SDK_ROOT env vars first, then falls back to the Android Studio
-	 * default install path on Windows
-	 * ({@code %USERPROFILE%\AppData\Local\Android\Sdk}).
-	 *
-	 * @return absolute path to the SDK root, or {@code null} if not found
-	 */
-	private static String resolveAndroidHome() {
-		String home = System.getenv("ANDROID_HOME");
-		if (home == null) {
-			home = System.getenv("ANDROID_SDK_ROOT");
-		}
-		if (home != null) {
-			return home;
-		}
-		boolean isWin = System.getProperty("os.name").toLowerCase().contains("win");
-		if (isWin) {
-			String userHome = System.getProperty("user.home");
-			if (userHome != null) {
-				File f = new File(userHome, "AppData\\Local\\Android\\Sdk");
-				if (f.exists()) {
-					return f.getAbsolutePath();
-				}
-			}
-		}
-		return null;
 	}
 
 	private static void writeInventoryLog() {
