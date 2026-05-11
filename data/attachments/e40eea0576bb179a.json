@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1694090,
+    "name" : "Miss Cole Cronin",
+    "email" : "qa-user-4511203136@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Pricilla",
+    "last_name" : "Gusikowski",
+    "company" : "Acme Corp",
+    "address1" : "5218 Aleida Ranch",
+    "address2" : "Apt. 476",
+    "country" : "Canada",
+    "state" : "Nevada",
+    "city" : "East Bartonborough",
+    "zipcode" : "42214"
+  }
+}
