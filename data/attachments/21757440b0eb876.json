@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1694236,
+    "name" : "Mckinley Schmitt",
+    "email" : "qa-user-1350272251@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Wilhelmina",
+    "last_name" : "Lowe",
+    "company" : "Acme Corp",
+    "address1" : "526 Welch Lights",
+    "address2" : "Suite 565",
+    "country" : "Canada",
+    "state" : "Montana",
+    "city" : "Port Columbus",
+    "zipcode" : "70189"
+  }
+}
