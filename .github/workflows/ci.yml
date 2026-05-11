@@ -85,15 +85,65 @@ jobs:
           path: target/allure-results
           retention-days: 7
 
-  # Mobile suite is intentionally NOT executed in CI.
-  #
-  # Rationale: Android emulator setup on GitHub Actions is heavyweight
-  # (large image pull, KVM acceleration availability varies per runner)
-  # and the suite targets the SauceLabs SwagLabs demo app — a real device
-  # cloud is the pragmatic execution channel. The repo ships a
-  # `browserstack` Maven profile for that purpose.
-  #
-  # Local execution: `mvn test` (default suite is testng.xml = mobile).
-  # Cloud execution: `mvn test -P web,browserstack` (web suite via
-  # BrowserStack; an analogous mobile profile can be added when Phase 3
-  # introduces App Live / App Automate capabilities).
+  mobile-smoke:
+    name: Mobile Smoke (Android emulator API 30)
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    # Soft mode: the mvn invocation inside the emulator-runner script uses
+    # `|| true` so CI stays green regardless of test outcomes. Pass/fail
+    # is visible in the Allure dashboard. Tightening to strict mode is
+    # planned once the 2 post-v2.1.0 deferred fixes (sortingPrice,
+    # checkoutPositiveFlow) ship.
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java 25
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '25'
+          cache: 'maven'
+
+      - name: Setup Node 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Appium 2 + UiAutomator2 driver
+        run: |
+          npm install -g appium@2
+          appium driver install uiautomator2
+
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      # The reactivecircus action owns the emulator lifecycle: boot, wait,
+      # run script, shutdown. The mvn invocation lives INSIDE the action's
+      # `script:` param so it executes against the running emulator.
+      # Specs adapted from the UCO Collect production mobile CI proven
+      # viable on ubuntu-latest 7GB runners.
+      - name: Run mobile tests on Android emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          ram-size: 2048M
+          heap-size: 512M
+          disk-size: 4G
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none -no-metrics -cores 1 -memory 2048
+          disable-animations: true
+          script: mvn -B test || true
+
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-mobile
+          path: target/allure-results
+          retention-days: 7

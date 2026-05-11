@@ -14,12 +14,13 @@ on:
   workflow_dispatch:
     inputs:
       suite:
-        description: 'Which suite to run (mobile not yet supported on CI runners)'
+        description: 'Which suite to run'
         type: choice
         options:
           - all
           - api
           - web
+          - mobile
         default: all
 
 permissions:
@@ -66,6 +67,46 @@ jobs:
       - name: Run Web suite (headless Chrome)
         if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'web' }}
         run: mvn -B test -P web -Dheadless=true || true
+
+      # Mobile suite — Android emulator via reactivecircus/android-emulator-runner.
+      # The action owns emulator lifecycle and runs `mvn -B test || true` inside
+      # its `script:` param against the booted emulator. Node + Appium + KVM
+      # setup steps run beforehand at the publish-allure job level, each gated
+      # by the same Mobile-suite condition so they're no-ops when only API or
+      # Web is selected via workflow_dispatch.
+      - name: Setup Node 20 (mobile)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Appium 2 + UiAutomator2 driver (mobile)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
+        run: |
+          npm install -g appium@2
+          appium driver install uiautomator2
+
+      - name: Enable KVM (mobile)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run Mobile suite (Android emulator API 30)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 30
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          ram-size: 2048M
+          heap-size: 512M
+          disk-size: 4G
+          emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none -camera-front none -no-metrics -cores 1 -memory 2048
+          disable-animations: true
+          script: mvn -B test || true
 
       - name: Checkout existing gh-pages history
         uses: actions/checkout@v4
