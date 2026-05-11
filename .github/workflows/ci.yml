@@ -110,9 +110,9 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Appium 2 + UiAutomator2 driver
+      - name: Install Appium 3 + UiAutomator2 driver
         run: |
-          npm install -g appium@2
+          npm install -g appium@3
           appium driver install uiautomator2
 
       - name: Enable KVM

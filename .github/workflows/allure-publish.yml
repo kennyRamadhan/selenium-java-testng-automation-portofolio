@@ -80,10 +80,10 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Install Appium 2 + UiAutomator2 driver (mobile)
+      - name: Install Appium 3 + UiAutomator2 driver (mobile)
         if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
         run: |
-          npm install -g appium@2
+          npm install -g appium@3
           appium driver install uiautomator2
 
       - name: Enable KVM (mobile)
