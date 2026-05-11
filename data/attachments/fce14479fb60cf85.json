@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1694357,
+    "name" : "Warren Tillman",
+    "email" : "qa-user-5504504828@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Daniella",
+    "last_name" : "Heaney",
+    "company" : "Acme Corp",
+    "address1" : "230 Warren Lakes",
+    "address2" : "Apt. 134",
+    "country" : "Canada",
+    "state" : "New Jersey",
+    "city" : "Luzshire",
+    "zipcode" : "16063"
+  }
+}
