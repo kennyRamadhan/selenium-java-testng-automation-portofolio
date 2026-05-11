@@ -37,8 +37,7 @@ public class ProductsList extends BaseMobilePage {
 	private static final By ITEM_TITLES_IOS = AppiumBy
 			.iOSClassChain("**/XCUIElementTypeStaticText[`name == \"test-Item title\"`]");
 
-	private static final By PRODUCTS_TITLE_ANDROID = AppiumBy
-			.xpath("//android.widget.TextView[@content-desc='test-PRODUCTS']");
+	private static final By PRODUCTS_TITLE_ANDROID = AppiumBy.accessibilityId("test-PRODUCTS");
 	private static final By PRODUCTS_TITLE_IOS = AppiumBy
 			.iOSClassChain("**/XCUIElementTypeStaticText[`name == \"PRODUCTS\"`]");
 
