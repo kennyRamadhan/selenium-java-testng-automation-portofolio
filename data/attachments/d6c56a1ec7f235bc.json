@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1694373,
+    "name" : "Haywood Turner",
+    "email" : "qa-user-6087966968@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Wyatt",
+    "last_name" : "Bogisich",
+    "company" : "Acme Corp",
+    "address1" : "80560 Gibson Road",
+    "address2" : "Apt. 716",
+    "country" : "Canada",
+    "state" : "Idaho",
+    "city" : "Heaneybury",
+    "zipcode" : "38765"
+  }
+}
