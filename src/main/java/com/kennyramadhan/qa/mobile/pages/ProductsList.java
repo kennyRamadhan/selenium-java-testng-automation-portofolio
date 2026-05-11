@@ -61,7 +61,7 @@ public class ProductsList extends BaseMobilePage {
 	private static final By LOW_TO_HIGH_IOS = AppiumBy.iOSNsPredicateString("name == 'Price (low to high)'");
 
 	private static final By PRICE_LIST_ANDROID = AppiumBy
-			.xpath("//android.view.ViewGroup[@content-desc=\"test-Price\"]/android.widget.TextView");
+			.xpath("//android.widget.TextView[@content-desc='test-Price']");
 	private static final By PRICE_LIST_IOS = AppiumBy.xpath("//XCUIElementTypeStaticText[@name=\"test-Price\"]");
 
 	private final WaitHelpers utils;
