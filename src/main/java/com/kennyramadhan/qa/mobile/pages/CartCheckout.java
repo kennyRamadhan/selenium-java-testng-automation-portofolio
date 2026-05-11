@@ -93,6 +93,11 @@ public class CartCheckout extends BaseMobilePage {
 	}
 
 	public void clickFinishBtn() {
+		// FINISH lives at the bottom of the long overview screen — scroll it
+		// into view first (mirrors the scrollIntoText pattern used by
+		// checkoutInformation for CHECKOUT and clickContinueShoppingBtn for
+		// CONTINUE SHOPPING).
+		utils.scrollIntoText("FINISH");
 		safeClick(FINISH_BTN);
 	}
 
@@ -124,38 +129,91 @@ public class CartCheckout extends BaseMobilePage {
 
 	/**
 	 * Returns the Item Total value from the checkout overview screen.
+	 *
 	 * <p>
-	 * iOS-only: throws on Android (locator unavailable).
+	 * iOS: reads the value of the iOS-only "Item total:" StaticText.
+	 * <p>
+	 * Android: the SwagLabs Android build's overview screen does not render a
+	 * dedicated Item Total line — only individual line-item prices (test-Price
+	 * content-descs). Sums those visible prices instead, which equals the Item
+	 * Total by definition (Item Total == sum of items before tax). Empirically
+	 * derived via overview-screen XML capture in Phase 5 commit 1 — no breakdown
+	 * footer present on Android.
 	 */
 	public double getItemTotal() {
 		LogHelper.step("Read Item Total on Checkout");
-		String value = driver.findElement(ITEM_TOTAL_IOS).getAttribute("value");
-		LogHelper.detail("Item Total: " + value);
-		return parsePrice(value);
+		if (isIOS()) {
+			String value = driver.findElement(ITEM_TOTAL_IOS).getAttribute("value");
+			LogHelper.detail("Item Total: " + value);
+			return parsePrice(value);
+		}
+		double sum = sumVisiblePrices();
+		LogHelper.detail("Item Total (Android computed from line items): " + sum);
+		return sum;
 	}
 
 	/**
 	 * Returns the Tax value from the checkout overview screen.
+	 *
 	 * <p>
-	 * iOS-only: throws on Android (locator unavailable).
+	 * iOS: reads the value of the iOS-only "Tax:" StaticText.
+	 * <p>
+	 * Android: returns 0.0 — the Android overview screen does not display a tax
+	 * line. Real tax computation happens server-side and is not surfaced in this
+	 * app build.
 	 */
 	public double getTax() {
 		LogHelper.step("Read Tax on Checkout");
-		String value = driver.findElement(TAX_IOS).getAttribute("value");
-		LogHelper.detail("Tax: " + value);
-		return parsePrice(value);
+		if (isIOS()) {
+			String value = driver.findElement(TAX_IOS).getAttribute("value");
+			LogHelper.detail("Tax: " + value);
+			return parsePrice(value);
+		}
+		LogHelper.detail("Tax (Android): 0.0 — no tax line on overview screen");
+		return 0.0;
 	}
 
 	/**
 	 * Returns the Grand Total value from the checkout overview screen.
+	 *
 	 * <p>
-	 * iOS-only: throws on Android (locator unavailable).
+	 * iOS: reads the value of the iOS-only "Total:" StaticText.
+	 * <p>
+	 * Android: no separate grand-total element on overview; returns the Item Total
+	 * (equivalent on Android since {@link #getTax()} returns 0).
 	 */
 	public double getGrandTotal() {
 		LogHelper.step("Read Grand Total on Checkout");
-		String value = driver.findElement(TOTAL_IOS).getAttribute("value");
-		LogHelper.detail("Grand Total: " + value);
-		return parsePrice(value);
+		if (isIOS()) {
+			String value = driver.findElement(TOTAL_IOS).getAttribute("value");
+			LogHelper.detail("Grand Total: " + value);
+			return parsePrice(value);
+		}
+		double sum = getItemTotal();
+		LogHelper.detail("Grand Total (Android, no tax): " + sum);
+		return sum;
+	}
+
+	/**
+	 * Sums the parseable price text of all currently-visible elements matching
+	 * {@link #PRICE_LIST_CART_ANDROID} on the screen. Used by
+	 * {@link #getItemTotal()} on Android to compute the Item Total equivalent from
+	 * line items when no dedicated total field exists.
+	 */
+	private double sumVisiblePrices() {
+		double total = 0.0;
+		for (WebElement el : driver.findElements(PRICE_LIST_CART_ANDROID)) {
+			String text = el.getText();
+			if (text == null || text.isBlank()) {
+				continue;
+			}
+			try {
+				total += parsePrice(text);
+			} catch (NumberFormatException ignored) {
+				// Skip non-numeric text gracefully.
+			}
+		}
+		return total;
 	}
 
 	private double parsePrice(String rawText) {
