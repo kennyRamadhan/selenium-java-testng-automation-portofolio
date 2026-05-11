@@ -70,12 +70,12 @@ public class ProductsAndCartTests extends BaseMobileTest {
 		login.getAutoCredentials("standard_user");
 		Assert.assertTrue(login.isProductsListVisible(), "Login should land on products list");
 
-		productsList.selectProducts("Sauce Labs Onesie");
+		productsList.selectProducts("Sauce Labs Backpack");
 
 		detailProducts.addToCartFromDetailsProducts();
 
 		String cartProducts = detailProducts.getDetailsProducts();
-		Assert.assertTrue(cartProducts.contains("Sauce Labs Onesie"),
+		Assert.assertTrue(cartProducts.contains("Sauce Labs Backpack"),
 				"Product details should reference the selected item");
 	}
 
@@ -105,12 +105,12 @@ public class ProductsAndCartTests extends BaseMobileTest {
 		login.getAutoCredentials("standard_user");
 		Assert.assertTrue(login.isProductsListVisible(), "Login should land on products list");
 
-		productsList.selectProducts("Sauce Labs Onesie");
+		productsList.selectProducts("Sauce Labs Backpack");
 
 		detailProducts.addToCartFromDetailsProducts();
 
 		String cartProducts = detailProducts.getDetailsProducts();
-		Assert.assertTrue(cartProducts.contains("Sauce Labs Onesie"),
+		Assert.assertTrue(cartProducts.contains("Sauce Labs Backpack"),
 				"Product details should reference the selected item");
 	}
 }
