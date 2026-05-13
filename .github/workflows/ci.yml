@@ -115,6 +115,24 @@ jobs:
           npm install -g appium@3
           appium driver install uiautomator2
 
+      # Phase 7: provision SwagLabs APK at runtime instead of from git.
+      # Layered idempotency — cache restores the APK on warm runs, curl
+      # repopulates on cache miss, and the Java ApkDownloader inside the
+      # test JVM is the final safety net if both fail.
+      - name: Cache SwagLabs APK
+        uses: actions/cache@v4
+        with:
+          path: apps/swaglabs-2.7.1.apk
+          key: swaglabs-apk-v2.7.1
+
+      - name: Download SwagLabs APK (cache miss)
+        run: |
+          mkdir -p apps
+          if [ ! -s apps/swaglabs-2.7.1.apk ]; then
+            curl -fL -o apps/swaglabs-2.7.1.apk \
+              https://github.com/saucelabs/sample-app-mobile/releases/download/2.7.1/Android.SauceLabs.Mobile.Sample.app.2.7.1.apk
+          fi
+
       - name: Enable KVM
         run: |
           echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules

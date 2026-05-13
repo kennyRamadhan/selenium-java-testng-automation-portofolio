@@ -86,6 +86,23 @@ jobs:
           npm install -g appium@3
           appium driver install uiautomator2
 
+      # Phase 7: provision SwagLabs APK at runtime; layered with Java ApkDownloader.
+      - name: Cache SwagLabs APK (mobile)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
+        uses: actions/cache@v4
+        with:
+          path: apps/swaglabs-2.7.1.apk
+          key: swaglabs-apk-v2.7.1
+
+      - name: Download SwagLabs APK (cache miss, mobile)
+        if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
+        run: |
+          mkdir -p apps
+          if [ ! -s apps/swaglabs-2.7.1.apk ]; then
+            curl -fL -o apps/swaglabs-2.7.1.apk \
+              https://github.com/saucelabs/sample-app-mobile/releases/download/2.7.1/Android.SauceLabs.Mobile.Sample.app.2.7.1.apk
+          fi
+
       - name: Enable KVM (mobile)
         if: ${{ github.event_name == 'push' || github.event.inputs.suite == 'all' || github.event.inputs.suite == 'mobile' }}
         run: |

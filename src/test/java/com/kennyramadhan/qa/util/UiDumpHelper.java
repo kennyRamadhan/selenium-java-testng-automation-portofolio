@@ -93,7 +93,7 @@ public class UiDumpHelper {
 			caps.setCapability("appium:platformVersion", platformVersion);
 			caps.setCapability("appium:appPackage", "com.swaglabsmobileapp");
 			caps.setCapability("appium:appActivity", "com.swaglabsmobileapp.SplashActivity");
-			caps.setCapability("appium:app", new File("src/test/resources/apps/appTest.apk").getAbsolutePath());
+			caps.setCapability("appium:app", new File("apps/swaglabs-2.7.1.apk").getAbsolutePath());
 			caps.setCapability("appium:noReset", true);
 			caps.setCapability("appium:fullReset", false);
 			caps.setCapability("appium:newCommandTimeout", 300);

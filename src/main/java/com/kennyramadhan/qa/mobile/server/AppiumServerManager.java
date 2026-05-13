@@ -2,6 +2,7 @@ package com.kennyramadhan.qa.mobile.server;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Random;
 import java.util.Set;
 
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import com.kennyramadhan.qa.core.config.ConfigLoader;
 import com.kennyramadhan.qa.core.driver.DriverManager;
 import com.kennyramadhan.qa.core.util.AdbHelper;
+import com.kennyramadhan.qa.core.util.ApkDownloader;
 
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
@@ -52,6 +54,13 @@ public class AppiumServerManager {
 
 	/** AppiumDriver instance (can be IOSDriver or AndroidDriver) */
 	private static AppiumDriver driver;
+
+	/**
+	 * Official SauceLabs SwagLabs mobile sample app v2.7.1 release URL. Pinned for
+	 * reproducibility; bump only when a verified newer release lands and locators
+	 * are revalidated.
+	 */
+	private static final String SWAGLABS_APK_URL = "https://github.com/saucelabs/sample-app-mobile/releases/download/2.7.1/Android.SauceLabs.Mobile.Sample.app.2.7.1.apk";
 
 	/**
 	 * W3C WebDriver standard capability keys. Per W3C protocol, only these may
@@ -209,6 +218,13 @@ public class AppiumServerManager {
 				});
 
 				String platform = ConfigLoader.getOrDefault("platformName", "Android").toLowerCase();
+
+				// Phase 7: provision the Android APK at the configured path before the driver
+				// tries to install it. Idempotent — skipped if file already present.
+				if (platform.contains("android")) {
+					String appPath = ConfigLoader.getOrDefault("app", "apps/swaglabs-2.7.1.apk");
+					ApkDownloader.ensureApk(SWAGLABS_APK_URL, Path.of(appPath));
+				}
 
 				// Auto-detect Android device + version (real-device priority over emulator).
 				// Overrides any stale udid/platformVersion from config.properties so a
