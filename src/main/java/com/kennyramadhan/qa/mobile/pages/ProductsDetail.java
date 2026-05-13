@@ -15,12 +15,8 @@ import io.appium.java_client.AppiumBy;
  */
 public class ProductsDetail extends BaseMobilePage {
 
-	private static final By DESCRIPTION_ANDROID = AppiumBy
-			.xpath("//android.view.ViewGroup[@content-desc=\"test-Description\"]/android.widget.TextView");
-	private static final By DESCRIPTION_IOS = AppiumBy
-			.iOSClassChain("**/XCUIElementTypeOther[`name == \"test-Description\"`]");
-
 	private static final By ADD_TO_CART = AppiumBy.accessibilityId("test-ADD TO CART");
+	private static final By REMOVE = AppiumBy.accessibilityId("test-REMOVE");
 
 	private final WaitHelpers utils;
 
@@ -29,13 +25,17 @@ public class ProductsDetail extends BaseMobilePage {
 		this.utils = new WaitHelpers();
 	}
 
-	/** Returns the textual description of the currently displayed product. */
-	public String getDetailsProducts() {
-		return waitFor(isIOS() ? DESCRIPTION_IOS : DESCRIPTION_ANDROID).getText();
-	}
-
 	public void addToCartFromDetailsProducts() {
 		utils.scrollIntoText("ADD TO CART");
 		safeClick(ADD_TO_CART);
+	}
+
+	/**
+	 * Returns true when the REMOVE button is visible on the details screen — direct
+	 * evidence that ADD TO CART succeeded (button toggles after tap). Render-order
+	 * independent; preferred over reading description text.
+	 */
+	public boolean isRemoveButtonVisible() {
+		return isDisplayedQuiet(REMOVE);
 	}
 }

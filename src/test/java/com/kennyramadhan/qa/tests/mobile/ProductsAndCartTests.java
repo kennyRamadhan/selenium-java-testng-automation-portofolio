@@ -74,9 +74,7 @@ public class ProductsAndCartTests extends BaseMobileTest {
 
 		detailProducts.addToCartFromDetailsProducts();
 
-		String cartProducts = detailProducts.getDetailsProducts();
-		Assert.assertTrue(cartProducts.contains("Sauce Labs Backpack"),
-				"Product details should reference the selected item");
+		Assert.assertTrue(detailProducts.isRemoveButtonVisible(), "ADD TO CART should toggle to REMOVE after tap");
 	}
 
 	@Test(priority = 4)
@@ -109,8 +107,6 @@ public class ProductsAndCartTests extends BaseMobileTest {
 
 		detailProducts.addToCartFromDetailsProducts();
 
-		String cartProducts = detailProducts.getDetailsProducts();
-		Assert.assertTrue(cartProducts.contains("Sauce Labs Backpack"),
-				"Product details should reference the selected item");
+		Assert.assertTrue(detailProducts.isRemoveButtonVisible(), "ADD TO CART should toggle to REMOVE after tap");
 	}
 }
