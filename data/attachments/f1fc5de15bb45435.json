@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1703183,
+    "name" : "Bertha Volkman",
+    "email" : "qa-user-7640592320@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Jonas",
+    "last_name" : "Kautzer",
+    "company" : "Acme Corp",
+    "address1" : "5269 Rashida Falls",
+    "address2" : "Apt. 603",
+    "country" : "Canada",
+    "state" : "Vermont",
+    "city" : "New Zitaborough",
+    "zipcode" : "49162"
+  }
+}
