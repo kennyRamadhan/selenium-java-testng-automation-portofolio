@@ -1,0 +1,21 @@
+{
+  "responseCode" : 200,
+  "user" : {
+    "id" : 1703487,
+    "name" : "Nadia Balistreri",
+    "email" : "qa-user-1466305448@example.com",
+    "title" : "Mrs",
+    "birth_day" : "15",
+    "birth_month" : "6",
+    "birth_year" : "1992",
+    "first_name" : "Martine",
+    "last_name" : "Fay",
+    "company" : "Acme Corp",
+    "address1" : "583 Metz Meadow",
+    "address2" : "Apt. 178",
+    "country" : "Canada",
+    "state" : "Mississippi",
+    "city" : "South Malcomstad",
+    "zipcode" : "99489"
+  }
+}
